@@ -112,6 +112,19 @@ h1 .cursor{display:inline-block;width:.5em;height:.85em;background:var(--blue);m
 .hero p.sub{margin-top:26px;max-width:46ch;color:var(--dim);font-size:15px;}
 .hero p.sub b{color:var(--ink);font-weight:600;}
 .hero-cta{margin-top:38px;display:flex;gap:16px;flex-wrap:wrap;}
+.ai-phone-card{margin-top:18px;max-width:560px;border:1px solid #25435E;background:linear-gradient(90deg,rgba(46,155,255,.12),rgba(4,6,10,.92));padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-decoration:none;transition:border-color .2s,transform .2s;}
+.ai-phone-card:hover,.ai-phone-card:focus-visible{border-color:var(--blue);transform:translateY(-2px);outline:none;}
+.ai-phone-card .signal{width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 16px rgba(46,155,255,.8);animation:phonePulse 1.8s ease-in-out infinite;}
+.ai-phone-card .phone-label{font-family:var(--mono);font-size:9px;letter-spacing:1.7px;color:var(--blue);text-transform:uppercase;}
+.ai-phone-card .phone-note{display:block;margin-top:3px;color:#788694;font-size:10px;line-height:1.4;}
+.ai-phone-card .phone-number{font-family:'Silkscreen',monospace;font-size:clamp(17px,2vw,22px);color:#fff;white-space:nowrap;}
+.ai-call-float{position:fixed;right:18px;bottom:18px;z-index:58;border:2px solid var(--blue);background:rgba(0,0,0,.94);box-shadow:0 0 28px rgba(46,155,255,.18);padding:10px 14px;text-decoration:none;text-align:right;transition:background .2s,transform .2s;}
+.ai-call-float:hover,.ai-call-float:focus-visible{background:var(--blue);color:#000;transform:translateY(-2px);outline:none;}
+.ai-call-float span{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.7px;color:var(--blue);text-transform:uppercase;}
+.ai-call-float b{display:block;font-family:'Silkscreen',monospace;font-size:16px;color:#fff;font-weight:400;margin-top:2px;}
+.ai-call-float:hover span,.ai-call-float:hover b,.ai-call-float:focus-visible span,.ai-call-float:focus-visible b{color:#000;}
+@keyframes phonePulse{50%{opacity:.4;box-shadow:0 0 5px rgba(46,155,255,.3);}}
+@media(max-width:560px){.ai-phone-card{grid-template-columns:auto 1fr;}.ai-phone-card .phone-number{grid-column:2;}.ai-call-float{right:12px;bottom:12px;padding:8px 10px;}.ai-call-float b{font-size:13px;}}
 .btn{font-family:var(--px);font-size:22px;letter-spacing:1px;text-decoration:none;padding:10px 26px;border:2px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;transition:all .15s;}
 .btn:hover{background:var(--ink);color:#000;}
 .btn.blue{border-color:var(--blue);color:var(--blue);}
@@ -239,7 +252,7 @@ form.sub button:hover{background:#fff;border-color:#fff;}
 @media(max-width:620px){.pricing-grid{grid-template-columns:1fr;}}
 
 .annual-bonus{position:relative;margin-top:34px;border:1px solid #37526C;background:linear-gradient(135deg,rgba(46,155,255,.15),rgba(3,6,9,.96) 58%);padding:30px 32px;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;overflow:hidden;}
-.annual-bonus::after{content:"ANNUAL";position:absolute;right:-8px;bottom:-20px;font-family:'Silkscreen',monospace;font-size:72px;color:rgba(46,155,255,.055);pointer-events:none;}
+.annual-bonus::after{content:"10% OFF";position:absolute;right:-8px;bottom:-20px;font-family:'Silkscreen',monospace;font-size:72px;color:rgba(46,155,255,.055);pointer-events:none;}
 .annual-bonus .tag{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--blue);text-transform:uppercase;}
 .annual-bonus h3{font-family:var(--px);font-size:clamp(30px,4vw,44px);font-weight:400;line-height:1;color:#fff;margin-top:9px;}
 .annual-bonus p{margin-top:12px;max-width:72ch;color:#A3A3A3;font-size:12px;}
@@ -417,6 +430,8 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
   </div>
 </nav>
 
+<a class="ai-call-float" href="tel:+447888865560" aria-label="Call the Clone Centre AI assistant on 07888 865560"><span>Call my AI</span><b>07888 865560</b></a>
+
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
   <canvas id="rain"></canvas>
@@ -429,6 +444,11 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
         <a class="btn blue" href="#community">JOIN THE COMMUNITY</a>
         <a class="btn" href="#library">GET THE BOOKS</a>
       </div>
+      <a class="ai-phone-card" href="tel:+447888865560" aria-label="Call the Clone Centre AI assistant on 07888 865560">
+        <span class="signal" aria-hidden="true"></span>
+        <span><span class="phone-label">Clone Centre AI phone line · live</span><span class="phone-note">Ask about AI consulting, coaching, community plans and products.</span></span>
+        <span class="phone-number">07888 865560</span>
+      </a>
     </div>
     <div class="hero-img">
       <img src="assets/joseph_code_dither.png" alt="Pixel portrait of Joseph Conlan">
@@ -568,12 +588,12 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 
   <div class="annual-bonus">
     <div>
-      <div class="tag">Annual member bonus · powered by HyperChat</div>
-      <h3>PAY ANNUALLY. GET YOUR OWN AI HELPER.</h3>
-      <p>Choose any paid annual Clone Centre plan and we will build you <b>one starter AI chatbot at no extra charge</b>, trained on one approved website or document collection and hosted while your annual membership remains active.</p>
-      <p class="small-print">Includes one knowledge base and fair-use messaging. Bespoke integrations, regulated advice and major rebuilds are quoted separately.</p>
+      <div class="tag">Annual member bonus · HyperChat partner code</div>
+      <h3>PAY ANNUALLY. GET 10% OFF HYPERCHAT.</h3>
+      <p>Choose any paid annual Clone Centre plan and we will send you a <b>private member code for 10% off an eligible HyperChat subscription</b>. You build and control your assistant inside HyperChat; there is no separate chatbot build or hosting promise from Clone Centre.</p>
+      <p class="small-print">One code per active annual member. Cannot be combined with another promotion. Eligibility and redemption are subject to the HyperChat plan and offer terms supplied with the code.</p>
     </div>
-    <a class="btn blue" href="mailto:hello@clonecentre.ai?subject=Annual%20AI%20Helper%20Bonus">CLAIM AI HELPER &gt;</a>
+    <a class="btn blue" href="mailto:hello@clonecentre.ai?subject=Annual%20HyperChat%2010%25%20Code">GET MY CODE &gt;</a>
   </div>
 
   <div class="switch-offer">
@@ -896,7 +916,7 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 <footer>
   <div class="l">
     <img src="assets/clonecentre_logo.png" alt="Clone Centre logo">
-    <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a></span>
+    <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a> · <a href="tel:+447888865560">AI line 07888 865560</a></span>
   </div>
   <div class="r">© 2026 JOSEPH CONLAN · PHASE 4 LIVE</div>
 </footer>
