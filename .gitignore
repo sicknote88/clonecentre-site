@@ -1,0 +1,7 @@
+.DS_Store
+
+# Paid products must be delivered after checkout, never from the public static site.
+books/paid/
+
+# Internal launch strategy is kept in the local workspace, not the public repository.
+COMMUNITY_LAUNCH_PLAN.md
