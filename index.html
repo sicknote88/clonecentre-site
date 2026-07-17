@@ -89,7 +89,7 @@ h2{font-family:var(--px);font-weight:400;font-size:clamp(40px,5.5vw,64px);line-h
 /* ---------- About ---------- */
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center;}
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;}}
-.about-grid img{width:100%;max-width:380px;image-rendering:pixelated;mix-blend-mode:lighten;border:1px solid var(--line);}
+.about-grid img{width:100%;max-width:380px;border:1px solid var(--line);border-radius:6px;}
 .statrow{display:flex;gap:36px;margin-top:38px;flex-wrap:wrap;}
 .stat .n{font-family:var(--px);font-size:44px;color:var(--blue);line-height:1;}
 .stat .l{font-size:11px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:6px;}
@@ -176,7 +176,7 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
   <div class="sec-kicker">About</div>
   <h2>WHO IS RUNNING THIS PLACE?</h2>
   <div class="about-grid">
-    <img src="assets/joseph_bw_dither.png" alt="Black and white pixel portrait of Joseph Conlan">
+    <img src="assets/joseph_bw.jpg" alt="Black and white portrait of Joseph Conlan">
     <div>
       <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. I have sat in rooms with <b>billion dollar venture capital funds</b> and watched how the smartest investors in the world use AI every single day.</p>
       <br>
@@ -209,32 +209,32 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 <!-- ============ LIBRARY ============ -->
 <section class="block reveal" id="library">
   <div class="sec-kicker">The Library</div>
-  <h2>FREE PDF BOOKS</h2>
-  <p class="lede">Every book I write, packaged as a clean PDF you can download, print or share. The guidebook for people who want to master prompting, and the plain English pack written for friends and family who are just getting started.</p>
+  <h2>THE PDF LIBRARY</h2>
+  <p class="lede">The Prompt Guidebook is the <b>premium flagship</b>, with full custom cover designs on the way. The plain English pack below is <b>free to download</b>, written for friends and family who are just getting started with AI.</p>
   <div class="lib-grid">
     <div class="book featured">
-      <span class="badge">Flagship</span>
+      <span class="badge">Premium</span>
       <div class="no">BOOK 01</div>
       <h3>The Clone Centre Prompt Guidebook</h3>
-      <p>How to talk to AI and get exactly what you ask for. The CLEAR framework, 30+ copy paste prompt recipes, advanced techniques and the ten mistakes almost everyone makes. This is the big one.</p>
-      <a class="dl" href="books/Clone_Centre_Prompt_Guidebook.pdf" download>DOWNLOAD THE GUIDEBOOK &gt;</a>
+      <p>How to talk to AI and get exactly what you ask for. The CLEAR framework, 30+ copy paste prompt recipes, advanced techniques and the ten mistakes almost everyone makes. Custom designed edition coming soon. Join the list and you will be first to get it.</p>
+      <a class="dl" href="#signup">GET IT VIA THE NEWSLETTER &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Over 50s</span>
+      <span class="badge">Free</span>
       <div class="no">BOOK 02</div>
       <h3>AI in Plain English</h3>
       <p>A friendly guide for the over 50s. What AI actually is, what it can and cannot do, and your first ten conversations, with zero jargon.</p>
       <a class="dl" href="books/AI_in_Plain_English.pdf" download>DOWNLOAD &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Over 50s</span>
+      <span class="badge">Free</span>
       <div class="no">BOOK 03</div>
       <h3>Everyday AI</h3>
       <p>50 simple ways AI can help around the house and beyond: recipes, letters, gardening, paperwork and keeping in touch with family.</p>
       <a class="dl" href="books/Everyday_AI.pdf" download>DOWNLOAD &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Over 50s</span>
+      <span class="badge">Free</span>
       <div class="no">BOOK 04</div>
       <h3>Safe and Sound</h3>
       <p>How to spot AI scams and protect yourself online. Voice cloning, deepfakes and the family safe word, plus a checklist for the fridge.</p>
