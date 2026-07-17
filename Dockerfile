@@ -1,8 +1,25 @@
-FROM nginx:alpine
-COPY index.html goal-tracker.html /usr/share/nginx/html/
-COPY assets /usr/share/nginx/html/assets
-RUN mkdir -p /usr/share/nginx/html/books
-COPY books/Clone_Centre_Prompt_Guidebook.pdf /usr/share/nginx/html/books/Clone_Centre_Prompt_Guidebook.pdf
-COPY nginx-site.conf /etc/nginx/conf.d/default.conf
-RUN chmod -R a+r /usr/share/nginx/html
-EXPOSE 80
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY server.js ./server.js
+COPY fulfillment ./fulfillment
+
+RUN mkdir -p /app/public/books /app/private/books
+COPY index.html goal-tracker.html order-complete.html /app/public/
+COPY assets /app/public/assets
+COPY books/Clone_Centre_Prompt_Guidebook.pdf /app/public/books/Clone_Centre_Prompt_Guidebook.pdf
+
+# Paid files are intentionally gitignored and are included only by the private
+# Railway CLI deployment (`railway up --no-gitignore`). They are never served
+# by Express as static assets.
+COPY books/paid /app/private/books
+COPY books/Clone_Centre_Prompt_Guidebook.pdf /app/private/books/Clone_Centre_Prompt_Guidebook.pdf
+
+ENV NODE_ENV=production
+EXPOSE 3000
+
+CMD ["node", "server.js"]

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>THE AI- FIRST BUSINESS · Clone Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Silkscreen:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:800px;height:1200px;overflow:hidden;}
+body{
+  background:
+    radial-gradient(900px 600px at 82% -8%, rgba(46,155,255,.16), transparent 58%),
+    radial-gradient(700px 600px at -8% 108%, rgba(46,155,255,.08), transparent 55%),
+    #000;
+  color:#EDEDED;
+  font-family:'IBM Plex Mono',monospace;
+  position:relative;
+}
+#rain{position:absolute;inset:0;z-index:0;opacity:.22;}
+.grid{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.45;
+  background:
+    linear-gradient(rgba(46,155,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(46,155,255,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 0%,transparent 75%);
+  mask-image:radial-gradient(ellipse at 50% 40%,#000 0%,transparent 75%);
+}
+.scanlines{
+  position:absolute;inset:0;z-index:60;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);
+}
+.vignette{
+  position:absolute;inset:0;z-index:59;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 52%,rgba(0,0,0,.55) 100%);
+}
+.frame{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;
+  padding:62px 54px 52px 54px;
+}
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;}
+.series{display:flex;align-items:center;gap:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;
+  letter-spacing:3px;color:#2E9BFF;}
+.series::before{content:"";width:13px;height:13px;background:#2E9BFF;border-radius:3px;}
+.bookno{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;
+  letter-spacing:2.5px;color:#5A6A82;}
+/* title block */
+.mid{margin-top:auto;margin-bottom:auto;padding-top:18px;}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:4px;
+  color:#2E9BFF;text-transform:uppercase;margin-bottom:22px;}
+.kicker::before{content:"> ";}
+h1{
+  font-family:'VT323',monospace;font-weight:400;
+  font-size:118px;line-height:.92;color:#fff;
+  text-shadow:5px 5px 0 rgba(46,155,255,.32);
+}
+.cursor{display:inline-block;width:.42em;height:.78em;background:#2E9BFF;
+  margin-left:.04em;vertical-align:-.04em;}
+.bar{width:170px;height:7px;background:#2E9BFF;border-radius:3px;margin:34px 0 28px 0;}
+.promise{font-family:'IBM Plex Mono',monospace;font-size:18px;line-height:1.6;
+  color:#9FB3CC;max-width:560px;font-weight:400;}
+/* price badge */
+.price-row{margin-top:30px;display:flex;align-items:center;gap:14px;}
+.badge{display:inline-block;font-family:'Silkscreen',monospace;font-weight:700;
+  font-size:15px;letter-spacing:2px;color:#000;background:#2E9BFF;
+  padding:7px 14px;text-transform:uppercase;}
+.price{font-family:'VT323',monospace;font-size:34px;color:#fff;line-height:1;}
+.price small{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5A6A82;
+  letter-spacing:2px;display:block;margin-top:4px;}
+/* bottom */
+.foot{margin-top:auto;border-top:1px solid #1C1C1C;padding-top:24px;
+  display:flex;justify-content:space-between;align-items:flex-end;}
+.author{font-family:'VT323',monospace;font-size:30px;color:#fff;letter-spacing:1px;}
+.author small{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5A6A82;
+  letter-spacing:2px;display:block;margin-bottom:6px;}
+.brand{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;
+  color:#9FB3CC;letter-spacing:1.5px;line-height:1.9;}
+.brand b{color:#2E9BFF;font-weight:600;}
+.brand .city{color:#5A6A82;font-size:10px;letter-spacing:2.5px;}
+</style>
+</head>
+<body>
+<canvas id="rain"></canvas>
+<div class="grid"></div>
+<div class="vignette"></div>
+<div class="frame">
+  <div class="top">
+    <div class="series">PRO SERIES</div>
+    <div class="bookno">BOOK 15</div>
+  </div>
+  <div class="mid">
+    <div class="kicker">A Clone Centre Book</div>
+    <h1>THE AI-<br>FIRST<br>BUSINESS_</h1>
+    <div class="bar"></div>
+    <p class="promise">The 90-day strategic playbook. Everything you have learned, sequenced into one plan.</p>
+    <div class="price-row">
+      <span class="badge">PREMIUM</span>
+      <span class="price">£19<small>INSTANT DOWNLOAD · PDF</small></span>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="author"><small>WRITTEN BY</small>JOSEPH CONLAN</div>
+    <div class="brand">Clone<b>Centre</b> · clonecentre.ai<br><span class="city">LIVERPOOL · 2026</span></div>
+  </div>
+</div>
+<div class="scanlines"></div>
+<script>
+/* matrix rain — same DNA as the live site */
+const c=document.getElementById('rain'),x=c.getContext('2d');
+c.width=800;c.height=1200;
+let cols=Math.floor(c.width/16),drops=Array(cols).fill(0).map(()=>Math.random()*-H/16);
+const CH='01<>[]{}#$%&*+=AI';
+function tick(){
+  x.fillStyle='rgba(0,0,0,.14)';x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#2E9BFF';x.font='15px monospace';
+  for(let i=0;i<cols;i++){
+    const ch=CH[Math.random()*CH.length|0];
+    x.fillText(ch,i*16,drops[i]*16);
+    if(drops[i]*16>c.height&&Math.random()>.975)drops[i]=0;
+    drops[i]+=.5;
+  }
+}
+/* pre-fill the rain so the static screenshot looks dense and lived-in */
+for(let i=0;i<70;i++)tick();
+</script>
+</body>
+</html>

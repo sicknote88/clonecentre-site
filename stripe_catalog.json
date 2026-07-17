@@ -1,0 +1,188 @@
+{
+  "stripe_account_id": "acct_1RuKCdFn1JbEKmsl",
+  "livemode": true,
+  "currency": "gbp",
+  "managed_by": "codex_stripe_catalog",
+  "catalog": [
+    {
+      "key": "how_to_ask",
+      "name": "How to Ask",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5Tz8g3vCQxU5",
+      "price_id": "price_1TuHIYFn1JbEKmslVBuEmirc",
+      "payment_link_id": "plink_1TuHJUFn1JbEKmslYedpoiSS",
+      "payment_link_url": "https://buy.stripe.com/fZu9ATdev0LcdCXbBEaZi00",
+      "placeholder": "https://buy.stripe.com/REPLACE_HOW_TO_ASK_9"
+    },
+    {
+      "key": "ai_in_plain_english",
+      "name": "AI in Plain English",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5UmsrdylzrK1",
+      "price_id": "price_1TuHJ9Fn1JbEKmslVJGe7P4u",
+      "payment_link_id": "plink_1TuHJlFn1JbEKmsluSHUmZrC",
+      "payment_link_url": "https://buy.stripe.com/5kQdR95M3fG68iD6hkaZi01",
+      "placeholder": "https://buy.stripe.com/REPLACE_AI_PLAIN_ENGLISH_9"
+    },
+    {
+      "key": "everyday_ai",
+      "name": "Everyday AI",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5UoKmku7bv4o",
+      "price_id": "price_1TuHJAFn1JbEKmslwyXOxbNx",
+      "payment_link_id": "plink_1TuHJmFn1JbEKmslFAwO40C5",
+      "payment_link_url": "https://buy.stripe.com/00w00j5M365w9mH7loaZi02",
+      "placeholder": "https://buy.stripe.com/REPLACE_EVERYDAY_AI_9"
+    },
+    {
+      "key": "safe_and_sound",
+      "name": "Safe and Sound",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5ULSBswl3Hty",
+      "price_id": "price_1TuHJAFn1JbEKmslzNoV5YiL",
+      "payment_link_id": "plink_1TuHJnFn1JbEKmsluDSx7fdH",
+      "payment_link_url": "https://buy.stripe.com/aFa28rgqHgKa9mH0X0aZi03",
+      "placeholder": "https://buy.stripe.com/REPLACE_SAFE_AND_SOUND_9"
+    },
+    {
+      "key": "ai_for_work_and_careers",
+      "name": "AI for Work and Careers",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5UWsjUgRqRWl",
+      "price_id": "price_1TuHJBFn1JbEKmslxCCiJWmg",
+      "payment_link_id": "plink_1TuHJnFn1JbEKmslgG1mi69I",
+      "payment_link_url": "https://buy.stripe.com/aFacN52zRfG61UffRUaZi04",
+      "placeholder": "https://buy.stripe.com/REPLACE_CAREERS_9"
+    },
+    {
+      "key": "ai_as_your_coach",
+      "name": "AI as Your Coach",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5U8KNTi8m09r",
+      "price_id": "price_1TuHJCFn1JbEKmslP5Fnu7Fz",
+      "payment_link_id": "plink_1TuHJoFn1JbEKmslM8EpOuFJ",
+      "payment_link_url": "https://buy.stripe.com/eVq14ngqH1Pg1Uf5dgaZi05",
+      "placeholder": "https://buy.stripe.com/REPLACE_COACH_9"
+    },
+    {
+      "key": "ai_for_small_business",
+      "name": "AI for Small Business",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5UZnzkYx8gzO",
+      "price_id": "price_1TuHJCFn1JbEKmsl1JXjzibU",
+      "payment_link_id": "plink_1TuHJpFn1JbEKmslSg1kGJ9E",
+      "payment_link_url": "https://buy.stripe.com/dRm3cvb6n9hI1Uf214aZi06",
+      "placeholder": "https://buy.stripe.com/REPLACE_SMALL_BUSINESS_9"
+    },
+    {
+      "key": "ai_money_saver",
+      "name": "AI Money Saver",
+      "unit_amount": 900,
+      "product_id": "prod_Uu5UFIoFUQxZC7",
+      "price_id": "price_1TuHJDFn1JbEKmsl368qPJdi",
+      "payment_link_id": "plink_1TuHJqFn1JbEKmsli8VkVNoE",
+      "payment_link_url": "https://buy.stripe.com/8x228r3DV51seH1axAaZi07",
+      "placeholder": "https://buy.stripe.com/REPLACE_MONEY_SAVER_9"
+    },
+    {
+      "key": "ai_automation_playbook",
+      "name": "The AI Automation Playbook",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5UILdpXaC9HF",
+      "price_id": "price_1TuHJEFn1JbEKmslooO9sdqc",
+      "payment_link_id": "plink_1TuHJqFn1JbEKmslxGuf3Ty6",
+      "payment_link_url": "https://buy.stripe.com/28E3cvcarctUdCXfRUaZi08",
+      "placeholder": "https://buy.stripe.com/REPLACE_AUTOMATION_19"
+    },
+    {
+      "key": "connecting_ai_to_your_business",
+      "name": "Connecting AI to Your Business",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5U673rYKFJK5",
+      "price_id": "price_1TuHJEFn1JbEKmslOb0Wmyy8",
+      "payment_link_id": "plink_1TuHJrFn1JbEKmslNyMLzeG3",
+      "payment_link_url": "https://buy.stripe.com/dRmaEXfmD79A7ez214aZi09",
+      "placeholder": "https://buy.stripe.com/REPLACE_MCP_19"
+    },
+    {
+      "key": "build_your_own_ai_assistant",
+      "name": "Build Your Own AI Assistant",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5UDPde2nsESm",
+      "price_id": "price_1TuHJFFn1JbEKmslbu9uimtl",
+      "payment_link_id": "plink_1TuHJsFn1JbEKmsldSiwhCKg",
+      "payment_link_url": "https://buy.stripe.com/3cI7sL4HZ2Tk0Qb7loaZi0a",
+      "placeholder": "https://buy.stripe.com/REPLACE_ASSISTANT_19"
+    },
+    {
+      "key": "the_ai_powered_workflow",
+      "name": "The AI-Powered Workflow",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5UUvJyInGX3F",
+      "price_id": "price_1TuHJGFn1JbEKmslWkgXB6nh",
+      "payment_link_id": "plink_1TuHJtFn1JbEKmslpFNPjK2Y",
+      "payment_link_url": "https://buy.stripe.com/dRmaEX6Q751s7ez6hkaZi0b",
+      "placeholder": "https://buy.stripe.com/REPLACE_WORKFLOW_19"
+    },
+    {
+      "key": "ai_for_growth",
+      "name": "AI for Growth",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5U5KzivcHpSF",
+      "price_id": "price_1TuHJGFn1JbEKmsldfz19dYk",
+      "payment_link_id": "plink_1TuHJuFn1JbEKmslvGrq4ya0",
+      "payment_link_url": "https://buy.stripe.com/aFa7sL1vN2Tk6av6hkaZi0c",
+      "placeholder": "https://buy.stripe.com/REPLACE_GROWTH_19"
+    },
+    {
+      "key": "the_automation_roi_method",
+      "name": "The Automation ROI Method",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5UFE0PmioGTM",
+      "price_id": "price_1TuHJHFn1JbEKmslLnFQs8xi",
+      "payment_link_id": "plink_1TuHJvFn1JbEKmslHHNJmOnU",
+      "payment_link_url": "https://buy.stripe.com/cNi6oH8Yf51saqL5dgaZi0d",
+      "placeholder": "https://buy.stripe.com/REPLACE_ROI_19"
+    },
+    {
+      "key": "the_ai_first_business",
+      "name": "The AI-First Business",
+      "unit_amount": 1900,
+      "product_id": "prod_Uu5Ub9mxvNHFD4",
+      "price_id": "price_1TuHJIFn1JbEKmslZ2mcivfe",
+      "payment_link_id": "plink_1TuHJvFn1JbEKmsl2p1YdlOZ",
+      "payment_link_url": "https://buy.stripe.com/8x2bJ1b6n3XoaqL358aZi0e",
+      "placeholder": "https://buy.stripe.com/REPLACE_AIFIRST_19"
+    },
+    {
+      "key": "full_library_bundle",
+      "name": "The Full Library",
+      "unit_amount": 3900,
+      "product_id": "prod_Uu5UX4FAAo5Abq",
+      "price_id": "price_1TuHJIFn1JbEKmslOMwqOyTT",
+      "payment_link_id": "plink_1TuHJwFn1JbEKmslb3HvsCsj",
+      "payment_link_url": "https://buy.stripe.com/28E4gzdev3Xo0Qb214aZi0f",
+      "placeholder": "https://buy.stripe.com/REPLACE_FULL_LIBRARY_39"
+    },
+    {
+      "key": "pro_series_bundle",
+      "name": "The Pro Series",
+      "unit_amount": 7900,
+      "product_id": "prod_Uu5UmJgBUGof0h",
+      "price_id": "price_1TuHJJFn1JbEKmslXecDLNTc",
+      "payment_link_id": "plink_1TuHJxFn1JbEKmslJkwb5GNH",
+      "payment_link_url": "https://buy.stripe.com/fZucN51vNbpQfL5fRUaZi0g",
+      "placeholder": "https://buy.stripe.com/REPLACE_PRO_BUNDLE_79"
+    },
+    {
+      "key": "everything_bundle",
+      "name": "Everything",
+      "unit_amount": 9900,
+      "product_id": "prod_Uu5UK0zchu6nsW",
+      "price_id": "price_1TuHJKFn1JbEKmslkJhhvtYx",
+      "payment_link_id": "plink_1TuHJyFn1JbEKmsldWiJhkWF",
+      "payment_link_url": "https://buy.stripe.com/3cI5kDgqH79A9mH0X0aZi0h",
+      "placeholder": "https://buy.stripe.com/REPLACE_EVERYTHING_99"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+.git
+.railway
+node_modules
+assets/covers/_html
+*.log
+.env
+.env.*

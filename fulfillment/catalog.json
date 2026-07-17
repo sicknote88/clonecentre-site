@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "paymentLinks": {
+    "plink_1TuHJUFn1JbEKmslYedpoiSS": "how_to_ask",
+    "plink_1TuHJlFn1JbEKmsluSHUmZrC": "ai_in_plain_english",
+    "plink_1TuHJmFn1JbEKmslFAwO40C5": "everyday_ai",
+    "plink_1TuHJnFn1JbEKmsluDSx7fdH": "safe_and_sound",
+    "plink_1TuHJnFn1JbEKmslgG1mi69I": "ai_for_work_and_careers",
+    "plink_1TuHJoFn1JbEKmslM8EpOuFJ": "ai_as_your_coach",
+    "plink_1TuHJpFn1JbEKmslSg1kGJ9E": "ai_for_small_business",
+    "plink_1TuHJqFn1JbEKmsli8VkVNoE": "ai_money_saver",
+    "plink_1TuHJqFn1JbEKmslxGuf3Ty6": "ai_automation_playbook",
+    "plink_1TuHJrFn1JbEKmslNyMLzeG3": "connecting_ai_to_your_business",
+    "plink_1TuHJsFn1JbEKmsldSiwhCKg": "build_your_own_ai_assistant",
+    "plink_1TuHJtFn1JbEKmslpFNPjK2Y": "the_ai_powered_workflow",
+    "plink_1TuHJuFn1JbEKmslvGrq4ya0": "ai_for_growth",
+    "plink_1TuHJvFn1JbEKmslHHNJmOnU": "the_automation_roi_method",
+    "plink_1TuHJvFn1JbEKmsl2p1YdlOZ": "the_ai_first_business",
+    "plink_1TuHJwFn1JbEKmslb3HvsCsj": "full_library_bundle",
+    "plink_1TuHJxFn1JbEKmslJkwb5GNH": "pro_series_bundle",
+    "plink_1TuHJyFn1JbEKmsldWiJhkWF": "everything_bundle"
+  },
+  "productIds": {
+    "prod_Uu5Tz8g3vCQxU5": "how_to_ask",
+    "prod_Uu5UmsrdylzrK1": "ai_in_plain_english",
+    "prod_Uu5UoKmku7bv4o": "everyday_ai",
+    "prod_Uu5ULSBswl3Hty": "safe_and_sound",
+    "prod_Uu5UWsjUgRqRWl": "ai_for_work_and_careers",
+    "prod_Uu5U8KNTi8m09r": "ai_as_your_coach",
+    "prod_Uu5UZnzkYx8gzO": "ai_for_small_business",
+    "prod_Uu5UFIoFUQxZC7": "ai_money_saver",
+    "prod_Uu5UILdpXaC9HF": "ai_automation_playbook",
+    "prod_Uu5U673rYKFJK5": "connecting_ai_to_your_business",
+    "prod_Uu5UDPde2nsESm": "build_your_own_ai_assistant",
+    "prod_Uu5UUvJyInGX3F": "the_ai_powered_workflow",
+    "prod_Uu5U5KzivcHpSF": "ai_for_growth",
+    "prod_Uu5UFE0PmioGTM": "the_automation_roi_method",
+    "prod_Uu5Ub9mxvNHFD4": "the_ai_first_business",
+    "prod_Uu5UX4FAAo5Abq": "full_library_bundle",
+    "prod_Uu5UmJgBUGof0h": "pro_series_bundle",
+    "prod_Uu5UK0zchu6nsW": "everything_bundle"
+  },
+  "products": {
+    "how_to_ask": {"title": "How to Ask", "files": ["How_to_Ask.pdf"]},
+    "ai_in_plain_english": {"title": "AI in Plain English", "files": ["AI_in_Plain_English.pdf"]},
+    "everyday_ai": {"title": "Everyday AI", "files": ["Everyday_AI.pdf"]},
+    "safe_and_sound": {"title": "Safe and Sound", "files": ["Safe_and_Sound.pdf"]},
+    "ai_for_work_and_careers": {"title": "AI for Work and Careers", "files": ["AI_for_Work_and_Careers.pdf"]},
+    "ai_as_your_coach": {"title": "AI as Your Coach", "files": ["AI_as_Your_Coach.pdf"]},
+    "ai_for_small_business": {"title": "AI for Small Business", "files": ["AI_for_Small_Business.pdf"]},
+    "ai_money_saver": {"title": "AI Money Saver", "files": ["AI_Money_Saver_Handbook.pdf"]},
+    "ai_automation_playbook": {"title": "The AI Automation Playbook", "files": ["AI_Automation_Playbook.pdf"]},
+    "connecting_ai_to_your_business": {"title": "Connecting AI to Your Business", "files": ["Connecting_AI_to_Your_Business.pdf"]},
+    "build_your_own_ai_assistant": {"title": "Build Your Own AI Assistant", "files": ["Build_Your_Own_AI_Assistant.pdf"]},
+    "the_ai_powered_workflow": {"title": "The AI-Powered Workflow", "files": ["The_AI_Powered_Workflow.pdf"]},
+    "ai_for_growth": {"title": "AI for Growth", "files": ["AI_for_Growth.pdf"]},
+    "the_automation_roi_method": {"title": "The Automation ROI Method", "files": ["The_Automation_ROI_Method.pdf"]},
+    "the_ai_first_business": {"title": "The AI-First Business", "files": ["The_AI_First_Business.pdf"]},
+    "full_library_bundle": {
+      "title": "The Full Library",
+      "files": ["How_to_Ask.pdf", "AI_in_Plain_English.pdf", "Everyday_AI.pdf", "Safe_and_Sound.pdf", "AI_for_Work_and_Careers.pdf", "AI_as_Your_Coach.pdf", "AI_for_Small_Business.pdf", "AI_Money_Saver_Handbook.pdf"]
+    },
+    "pro_series_bundle": {
+      "title": "The Pro Series",
+      "files": ["AI_Automation_Playbook.pdf", "Connecting_AI_to_Your_Business.pdf", "Build_Your_Own_AI_Assistant.pdf", "The_AI_Powered_Workflow.pdf", "AI_for_Growth.pdf", "The_Automation_ROI_Method.pdf", "The_AI_First_Business.pdf"]
+    },
+    "everything_bundle": {
+      "title": "Everything",
+      "files": ["How_to_Ask.pdf", "AI_in_Plain_English.pdf", "Everyday_AI.pdf", "Safe_and_Sound.pdf", "AI_for_Work_and_Careers.pdf", "AI_as_Your_Coach.pdf", "AI_for_Small_Business.pdf", "AI_Money_Saver_Handbook.pdf", "AI_Automation_Playbook.pdf", "Connecting_AI_to_Your_Business.pdf", "Build_Your_Own_AI_Assistant.pdf", "The_AI_Powered_Workflow.pdf", "AI_for_Growth.pdf", "The_Automation_ROI_Method.pdf", "The_AI_First_Business.pdf", "Clone_Centre_Prompt_Guidebook.pdf", "extras/README_mcp_server.md", "extras/business_facts.txt", "extras/business_knowledge_server.py"]
+    }
+  }
+}
