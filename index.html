@@ -42,9 +42,23 @@ nav .links a{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-tran
 nav .links a:hover{color:var(--blue);}
 @media(max-width:640px){nav .links{display:none;}}
 
+/* ---------- Mobile ---------- */
+@media(max-width:860px){
+  section.block{padding:72px 22px;}
+  .hero-inner{padding:110px 22px 70px;gap:28px;}
+  h1{font-size:clamp(52px,15vw,84px);}
+  h2{font-size:clamp(34px,10vw,48px);}
+  .signup{padding:44px 22px;}
+  .marquee div{font-size:22px;}
+  .about-grid img{max-width:100%;}
+  .statrow{gap:26px;}
+  form.sub input{font-size:16px;}
+  footer{padding:40px 22px;}
+}
+
 /* ---------- Hero ---------- */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
-#rain{position:absolute;inset:0;opacity:.16;z-index:0;}
+#rain{position:fixed;inset:0;opacity:.13;z-index:0;pointer-events:none;}
 .hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;
   width:100%;max-width:1200px;margin:0 auto;padding:120px 40px 80px;}
 @media(max-width:860px){.hero-inner{grid-template-columns:1fr;}}
@@ -134,6 +148,7 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 
 <div class="scanlines"></div>
 <div class="vignette"></div>
+<canvas id="rain"></canvas>
 
 <nav>
   <a class="brand" href="#top">
@@ -149,12 +164,11 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <canvas id="rain"></canvas>
   <div class="hero-inner">
     <div>
       <div class="kicker">Joseph Conlan · Clone Centre</div>
       <h1>WELCOME<br>TO MY<br>SITE<span class="cursor"></span></h1>
-      <p class="sub">I am <b>Joseph Conlan</b>, an AI professional who has worked with <b>billion dollar VC funds</b>. This is where I share how to get the most out of your AI: tips, tricks and prompts that actually work.</p>
+      <p class="sub">I am <b>Joseph Conlan</b>, an AI professional who has worked with everyone from <b>SME owners</b> to the owners of <b>billion dollar VC funds in Beverly Hills</b>. This is where I share how to get the most out of your AI: tips, tricks and prompts that actually work.</p>
       <div class="hero-cta">
         <a class="btn blue" href="#signup">SIGN UP FOR AI TIPS</a>
         <a class="btn" href="#library">GET THE BOOKS</a>
@@ -180,9 +194,9 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
     <div>
       <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. I have sat in rooms with <b>billion dollar venture capital funds</b> and watched how the smartest investors in the world use AI every single day.</p>
       <br>
-      <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site, the guidebook, the books and the newsletter, exists to teach you that one skill in plain English.</p>
+      <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site, the books, the newsletter and the <b>free community</b>, exists to teach you that one skill in plain English.</p>
       <div class="statrow">
-        <div class="stat"><div class="n">4</div><div class="l">Free PDF books</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">Books in the library</div></div>
         <div class="stat"><div class="n">30+</div><div class="l">Prompt recipes</div></div>
         <div class="stat"><div class="n">0</div><div class="l">Jargon allowed</div></div>
       </div>
@@ -195,7 +209,7 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
   <div class="signup">
     <div class="sec-kicker">Newsletter</div>
     <h2>SIGN UP HERE</h2>
-    <p class="lede" style="margin:0 auto;">AI tips, tricks and how to get the most out of your AI, straight from an AI professional who has worked with billion dollar VC funds. One short email. No spam. Ever.</p>
+    <p class="lede" style="margin:0 auto;">Join the free Clone Centre community. AI tips, tricks and prompts that actually work, in one short email. No spam. Ever.</p>
     <!-- To receive signups, replace the email below with your own and activate it once at formsubmit.co -->
     <form class="sub" id="subform" action="https://formsubmit.co/ajax/hello@clonecentre.ai" method="POST">
       <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
@@ -210,35 +224,35 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 <section class="block reveal" id="library">
   <div class="sec-kicker">The Library</div>
   <h2>THE PDF LIBRARY</h2>
-  <p class="lede">The Prompt Guidebook is the <b>premium flagship</b>, with full custom cover designs on the way. The plain English pack below is <b>free to download</b>, written for friends and family who are just getting started with AI.</p>
+  <p class="lede">The Clone Centre Prompt Guidebook is <b>free</b>, my gift to you. The paid series below is written for complete beginners, with custom designed covers on the way. Join the list to hear first when each title launches.</p>
   <div class="lib-grid">
     <div class="book featured">
-      <span class="badge">Premium</span>
+      <span class="badge">Free</span>
       <div class="no">BOOK 01</div>
       <h3>The Clone Centre Prompt Guidebook</h3>
-      <p>How to talk to AI and get exactly what you ask for. The CLEAR framework, 30+ copy paste prompt recipes, advanced techniques and the ten mistakes almost everyone makes. Custom designed edition coming soon. Join the list and you will be first to get it.</p>
-      <a class="dl" href="#signup">GET IT VIA THE NEWSLETTER &gt;</a>
+      <p>How to talk to AI and get exactly what you ask for. The CLEAR framework, 30+ copy paste prompt recipes, advanced techniques and the ten mistakes almost everyone makes. Free. My gift to you.</p>
+      <a class="dl" href="books/Clone_Centre_Prompt_Guidebook.pdf" download>DOWNLOAD THE GUIDEBOOK &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Free</span>
+      <span class="badge">Premium</span>
       <div class="no">BOOK 02</div>
       <h3>AI in Plain English</h3>
-      <p>A friendly guide for the over 50s. What AI actually is, what it can and cannot do, and your first ten conversations, with zero jargon.</p>
-      <a class="dl" href="books/AI_in_Plain_English.pdf" download>DOWNLOAD &gt;</a>
+      <p>A friendly guide for complete beginners. What AI actually is, what it can and cannot do, and your first ten conversations, with zero jargon.</p>
+      <a class="dl" href="#signup">NOTIFY ME &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Free</span>
+      <span class="badge">Premium</span>
       <div class="no">BOOK 03</div>
       <h3>Everyday AI</h3>
       <p>50 simple ways AI can help around the house and beyond: recipes, letters, gardening, paperwork and keeping in touch with family.</p>
-      <a class="dl" href="books/Everyday_AI.pdf" download>DOWNLOAD &gt;</a>
+      <a class="dl" href="#signup">NOTIFY ME &gt;</a>
     </div>
     <div class="book">
-      <span class="badge">Free</span>
+      <span class="badge">Premium</span>
       <div class="no">BOOK 04</div>
       <h3>Safe and Sound</h3>
       <p>How to spot AI scams and protect yourself online. Voice cloning, deepfakes and the family safe word, plus a checklist for the fridge.</p>
-      <a class="dl" href="books/Safe_and_Sound.pdf" download>DOWNLOAD &gt;</a>
+      <a class="dl" href="#signup">NOTIFY ME &gt;</a>
     </div>
   </div>
 </section>
