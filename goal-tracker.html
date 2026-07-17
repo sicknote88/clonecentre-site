@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>90-Day Goal Tracker · Clone Centre</title>
+<meta name="description" content="A private, browser-based 90-day goal and weekly accountability tracker from Clone Centre.">
+<meta name="release" content="phase-4">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Silkscreen:wght@400;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--panel:#050505;--ink:#ededed;--dim:#8a8a8a;--blue:#2e9bff;--line:#202020;--px:'VT323',monospace;--mono:'IBM Plex Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{min-height:100vh;background:radial-gradient(1000px 650px at 85% -10%,rgba(46,155,255,.13),transparent 58%),#000;color:var(--ink);font-family:var(--mono);font-size:14px;line-height:1.65;}
+body::before{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);}
+::selection{background:var(--blue);color:#000;}
+a{color:inherit;}
+.topbar{position:sticky;top:0;z-index:10;min-height:66px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px max(22px,calc((100vw - 1120px)/2));}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.brand img{width:32px;height:32px;border-radius:6px;object-fit:cover;mix-blend-mode:screen;}
+.brand span{font-family:var(--px);font-size:24px;color:#fff;}
+.brand b{color:var(--blue);font-weight:400;}
+.back{font-family:var(--px);font-size:19px;text-decoration:none;color:var(--blue);border:1px solid #204b70;padding:5px 12px;}
+.back:hover,.back:focus-visible{background:var(--blue);color:#000;outline:none;}
+main{width:min(1120px,calc(100% - 44px));margin:0 auto;padding:72px 0 100px;}
+.kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);}
+.kicker::before{content:"// ";}
+h1{font-family:var(--px);font-weight:400;font-size:clamp(52px,8vw,92px);line-height:.9;color:#fff;text-shadow:3px 3px 0 rgba(46,155,255,.35);margin-top:17px;}
+.intro{max-width:68ch;margin-top:25px;color:var(--dim);}
+.privacy{margin-top:18px;display:inline-block;border-left:2px solid var(--blue);padding:5px 0 5px 13px;color:#768493;font-size:10px;letter-spacing:.5px;}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:34px 0;}
+button,.button{font-family:var(--px);font-size:20px;letter-spacing:.5px;padding:8px 17px;border:2px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer;text-decoration:none;}
+button:hover,button:focus-visible,.button:hover,.button:focus-visible{background:var(--blue);color:#000;outline:none;}
+button.secondary{border-color:#363636;color:#aaa;}
+button.secondary:hover,button.secondary:focus-visible{border-color:#fff;background:#fff;color:#000;}
+#save-status{font-size:10px;letter-spacing:1px;color:#65717d;text-transform:uppercase;}
+.panel{border:1px solid var(--line);background:rgba(5,5,5,.94);padding:30px;margin-top:20px;}
+.panel.blue{border:2px solid var(--blue);background:linear-gradient(145deg,rgba(46,155,255,.12),#050505 46%);}
+.panel-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:24px;}
+.panel-no{font-family:'Silkscreen',monospace;font-size:12px;color:var(--blue);}
+h2{font-family:var(--px);font-size:36px;font-weight:400;color:#fff;line-height:1;margin-top:7px;}
+.hint{font-size:10px;color:#66717c;max-width:46ch;text-align:right;}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.field{display:grid;gap:7px;}
+.field.full{grid-column:1/-1;}
+label{font-size:9px;letter-spacing:1.4px;color:#7f8b97;text-transform:uppercase;}
+input,textarea{width:100%;border:1px solid #303030;background:#000;color:#fff;font:inherit;padding:12px 13px;outline:none;border-radius:0;}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);}
+textarea{min-height:88px;resize:vertical;}
+.milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.weeks{display:grid;gap:11px;}
+.week{display:grid;grid-template-columns:64px minmax(170px,1.15fr) minmax(160px,.85fr) 72px;gap:12px;align-items:center;border-top:1px solid #191919;padding-top:11px;}
+.week:first-child{border-top:0;padding-top:0;}
+.week-no{font-family:var(--px);font-size:23px;color:#fff;}
+.week-no b{color:var(--blue);font-weight:400;}
+.week input{padding:10px 11px;font-size:12px;}
+.done{display:flex;align-items:center;justify-content:center;gap:7px;color:#76818c;font-size:9px;letter-spacing:1px;}
+.done input{appearance:none;width:23px;height:23px;padding:0;border:1px solid #3a4651;cursor:pointer;position:relative;}
+.done input:checked{border-color:var(--blue);background:var(--blue);}
+.done input:checked::after{content:"✓";position:absolute;inset:-3px 0 0;text-align:center;color:#000;font:22px var(--px);}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.review-grid textarea{min-height:110px;}
+.disclaimer{margin-top:28px;border:1px dashed #26313c;padding:18px;color:#697581;font-size:10px;line-height:1.6;}
+.disclaimer b{color:#aab4bd;}
+footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#59636d;font-size:10px;letter-spacing:.6px;}
+@media(max-width:760px){
+  .topbar{padding:11px 18px;}.brand span{font-size:21px;}main{width:min(100% - 34px,1120px);padding-top:52px;}
+  .panel{padding:22px 18px;}.panel-head{display:block;}.hint{text-align:left;margin-top:8px;}
+  .fields,.milestones,.review-grid{grid-template-columns:1fr;}.field.full{grid-column:auto;}
+  .week{grid-template-columns:48px 1fr 52px;}.week .blocker{grid-column:2/-1;}.done{grid-column:3;grid-row:1;align-self:center;}
+}
+@media(max-width:430px){.back{font-size:17px;padding:5px 8px}.brand span{display:none}.week{grid-template-columns:42px 1fr 44px;gap:8px}.panel{padding:20px 14px}.toolbar button{width:100%;}}
+@media print{
+  body{background:#fff;color:#111;font-size:11px;}body::before,.topbar,.toolbar{display:none!important;}main{width:100%;padding:0;}h1,h2,.week-no{color:#000;text-shadow:none}.kicker,.panel-no,.week-no b{color:#1269a7}.intro,.hint,.privacy{color:#444}.panel,.panel.blue{break-inside:avoid;background:#fff;border-color:#999;padding:16px}input,textarea{border-color:#bbb;color:#000;background:#fff}.weeks{gap:5px}.week{padding-top:5px}.done input{print-color-adjust:exact;-webkit-print-color-adjust:exact}.disclaimer,footer{color:#444;border-color:#aaa}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html#accountability"><img src="assets/clonecentre_logo.png" alt=""><span>Clone<b>Centre</b></span></a>
+  <a class="back" href="index.html#accountability">&lt; BACK TO ACCOUNTABILITY</a>
+</header>
+
+<main>
+  <div class="kicker">Private 90-day workspace</div>
+  <h1>ONE GOAL.<br>TWELVE WEEKS.</h1>
+  <p class="intro">Choose one outcome, make the first move small, and review the truth every week. This tracker is the working template behind Clone Centre accountability coaching.</p>
+  <div class="privacy">PRIVATE BY DEFAULT · YOUR ENTRIES STAY IN THIS BROWSER AND ARE NOT SENT TO CLONE CENTRE</div>
+
+  <div class="toolbar">
+    <button type="button" id="print">PRINT / SAVE PDF</button>
+    <button type="button" class="secondary" id="reset">CLEAR THIS TRACKER</button>
+    <span id="save-status" role="status" aria-live="polite">Ready · saves automatically</span>
+  </div>
+
+  <section class="panel blue">
+    <div class="panel-head"><div><div class="panel-no">01</div><h2>THE 90-DAY OUTCOME</h2></div><p class="hint">Specific, realistic and attached to a date. One outcome beats twelve competing priorities.</p></div>
+    <div class="fields">
+      <div class="field full"><label for="outcome">What will be true in 90 days?</label><textarea id="outcome" data-save="outcome" placeholder="Example: Launch the first paid version of my AI helper and sign five customers."></textarea></div>
+      <div class="field"><label for="why">Why does this matter now?</label><textarea id="why" data-save="why" placeholder="The reason worth returning to when motivation drops."></textarea></div>
+      <div class="field"><label for="deadline">Target date</label><input type="date" id="deadline" data-save="deadline"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><div><div class="panel-no">02</div><h2>THREE MILESTONES</h2></div><p class="hint">Describe visible evidence of progress, not activity for its own sake.</p></div>
+    <div class="milestones">
+      <div class="field"><label for="milestone-1">By day 30</label><textarea id="milestone-1" data-save="milestone-1" placeholder="First proof"></textarea></div>
+      <div class="field"><label for="milestone-2">By day 60</label><textarea id="milestone-2" data-save="milestone-2" placeholder="Second proof"></textarea></div>
+      <div class="field"><label for="milestone-3">By day 90</label><textarea id="milestone-3" data-save="milestone-3" placeholder="Finished outcome"></textarea></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><div><div class="panel-no">03</div><h2>THE TWELVE-WEEK PATH</h2></div><p class="hint">Give each week one action. Week one should feel almost too small to fail.</p></div>
+    <div class="weeks" id="weeks"></div>
+  </section>
+
+  <section class="panel blue">
+    <div class="panel-head"><div><div class="panel-no">04</div><h2>WEEKLY REVIEW</h2></div><p class="hint">Tell the truth without punishing yourself. Keep the lesson and choose the next move.</p></div>
+    <div class="review-grid">
+      <div class="field"><label for="review-win">What went well?</label><textarea id="review-win" data-save="review-win"></textarea></div>
+      <div class="field"><label for="review-not">What did not go to plan?</label><textarea id="review-not" data-save="review-not"></textarea></div>
+      <div class="field"><label for="review-learn">What did I learn?</label><textarea id="review-learn" data-save="review-learn"></textarea></div>
+      <div class="field"><label for="review-next">What is the one thing that matters next week?</label><textarea id="review-next" data-save="review-next"></textarea></div>
+    </div>
+  </section>
+
+  <div class="disclaimer"><b>SCOPE:</b> This template supports planning, action and reflection. It is not therapy and does not provide medical, legal or financial advice. If a goal raises health, safety or crisis concerns, speak to an appropriate qualified professional.</div>
+  <footer><span>CLONE CENTRE · PHASE 4</span><span>YOUR WORK SAVES LOCALLY AS YOU TYPE</span></footer>
+</main>
+
+<script>
+const STORE='clonecentre-90-day-tracker-v1';
+const weeks=document.getElementById('weeks');
+for(let n=1;n<=12;n++){
+  const row=document.createElement('div');
+  row.className='week';
+  row.innerHTML=`<div class="week-no"><b>${String(n).padStart(2,'0')}</b> / 12</div><div class="field"><label for="week-${n}-action">One useful action</label><input id="week-${n}-action" data-save="week-${n}-action" placeholder="What will move the goal?"></div><div class="field blocker"><label for="week-${n}-lesson">Blocker or lesson</label><input id="week-${n}-lesson" data-save="week-${n}-lesson" placeholder="What changed?"></div><label class="done" for="week-${n}-done"><input type="checkbox" id="week-${n}-done" data-save="week-${n}-done"> DONE</label>`;
+  weeks.appendChild(row);
+}
+const fields=[...document.querySelectorAll('[data-save]')];
+const status=document.getElementById('save-status');
+let timer;
+function readStore(){try{return JSON.parse(localStorage.getItem(STORE)||'{}');}catch(_){return {};}}
+function load(){const data=readStore();fields.forEach(el=>{if(!(el.dataset.save in data))return;if(el.type==='checkbox')el.checked=Boolean(data[el.dataset.save]);else el.value=data[el.dataset.save];});}
+function save(){const data={};fields.forEach(el=>data[el.dataset.save]=el.type==='checkbox'?el.checked:el.value);localStorage.setItem(STORE,JSON.stringify(data));status.textContent='Saved in this browser';clearTimeout(timer);timer=setTimeout(()=>status.textContent='Ready · saves automatically',1600);}
+fields.forEach(el=>el.addEventListener(el.type==='checkbox'?'change':'input',save));
+document.getElementById('print').addEventListener('click',()=>window.print());
+document.getElementById('reset').addEventListener('click',()=>{if(!confirm('Clear every entry in this 90-day tracker? This cannot be undone.'))return;localStorage.removeItem(STORE);fields.forEach(el=>{if(el.type==='checkbox')el.checked=false;else el.value='';});status.textContent='Tracker cleared';});
+load();
+</script>
+</body>
+</html>
