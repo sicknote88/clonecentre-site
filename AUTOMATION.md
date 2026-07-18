@@ -40,6 +40,8 @@ The dedicated service stores:
 
 ## Production resources
 
+- Public personal site: `https://joseph.clonecentre.ai`
+- Railway service hostname: `https://clonecentre-site-production.up.railway.app` (kept for signed webhook delivery and redirected to the public domain for browser-facing pages)
 - Stripe event destination ID: `we_1TuN6mFn1JbEKmslGeFtBLxA`
 - Stripe events: `checkout.session.completed`, `checkout.session.async_payment_succeeded`
 - Cal.com event types: `ai-fix-session`, `ai-power-session`, `ai-build-partner`

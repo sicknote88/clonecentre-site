@@ -94,7 +94,7 @@ function proofFileMatchesType(buffer, type) {
 }
 
 function publicSiteUrl() {
-  return (process.env.SITE_URL || 'https://clonecentre-site-production.up.railway.app').replace(/\/$/, '');
+  return (process.env.SITE_URL || 'https://joseph.clonecentre.ai').replace(/\/$/, '');
 }
 
 function cookieValue(request, name) {
@@ -1363,10 +1363,44 @@ app.get('/api/health', async (_request, response) => {
   });
 });
 
-function sendHtml(response, filename, status = 200) {
-  response.status(status).set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  return response.sendFile(join(publicDir, filename));
+const canonicalPublicRoutes = new Map([
+  ['/', '/'],
+  ['/index.html', '/'],
+  ['/about', '/about'],
+  ['/community', '/community'],
+  ['/coaching', '/coaching'],
+  ['/library', '/library'],
+  ['/products', '/products'],
+  ['/member', '/member'],
+  ['/member.html', '/member'],
+  ['/order-complete', '/order-complete'],
+  ['/order-complete.html', '/order-complete'],
+  ['/chatbot-knowledge', '/chatbot-knowledge'],
+  ['/chatbot-knowledge.html', '/chatbot-knowledge'],
+  ['/goal-tracker', '/goal-tracker'],
+  ['/goal-tracker.html', '/goal-tracker']
+]);
+
+function canonicalUrl(request, filename) {
+  const fallbackPath = filename === 'index.html' ? '/' : `/${filename.replace(/\.html$/, '')}`;
+  const path = canonicalPublicRoutes.get(request.path) || fallbackPath;
+  return `${publicSiteUrl()}${path === '/' ? '/' : path}`;
 }
+
+function sendHtml(request, response, filename, status = 200) {
+  const markup = readFileSync(join(publicDir, filename), 'utf8')
+    .replaceAll('__CLONE_CENTRE_CANONICAL__', escapeHtml(canonicalUrl(request, filename)));
+  response.status(status).type('html').set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  return response.send(markup);
+}
+
+app.use((request, response, next) => {
+  if (!isProduction || !['GET', 'HEAD'].includes(request.method) || !request.hostname.endsWith('.up.railway.app')) return next();
+  const canonicalPath = canonicalPublicRoutes.get(request.path);
+  if (!canonicalPath) return next();
+  const query = request.originalUrl.slice(request.path.length);
+  return response.redirect(308, `${publicSiteUrl()}${canonicalPath}${query}`);
+});
 
 if (!isProduction) {
   const previewProfile = {
@@ -1402,15 +1436,19 @@ if (!isProduction) {
   });
 }
 
-app.get('/', (_request, response) => sendHtml(response, 'index.html'));
+app.get('/', (request, response) => sendHtml(request, response, 'index.html'));
 for (const page of ['about', 'community', 'coaching', 'library', 'products']) {
   app.get(`/${page}/`, (_request, response) => response.redirect(308, `/${page}`));
-  app.get(`/${page}`, (_request, response) => sendHtml(response, 'index.html'));
+  app.get(`/${page}`, (request, response) => sendHtml(request, response, 'index.html'));
 }
-app.get('/order-complete', (_request, response) => sendHtml(response, 'order-complete.html'));
-app.get('/chatbot-knowledge', (_request, response) => sendHtml(response, 'chatbot-knowledge.html'));
+for (const [filePath, cleanPath] of [['/index.html', '/'], ['/member.html', '/member'], ['/order-complete.html', '/order-complete'], ['/chatbot-knowledge.html', '/chatbot-knowledge'], ['/goal-tracker.html', '/goal-tracker']]) {
+  app.get(filePath, (_request, response) => response.redirect(308, cleanPath));
+}
+app.get('/order-complete', (request, response) => sendHtml(request, response, 'order-complete.html'));
+app.get('/chatbot-knowledge', (request, response) => sendHtml(request, response, 'chatbot-knowledge.html'));
+app.get('/goal-tracker', (request, response) => sendHtml(request, response, 'goal-tracker.html'));
 app.get('/member/', (_request, response) => response.redirect(308, '/member'));
-app.get('/member', (_request, response) => sendHtml(response, 'member.html'));
+app.get('/member', (request, response) => sendHtml(request, response, 'member.html'));
 app.use('/books/Clone_Centre_Prompt_Guidebook.pdf', (_request, response) => response.status(404).json({ error: 'guide_request_required' }));
 app.use('/books/paid', (_request, response) => response.status(404).json({ error: 'not_found' }));
 app.use(express.static(publicDir, {
@@ -1420,7 +1458,7 @@ app.use(express.static(publicDir, {
     if (filePath.endsWith('.html')) response.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   }
 }));
-app.use((_request, response) => sendHtml(response, 'index.html', 404));
+app.use((request, response) => sendHtml(request, response, 'index.html', 404));
 
 const server = app.listen(port, () => {
   console.info(JSON.stringify({ type: 'server.started', port, dry_run: dryRun, catalog_products: Object.keys(catalog.products).length }));

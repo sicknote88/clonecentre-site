@@ -73,7 +73,7 @@ export function brandEmail({
   internal = false,
   wide = false
 }) {
-  const safeSite = String(siteUrl || 'https://clonecentre-site-production.up.railway.app').replace(/\/$/, '');
+  const safeSite = String(siteUrl || 'https://joseph.clonecentre.ai').replace(/\/$/, '');
   const logoUrl = `${safeSite}/assets/clonecentre_logo.png`;
   const memberUrl = `${safeSite}/member`;
   const libraryUrl = `${safeSite}/library`;

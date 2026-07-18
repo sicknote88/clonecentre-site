@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joseph Conlan · Clone Centre</title>
 <meta name="description" content="Practical AI training, weekly live calls, 1-to-1 coaching and a community for people who want to put AI to work, from Joseph Conlan at Clone Centre.">
+<link rel="canonical" href="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Clone Centre">
+<meta property="og:title" content="Joseph Conlan · Clone Centre">
+<meta property="og:description" content="Practical AI systems, coaching, community and products from Joseph Conlan at Clone Centre.">
+<meta property="og:url" content="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:image" content="https://joseph.clonecentre.ai/assets/clone_centre_latest_logo.png">
 <meta name="release" content="phase-5">
 <link rel="icon" type="image/png" href="/assets/clone_centre_latest_logo.png?v=2">
 <link rel="apple-touch-icon" href="/assets/clone_centre_latest_logo.png?v=2">
@@ -1244,7 +1251,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       </ul>
       <div class="coach-actions">
         <a class="btn blue" href="https://buy.stripe.com/4gMbJ1b6n9hIeH1358aZi0n">JOIN MONTHLY · £149 &gt;</a>
-        <a class="btn" href="goal-tracker.html">OPEN THE TRACKER &gt;</a>
+        <a class="btn" href="/goal-tracker">OPEN THE TRACKER &gt;</a>
       </div>
     </article>
 
@@ -1825,7 +1832,7 @@ guideForm.addEventListener('submit',async function(event){
   try{
     const response=await fetch(guideForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
     const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error('profile failed');
-    if(!result.emailSent){document.getElementById('guide-success-title').textContent='PROFILE SAVED.';document.getElementById('guide-success-copy').textContent='Your AI starting point is stored securely. Email delivery is temporarily pending while our sending account is reviewed; you will not need to complete this form again.';}
+    if(!result.emailSent){document.getElementById('guide-success-title').textContent='PROFILE SAVED // EMAIL QUEUED.';document.getElementById('guide-success-copy').textContent='Your AI starting point is stored securely and your Prompt Guidebook is queued for delivery. Check your inbox in the next few minutes; you will not need to complete this form again.';}
     document.getElementById('guide-form-shell').style.display='none';document.getElementById('guide-success').style.display='block';
   }catch(_){
     error.style.display='block';button.disabled=false;button.textContent='TRY AGAIN >';
