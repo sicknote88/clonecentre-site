@@ -89,7 +89,8 @@ nav .links a:hover::after,nav .links a:focus-visible::after{right:0;}
   h1{font-size:clamp(52px,15vw,84px);}
   h2{font-size:clamp(34px,10vw,48px);}
   .kicker{font-size:10px;letter-spacing:2px;}
-  .hero-img img{width:min(300px,78vw);}
+  .hero-img,.hero-copy{grid-column:1;grid-row:auto;}
+  .hero-img img{width:min(238px,62vw);}
   .signup{padding:44px 22px;}
   .marquee div{font-size:22px;}
   .about-grid img{max-width:100%;}
@@ -127,7 +128,8 @@ h1 .cursor{display:inline-block;width:.5em;height:.85em;background:var(--blue);m
 .btn:hover{background:var(--ink);color:#000;}
 .btn.blue{border-color:var(--blue);color:var(--blue);}
 .btn.blue:hover{background:var(--blue);color:#000;}
-.hero-img{position:relative;justify-self:center;}
+.hero-copy{grid-column:1;grid-row:1;}
+.hero-img{position:relative;justify-self:center;grid-column:2;grid-row:1;}
 .hero-img img{display:block;width:min(360px,72vw);image-rendering:pixelated;mix-blend-mode:lighten;
   -webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 100%);mask-image:linear-gradient(to bottom,#000 78%,transparent 100%);}
 .hero-img .tag{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--dim);white-space:nowrap;}
@@ -192,6 +194,51 @@ form.sub button:hover{background:#fff;border-color:#fff;}
 .form-ok{display:none;margin-top:26px;font-family:var(--px);font-size:26px;color:var(--blue);}
 .form-error{display:none;margin:16px auto 0;max-width:560px;color:#ff8d8d;font-size:12px;line-height:1.55;}
 .hp-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;}
+
+/* ---------- AI profile + guide gate ---------- */
+.guide-gate-overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-y:auto;}
+.guide-gate-overlay.open{display:flex;}
+body.guide-open{overflow:hidden;}
+.guide-gate{position:relative;width:min(760px,100%);border:1px solid #31506c;background:
+  linear-gradient(rgba(46,155,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(46,155,255,.035) 1px,transparent 1px),#03070b;background-size:28px 28px;box-shadow:0 28px 90px rgba(0,0,0,.75);padding:38px;}
+.guide-gate::before{content:"PROFILE.EXE";position:absolute;right:22px;top:18px;font-family:'Silkscreen',monospace;font-size:9px;letter-spacing:2px;color:rgba(46,155,255,.36);}
+.guide-close{position:absolute;right:16px;bottom:16px;width:38px;height:38px;border:1px solid #34404b;background:#000;color:#9aa7b4;font-family:var(--px);font-size:25px;cursor:pointer;}
+.guide-close:hover,.guide-close:focus-visible{border-color:var(--blue);color:var(--blue);outline:none;}
+.guide-progress{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:28px;max-width:180px;}
+.guide-progress span{height:5px;background:#14202a;border:1px solid #263b4e;}
+.guide-progress span.on{background:var(--blue);border-color:var(--blue);box-shadow:0 0 16px rgba(46,155,255,.45);}
+.guide-eyebrow{font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;}
+.guide-gate h2{font-size:clamp(38px,6vw,58px);margin:12px 0 14px;max-width:620px;}
+.guide-intro{max-width:62ch;color:#98A4AF;font-size:13px;}
+.guide-form{margin-top:30px;}
+.guide-step{display:none;}
+.guide-step.active{display:block;animation:guideIn .25s ease-out;}
+@keyframes guideIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+.profile-field{display:flex;flex-direction:column;gap:8px;}
+.profile-field.full{grid-column:1/-1;}
+.profile-field label,.profile-label{font-size:10px;letter-spacing:1.7px;color:#AAB4BE;text-transform:uppercase;}
+.profile-field input,.profile-field select{width:100%;border:1px solid #42505d;background:#000;color:#fff;padding:14px 15px;font-family:var(--mono);font-size:14px;outline:none;}
+.profile-field input:focus,.profile-field select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,155,255,.16);}
+.profile-stage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
+.stage-choice{position:relative;cursor:pointer;}
+.stage-choice input{position:absolute;opacity:0;pointer-events:none;}
+.stage-choice span{display:flex;align-items:center;min-height:58px;border:1px solid #35414c;background:rgba(0,0,0,.78);padding:12px 14px;color:#AAB3BC;font-size:12px;line-height:1.4;transition:border-color .15s,background .15s,color .15s;}
+.stage-choice span::before{content:">";margin-right:10px;color:#4F5D69;font-family:var(--px);font-size:20px;}
+.stage-choice input:checked+span{border-color:var(--blue);background:rgba(46,155,255,.13);color:#fff;}
+.stage-choice input:checked+span::before{color:var(--blue);}
+.stage-choice input:focus-visible+span{outline:2px solid #fff;outline-offset:2px;}
+.profile-consent{display:flex;align-items:flex-start;gap:10px;margin-top:18px;color:#7F8A94;font-size:11px;line-height:1.55;}
+.profile-consent input{margin-top:3px;accent-color:var(--blue);}
+.guide-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;}
+.guide-actions .btn{min-width:150px;text-align:center;}
+.guide-actions .quiet{border:0;color:#84909B;padding-left:0;padding-right:0;}
+.guide-actions .quiet:hover{background:transparent;color:#fff;}
+.guide-error{display:none;margin-top:16px;color:#ff8d8d;font-size:12px;}
+.guide-success{display:none;padding:34px 0 12px;}
+.guide-success .success-mark{font-family:'Silkscreen',monospace;color:var(--blue);font-size:14px;letter-spacing:2px;}
+.guide-success h2{margin-top:18px;}
+.guide-success p{color:#9DA8B2;max-width:58ch;}
 
 /* ---------- Library ---------- */
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:44px;}
@@ -433,6 +480,12 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 .momentum-card p{max-width:70ch;color:#A5A5A5;font-size:13px;}
 .momentum-card p b{color:#fff;}
 .momentum-card .btn{white-space:nowrap;text-align:center;}
+.value-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:38px 0 76px;}
+.value-card{position:relative;border:1px solid #26313c;background:linear-gradient(145deg,rgba(46,155,255,.1),rgba(5,5,5,.96) 48%);padding:30px;min-height:230px;overflow:hidden;}
+.value-card::after{content:attr(data-mark);position:absolute;right:-5px;bottom:-28px;font-family:'Silkscreen',monospace;font-size:86px;color:rgba(46,155,255,.055);}
+.value-card .value-no{font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
+.value-card h3{font-family:var(--px);font-size:36px;font-weight:400;line-height:1;color:#fff;margin:18px 0 12px;}
+.value-card p{position:relative;z-index:1;color:#9DA6AE;font-size:12px;max-width:42ch;}
 .route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:42px;}
 .route-card{position:relative;min-height:290px;border:1px solid #26313c;background:linear-gradient(145deg,rgba(46,155,255,.08),rgba(5,5,5,.95) 44%);padding:30px;text-decoration:none;color:inherit;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s,border-color .2s,background .2s;}
 .route-card::after{content:attr(data-step);position:absolute;right:-8px;bottom:-36px;font-family:'Silkscreen',monospace;font-size:112px;color:rgba(46,155,255,.055);}
@@ -532,19 +585,21 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   .route-card,.route-card.primary{min-height:245px;padding:25px;}
   .simple-rule{align-items:flex-start;flex-direction:column;}
   .offer-map-head,.library-section-head{align-items:flex-start;flex-direction:column;}
-  .offer-shelf{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .offer-card:nth-child(2){border-right:0;}
-  .offer-card:nth-child(-n+2){border-bottom:1px solid #26313c;}
+  .value-grid{grid-template-columns:1fr;margin-bottom:58px;}
+  .value-card{min-height:0;}
+  .route-grid,.pricing-grid,.live-grid,.app-grid{grid-template-columns:1fr;}
+  .offer-shelf{grid-template-columns:1fr;}
+  .offer-card,.offer-card:nth-child(2){border-right:0;border-bottom:1px solid #26313c;}
+  .offer-card:last-child{border-bottom:0;}
   .library-start{grid-template-columns:1fr;}
   .bundle-grid{grid-template-columns:1fr;}
   .mini-links{grid-template-columns:1fr;}
-  .choice-guide{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .page-library .lib-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-  html[data-page="library"] .lib-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-  html[data-page="library"] .book{padding:15px 12px;gap:9px;}
-  html[data-page="library"] .book h3{font-size:22px;}
-  html[data-page="library"] .book p{font-size:11px;line-height:1.5;}
-  html[data-page="library"] .book .price{font-size:24px;}
+  .choice-guide{grid-template-columns:1fr;}
+  .page-library .lib-grid,html[data-page="library"] .lib-grid{grid-template-columns:1fr;gap:18px;}
+  html[data-page="library"] .book{padding:24px 20px;gap:12px;}
+  html[data-page="library"] .book h3{font-size:30px;}
+  html[data-page="library"] .book p{font-size:12px;line-height:1.6;}
+  html[data-page="library"] .book .price{font-size:30px;}
   html[data-page="library"] .book.featured{grid-column:1/-1;padding:24px 18px;}
   html[data-page="library"] .book.featured .cover{width:min(170px,52vw);}
   html[data-page="library"] .everything-card{grid-column:1/-1;}
@@ -557,12 +612,23 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   .offer-card:last-child{border-bottom:0;}
   .picker-control{grid-template-columns:1fr;}
   .picker-control .btn{width:100%;}
-  html[data-page="library"] .book p{display:none;}
-  html[data-page="library"] .book.featured p,html[data-page="library"] .everything-card p{display:block;}
+  .guide-gate-overlay{padding:0;align-items:flex-start;}
+  .guide-gate{min-height:100svh;border-left:0;border-right:0;padding:30px 20px 72px;}
+  .profile-fields,.profile-stage-grid{grid-template-columns:1fr;}
+  .profile-field.full{grid-column:auto;}
+  .guide-actions{align-items:stretch;flex-direction:column-reverse;}
+  .guide-actions .btn{width:100%;}
 }
 @media(max-width:560px){
-  .hero-img,.scrollcue{display:none;}
-  .hero{min-height:100svh;}
+  .scrollcue{display:none;}
+  .hero{min-height:100svh;align-items:flex-start;}
+  .hero-inner{padding-top:88px;padding-bottom:56px;gap:20px;}
+  .hero-img{display:block;order:-1;}
+  .hero-img .tag{bottom:8px;font-size:9px;letter-spacing:2px;}
+  .hero h1{font-size:clamp(50px,14vw,68px);}
+  .hero p.sub{margin-top:18px;font-size:13px;line-height:1.65;}
+  .hero-cta{margin-top:24px;gap:10px;}
+  .hero-cta .btn{width:100%;text-align:center;}
 }
 </style>
 </head>
@@ -596,19 +662,19 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <header class="hero" id="top">
   <canvas id="rain"></canvas>
   <div class="hero-inner">
-    <div>
-      <div class="kicker">Joseph Conlan · Clone Centre</div>
-      <h1>MAKE AI<br>USEFUL<span class="cursor"></span></h1>
-      <p class="sub">I am <b>Joseph Conlan</b>. I help people understand AI in plain English, put it to work on real problems, and keep enough momentum to finish what they start. Begin with something useful—<b>free, with no signup wall</b>.</p>
-      <div class="hero-cta">
-        <a class="btn blue" href="/books/Clone_Centre_Prompt_Guidebook.pdf" download>GET THE FREE GUIDE</a>
-        <a class="btn" href="#start">CHOOSE MY NEXT STEP</a>
-      </div>
-      <p class="ai-line-note">PREFER TO TALK? CLONE CENTRE AI · <strong><a href="tel:+447888865560">07888 865560</a></strong></p>
-    </div>
     <div class="hero-img">
       <img src="assets/joseph_code_dither.png" alt="Pixel portrait of Joseph Conlan">
       <div class="tag">JOSEPH.EXE · ONLINE</div>
+    </div>
+    <div class="hero-copy">
+      <div class="kicker">Joseph Conlan · Founder, Clone Centre</div>
+      <h1>I MAKE AI<br>USEFUL<span class="cursor"></span></h1>
+      <p class="sub">I am <b>Joseph Conlan</b>. I build practical AI systems, teach people how to use them without the jargon, and help good ideas become working tools. This is my place to show you <b>what AI can do and how we make it useful</b>.</p>
+      <div class="hero-cta">
+        <a class="btn blue" href="#start">SEE HOW I CAN HELP</a>
+        <a class="btn" href="#guide-gate" data-guide-gate>GET THE PROMPT GUIDE</a>
+      </div>
+      <p class="ai-line-note">PREFER TO TALK? CLONE CENTRE AI · <strong><a href="tel:+447888865560">07888 865560</a></strong></p>
     </div>
   </div>
   <div class="scrollcue">SCROLL</div>
@@ -627,21 +693,38 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 
 <!-- ============ HOME ROUTE FINDER ============ -->
 <section class="block reveal home-hub" id="start">
-  <div class="momentum-card">
+  <div class="hub-head">
     <div>
-      <div class="momentum-status">Step 1 of 3 · starting point found</div>
-      <h2>YOU ARE NOT STARTING AT ZERO.</h2>
-      <p>You found the right place. Take the <b>Prompt Guidebook</b>: the CLEAR framework, 30+ copy-and-paste prompts and the ten mistakes almost everyone makes. It is a useful first win, not a preview locked behind an email form.</p>
+      <div class="sec-kicker">The value we provide</div>
+      <h2>LESS CONFUSION. MORE USEFUL WORK.</h2>
     </div>
-    <a class="btn blue" href="/books/Clone_Centre_Prompt_Guidebook.pdf" download>DOWNLOAD FREE &gt;</a>
+    <p class="lede">Clone Centre turns AI from an interesting idea into something you can understand, use and build into the way you actually work.</p>
+  </div>
+
+  <div class="value-grid">
+    <article class="value-card" data-mark="01">
+      <div class="value-no">Clarity</div>
+      <h3>UNDERSTAND IT</h3>
+      <p>Plain-English guidance that explains what matters, removes the jargon and gives you the exact words to try next.</p>
+    </article>
+    <article class="value-card" data-mark="02">
+      <div class="value-no">Capability</div>
+      <h3>USE IT</h3>
+      <p>Prompts, books, live builds and working examples that turn learning into useful output you can see and repeat.</p>
+    </article>
+    <article class="value-card" data-mark="03">
+      <div class="value-no">Systems</div>
+      <h3>BUILD WITH IT</h3>
+      <p>Private help and real AI products for the moments when you need architecture, automation and momentum—not another slide deck.</p>
+    </article>
   </div>
 
   <div class="hub-head">
     <div>
-      <div class="sec-kicker">Step 2 of 3</div>
-      <h2>PICK ONE NEXT MOVE.</h2>
+      <div class="sec-kicker">How we do it</div>
+      <h2>CHOOSE THE KIND OF HELP THAT FITS.</h2>
     </div>
-    <p class="lede">Most people should start with the basics. If that is not you, choose the route that matches the problem in front of you.</p>
+    <p class="lede">Learn at your own pace, build live with the community, or work directly with me on the problem in front of you.</p>
   </div>
 
   <div class="route-grid">
@@ -667,20 +750,20 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   </div>
 
   <div class="simple-rule">
-    <div><b>THE DEFAULT IS DELIBERATE.</b><br><span>If you are unsure, start with one plain-English recommendation. You can move up only when a bigger option genuinely helps.</span></div>
-    <a class="btn blue" href="/library#library-picker">USE THE BOOK PICKER &gt;</a>
+    <div><b>NOT SURE WHERE YOU FIT?</b><br><span>Tell me where you are with AI. I will send the Prompt Guidebook and use your answers to make the next advice more relevant.</span></div>
+    <a class="btn blue" href="#guide-gate" data-guide-gate>BUILD MY AI PROFILE &gt;</a>
   </div>
 
   <div class="offer-map">
     <div class="offer-map-head">
-      <div><div class="sec-kicker">Step 3 of 3 · everything available</div><h2>THE WHOLE PLACE, AT A GLANCE.</h2></div>
+      <div><div class="sec-kicker">Everything has its place</div><h2>THE WHOLE PLACE, AT A GLANCE.</h2></div>
       <p>No mystery menu and no need to compare every price at once. These are the four shelves; open only the one that matches what you need.</p>
     </div>
     <div class="offer-shelf">
       <a class="offer-card" href="/library">
         <span class="offer-count">Self-paced · 16 resources</span>
         <h3>READ + LEARN</h3>
-        <ul><li>Free Prompt Guidebook</li><li>8 Plain English books</li><li>7 Pro build-alongs</li><li>Three money-saving bundles</li></ul>
+        <ul><li>Profile-gated Prompt Guidebook</li><li>8 Plain English books</li><li>7 Pro build-alongs</li><li>Three money-saving bundles</li></ul>
         <span class="offer-action">OPEN THE LIBRARY &gt;</span>
       </a>
       <a class="offer-card" href="/community">
@@ -1028,17 +1111,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <!-- ============ SIGNUP ============ -->
 <section class="block reveal" id="signup">
   <div class="signup">
-    <div class="sec-kicker">Keep the momentum</div>
-    <h2>WANT THE NEXT USEFUL THING?</h2>
-    <p class="lede" style="margin:0 auto;">Join the free Clone Centre community for one practical AI email each week and the private Telegram launch invite. No card. No spam. Leave whenever you like.</p>
-    <form class="sub" id="subform" action="/api/subscribe" method="POST">
-      <label class="hp-field" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
-      <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
-      <button type="submit">JOIN FREE &gt;</button>
-    </form>
-    <div class="form-ok" id="formok">YOU ARE ON THE LIST. YOUR COMMUNITY INVITE IS NEXT.</div>
-    <div class="form-error" id="formerror" role="status">That did not go through. Check the address and try again, or email hello@clonecentre.ai.</div>
-    <div class="form-note">Your email is only used for Clone Centre updates and your private community invite.</div>
+    <div class="sec-kicker">A useful introduction</div>
+    <h2>TELL ME HOW YOU USE AI.</h2>
+    <p class="lede" style="margin:0 auto;">Answer four quick questions. I will email your Prompt Guidebook, save your starting point and make future Clone Centre advice more relevant to you.</p>
+    <p style="margin-top:30px;"><a class="btn blue" href="#guide-gate" data-guide-gate>BUILD MY AI PROFILE &gt;</a></p>
+    <div class="form-note">Clear consent, no card and no generic spam. You can leave whenever you like.</div>
   </div>
 </section>
 
@@ -1046,14 +1123,14 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <section class="block reveal" id="library">
   <div class="sec-kicker">Start with one useful result</div>
   <h2>FIND THE RIGHT BOOK WITHOUT READING THE WHOLE SHELF.</h2>
-  <p class="lede">Start free, accept the sensible default, or adjust one pre-filled choice. If you already know you want a complete learning path, compare the three bundles before the individual catalogue.</p>
+  <p class="lede">Request the guide with your AI profile, accept the sensible book recommendation, or adjust one pre-filled choice. If you already know you want a complete learning path, compare the three bundles before the individual catalogue.</p>
 
   <div class="library-start" id="library-picker">
     <div class="library-free">
-      <div class="library-start-label">Free first win · no email required</div>
+      <div class="library-start-label">Included after your AI profile</div>
       <h3>THE PROMPT GUIDEBOOK</h3>
-      <p>The CLEAR framework, 30+ copy-and-paste prompt recipes and the ten mistakes almost everyone makes. Take the useful part now; join the community later only if it earns its place.</p>
-      <a class="btn blue" href="/books/Clone_Centre_Prompt_Guidebook.pdf" download>DOWNLOAD FREE &gt;</a>
+      <p>The CLEAR framework, 30+ copy-and-paste prompt recipes and the ten mistakes almost everyone makes. Tell me how you use AI and the guide will be sent directly to your inbox.</p>
+      <a class="btn blue" href="#guide-gate" data-guide-gate>REQUEST MY GUIDE &gt;</a>
     </div>
     <div class="library-picker">
       <div class="library-start-label">Smart default · adjust only if needed</div>
@@ -1295,6 +1372,81 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <div class="r">© 2026 JOSEPH CONLAN · PHASE 5 LIVE</div>
 </footer>
 
+<!-- ============ AI PROFILE + GUIDE GATE ============ -->
+<div class="guide-gate-overlay" id="guide-gate" aria-hidden="true">
+  <div class="guide-gate" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+    <button class="guide-close" id="guide-close" type="button" aria-label="Close AI profile form">×</button>
+    <div id="guide-form-shell">
+      <div class="guide-progress" aria-label="Form progress"><span class="on"></span><span></span></div>
+      <div class="guide-eyebrow">Your AI profile · about 45 seconds</div>
+      <h2 id="guide-title">MAKE THE GUIDE RELEVANT TO YOU.</h2>
+      <p class="guide-intro">Tell me where you are with AI. I will email the Prompt Guidebook and use your answers to make future Clone Centre advice less generic.</p>
+      <form class="guide-form" id="profileform" action="/api/subscribe" method="POST">
+        <label class="hp-field" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        <div class="guide-step active" data-guide-step="1">
+          <div class="profile-fields">
+            <div class="profile-field">
+              <label for="profile-name">First name</label>
+              <input id="profile-name" name="firstName" type="text" autocomplete="given-name" minlength="2" maxlength="60" placeholder="Joseph" required>
+            </div>
+            <div class="profile-field">
+              <label for="profile-email">Email address</label>
+              <input id="profile-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+            </div>
+            <div class="profile-field full">
+              <label for="profile-role">Where will AI be useful?</label>
+              <select id="profile-role" name="role" required>
+                <option value="" selected disabled>Choose the closest answer</option>
+                <option value="personal">In my personal life</option>
+                <option value="employee">In my work or career</option>
+                <option value="leader">Across a team I lead</option>
+                <option value="founder">Inside a business I run</option>
+              </select>
+            </div>
+          </div>
+          <div class="guide-actions">
+            <span></span>
+            <button class="btn blue" id="guide-next" type="button">NEXT: YOUR AI USE &gt;</button>
+          </div>
+        </div>
+        <div class="guide-step" data-guide-step="2">
+          <div class="profile-label">Where are you with AI today?</div>
+          <div class="profile-stage-grid">
+            <label class="stage-choice"><input type="radio" name="aiStage" value="new" required><span>I have barely started</span></label>
+            <label class="stage-choice"><input type="radio" name="aiStage" value="exploring"><span>I am experimenting</span></label>
+            <label class="stage-choice"><input type="radio" name="aiStage" value="regular"><span>I use AI most weeks</span></label>
+            <label class="stage-choice"><input type="radio" name="aiStage" value="building"><span>I am building systems</span></label>
+          </div>
+          <div class="profile-field" style="margin-top:18px;">
+            <label for="profile-goal">What would be most useful next?</label>
+            <select id="profile-goal" name="goal" required>
+              <option value="" selected disabled>Choose one main result</option>
+              <option value="understand">Understand AI clearly</option>
+              <option value="prompt">Get better answers from AI</option>
+              <option value="save_time">Save time on repeat work</option>
+              <option value="automate">Automate a process</option>
+              <option value="build">Build an AI product or assistant</option>
+              <option value="safe">Use AI safely</option>
+            </select>
+          </div>
+          <label class="profile-consent"><input type="checkbox" name="consent" required> <span>Email my guide and send practical Clone Centre updates based on these answers. I can unsubscribe at any time.</span></label>
+          <div class="guide-actions">
+            <button class="btn quiet" id="guide-back" type="button">&lt; BACK</button>
+            <button class="btn blue" type="submit">EMAIL MY GUIDE &gt;</button>
+          </div>
+        </div>
+        <div class="guide-error" id="guide-error" role="status">That did not go through. Check each answer and try again, or email hello@clonecentre.ai.</div>
+      </form>
+    </div>
+    <div class="guide-success" id="guide-success" role="status">
+      <div class="success-mark">PROFILE SAVED // GUIDE QUEUED</div>
+      <h2>CHECK YOUR INBOX.</h2>
+      <p>Your Prompt Guidebook is being emailed as an attachment. I have also saved your AI starting point so the next advice is more useful.</p>
+      <p style="margin-top:26px;"><a class="btn blue" href="/library">EXPLORE THE LIBRARY &gt;</a></p>
+    </div>
+  </div>
+</div>
+
 <!-- ============ BOOK DETAIL MODAL ============ -->
 <div class="modal-overlay" id="bookModal" onclick="if(event.target===this)closeModal()">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -1328,7 +1480,7 @@ const pageCopy={
   about:{title:'Joseph Conlan · About',kicker:'About Joseph',heading:'THE PERSON BEHIND THE SYSTEMS.',lede:'My background, my plain-English approach, and the numbers that explain why learning to use AI well matters now.',jump:'<a class="btn blue" href="#about">MEET JOSEPH &gt;</a><a class="btn" href="#numbers">SEE THE EVIDENCE &gt;</a>'},
   community:{title:'Clone Centre Community · Joseph Conlan',kicker:'Membership + weekly programme',heading:'ONE COMMUNITY. FOUR LEVELS.',lede:'Start free, learn with the group, build live with Joseph, or add personal accountability. Every level and every weekly touchpoint is explained below.',jump:'<a class="btn blue" href="#community">COMPARE LEVELS &gt;</a><a class="btn" href="#live">SEE THE WEEK &gt;</a><a class="btn" href="#signup">START FREE &gt;</a>'},
   coaching:{title:'AI Coaching · Joseph Conlan',kicker:'Private help + accountability',heading:'GET THE RIGHT KIND OF HELP.',lede:'Choose focused expert working time when the AI problem is technical. Choose accountability when the real problem is keeping momentum.',jump:'<a class="btn blue" href="#accountability">ACCOUNTABILITY &gt;</a><a class="btn" href="#coaching">PRIVATE SESSIONS &gt;</a>'},
-  library:{title:'Clone Centre PDF Library · Joseph Conlan',kicker:'15 books · one smart starting point',heading:'START WITH ONE CLEAR RESULT.',lede:'Take the free guide with no email wall, use the pre-filled picker for one recommendation, or compare three complete learning paths before browsing the full shelf.',jump:'<a class="btn blue" href="#library-picker">GET A RECOMMENDATION &gt;</a><a class="btn" href="#library-bundles">COMPARE 3 BUNDLES &gt;</a>'},
+  library:{title:'Clone Centre PDF Library · Joseph Conlan',kicker:'15 books · one smart starting point',heading:'START WITH ONE CLEAR RESULT.',lede:'Build your AI profile to receive the Prompt Guidebook, use the pre-filled picker for one recommendation, or compare three complete learning paths before browsing the full shelf.',jump:'<a class="btn blue" href="#library-picker">GET A RECOMMENDATION &gt;</a><a class="btn" href="#library-bundles">COMPARE 3 BUNDLES &gt;</a>'},
   products:{title:'Clone Centre Products · Joseph Conlan',kicker:'The Clone Centre stack',heading:'WORKING SYSTEMS. NOT SLIDE DECKS.',lede:'Meet the live AI products behind the teaching: voice assistance, website AI, governance and acquisition intelligence.',jump:'<a class="btn blue" href="#ecosystem">EXPLORE THE STACK &gt;</a>'}
 };
 if(pageCopy[currentPage]){
@@ -1392,20 +1544,50 @@ if(location.hash&&document.fonts){
   }));
 }
 
-/* ---- signup ---- */
-document.getElementById('subform').addEventListener('submit',async function(e){
-  e.preventDefault();
-  const f=this,ok=document.getElementById('formok'),error=document.getElementById('formerror');
-  const button=f.querySelector('button'),data=new FormData(f);
-  button.disabled=true;button.textContent='JOINING...';error.style.display='none';
+/* ---- AI profile + guide gate ---- */
+const guideGate=document.getElementById('guide-gate');
+const guideForm=document.getElementById('profileform');
+const guideSteps=[...guideGate.querySelectorAll('[data-guide-step]')];
+const guideProgress=[...guideGate.querySelectorAll('.guide-progress span')];
+function setGuideStep(step){
+  guideSteps.forEach(panel=>panel.classList.toggle('active',panel.dataset.guideStep===String(step)));
+  guideProgress.forEach((bar,index)=>bar.classList.toggle('on',index<step));
+}
+function openGuideGate(event){
+  if(event)event.preventDefault();
+  guideGate.classList.add('open');guideGate.setAttribute('aria-hidden','false');document.body.classList.add('guide-open');
+  if(document.getElementById('guide-success').style.display!=='block'){
+    setGuideStep(1);setTimeout(()=>document.getElementById('profile-name').focus(),60);
+  }
+}
+function closeGuideGate(){
+  guideGate.classList.remove('open');guideGate.setAttribute('aria-hidden','true');document.body.classList.remove('guide-open');
+}
+document.querySelectorAll('[data-guide-gate]').forEach(link=>link.addEventListener('click',openGuideGate));
+document.getElementById('guide-close').addEventListener('click',closeGuideGate);
+guideGate.addEventListener('click',event=>{if(event.target===guideGate)closeGuideGate();});
+document.getElementById('guide-next').addEventListener('click',()=>{
+  const fields=[...guideSteps[0].querySelectorAll('input:not([type="hidden"]),select')];
+  const invalid=fields.find(field=>!field.checkValidity());
+  if(invalid){invalid.reportValidity();return;}
+  setGuideStep(2);setTimeout(()=>guideSteps[1].querySelector('input').focus(),40);
+});
+document.getElementById('guide-back').addEventListener('click',()=>setGuideStep(1));
+guideForm.addEventListener('submit',async function(event){
+  event.preventDefault();
+  if(!guideForm.reportValidity())return;
+  const error=document.getElementById('guide-error'),button=guideForm.querySelector('[type="submit"]'),data=new FormData(guideForm);
+  button.disabled=true;button.textContent='SENDING...';error.style.display='none';
+  const payload={firstName:data.get('firstName'),email:data.get('email'),role:data.get('role'),aiStage:data.get('aiStage'),goal:data.get('goal'),consent:data.has('consent'),company:data.get('company')};
   try{
-    const response=await fetch(f.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({email:data.get('email'),company:data.get('company')})});
-    if(!response.ok)throw new Error('signup failed');
-    f.style.display='none';ok.style.display='block';
+    const response=await fetch(guideForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!response.ok)throw new Error('profile failed');
+    document.getElementById('guide-form-shell').style.display='none';document.getElementById('guide-success').style.display='block';
   }catch(_){
     error.style.display='block';button.disabled=false;button.textContent='TRY AGAIN >';
   }
 });
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&guideGate.classList.contains('open'))closeGuideGate();});
 
 /* ---- live Cal.com booking connection ---- */
 const calendarShell=document.getElementById('calendar-shell');

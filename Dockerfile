@@ -8,10 +8,9 @@ RUN npm ci --omit=dev
 COPY server.js ./server.js
 COPY fulfillment ./fulfillment
 
-RUN mkdir -p /app/public/books /app/private/books
+RUN mkdir -p /app/public /app/private/books
 COPY index.html goal-tracker.html order-complete.html /app/public/
 COPY assets /app/public/assets
-COPY books/Clone_Centre_Prompt_Guidebook.pdf /app/public/books/Clone_Centre_Prompt_Guidebook.pdf
 
 # Paid files are intentionally gitignored and are included only by the private
 # Railway CLI deployment (`railway up --no-gitignore`). They are never served

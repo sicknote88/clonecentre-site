@@ -10,5 +10,10 @@ node_modules/
 # Paid products must be delivered after checkout, never from the public static site.
 books/paid/
 
+# Generated PDF QA artifacts stay local; the deploy reads the approved files
+# from books/ and includes the private paid library with --no-gitignore.
+output/
+tmp/
+
 # Internal launch strategy is kept in the local workspace, not the public repository.
 COMMUNITY_LAUNCH_PLAN.md

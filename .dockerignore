@@ -1,6 +1,8 @@
 .git
 .railway
 node_modules
+output
+tmp
 assets/covers/_html
 *.log
 .env

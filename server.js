@@ -89,24 +89,63 @@ function emailMarkup(product) {
   </body></html>`;
 }
 
-function welcomeEmailMarkup() {
+const profileOptions = {
+  role: {
+    personal: 'Personal use',
+    employee: 'My work or career',
+    leader: 'Leading a team',
+    founder: 'Running a business'
+  },
+  aiStage: {
+    new: 'I have barely started',
+    exploring: 'I am experimenting',
+    regular: 'I use AI most weeks',
+    building: 'I am building systems'
+  },
+  goal: {
+    understand: 'Understand AI clearly',
+    prompt: 'Get better answers',
+    save_time: 'Save time on repeat work',
+    automate: 'Automate a process',
+    build: 'Build an AI product or assistant',
+    safe: 'Use AI safely'
+  }
+};
+
+function welcomeEmailMarkup(firstName) {
   const siteUrl = publicSiteUrl();
   return `<!doctype html>
   <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
     <div style="max-width:620px;margin:auto;padding:34px 24px">
       <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // YOU ARE IN</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">One useful AI email a week. No noise.</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Welcome to Clone Centre. I will send practical prompts, plain-English explanations and the private community invite as it opens.</p>
-      <p style="line-height:1.65;color:#aeb8c2">Start with the free Prompt Guidebook now. It includes the CLEAR framework and more than 30 copy-and-paste prompts.</p>
-      <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${siteUrl}/books/Clone_Centre_Prompt_Guidebook.pdf">GET THE FREE GUIDE</a></p>
+      <h1 style="font-size:30px;margin:18px 0 12px">Your Prompt Guidebook is attached.</h1>
+      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(firstName)}, welcome to Clone Centre. Your guide includes the CLEAR framework, more than 30 copy-and-paste prompts and the ten mistakes that make AI feel harder than it is.</p>
+      <p style="line-height:1.65;color:#aeb8c2">I have also saved the answers you shared so the advice I send is relevant to how you actually use AI.</p>
+      <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${siteUrl}/library">EXPLORE THE LIBRARY</a></p>
       <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">You asked to receive Clone Centre updates. Reply with “unsubscribe” at any time and I will remove you.</div>
     </div>
   </body></html>`;
 }
 
-async function addNewsletterContact(email) {
+function leadNotificationMarkup(profile) {
+  return `<!doctype html>
+  <html><body style="font-family:Arial,sans-serif;background:#f3f5f7;color:#101820;margin:0;padding:28px">
+    <div style="max-width:620px;margin:auto;background:#fff;border:1px solid #d9e0e7;padding:28px">
+      <div style="font:12px monospace;letter-spacing:2px;color:#1676c4">NEW CLONE CENTRE PROFILE</div>
+      <h1 style="font-size:28px;margin:16px 0">${escapeHtml(profile.firstName)} requested the Prompt Guidebook.</h1>
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">Email</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profile.email)}</td></tr>
+        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">Context</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profileOptions.role[profile.role])}</td></tr>
+        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">AI stage</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profileOptions.aiStage[profile.aiStage])}</td></tr>
+        <tr><td style="padding:10px;color:#647180">Main goal</td><td style="padding:10px">${escapeHtml(profileOptions.goal[profile.goal])}</td></tr>
+      </table>
+    </div>
+  </body></html>`;
+}
+
+async function addNewsletterContact(email, firstName) {
   const segmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID;
-  const createBody = { email, unsubscribed: false };
+  const createBody = { email, first_name: firstName, unsubscribed: false };
   if (segmentId) createBody.segments = [{ id: segmentId }];
 
   const created = await resendRequest('/contacts', { body: createBody });
@@ -117,7 +156,7 @@ async function addNewsletterContact(email) {
   if (created.response.status === 409) {
     const updated = await resendRequest(`/contacts/${encodeURIComponent(email)}`, {
       method: 'PATCH',
-      body: { unsubscribed: false }
+      body: { first_name: firstName, unsubscribed: false }
     });
     if (!updated.response.ok) {
       throw new Error(`Resend rejected contact update (${updated.response.status}): ${updated.result.message || updated.result.name || 'unknown error'}`);
@@ -134,18 +173,31 @@ async function addNewsletterContact(email) {
   }
 }
 
-async function subscribe(email) {
-  await addNewsletterContact(email);
-  const emailKey = createHash('sha256').update(email).digest('hex').slice(0, 32);
+async function subscribe(profile) {
+  await addNewsletterContact(profile.email, profile.firstName);
+  const emailKey = createHash('sha256').update(profile.email).digest('hex').slice(0, 32);
+  const guidePath = assertPrivateFile('Clone_Centre_Prompt_Guidebook.pdf');
   const result = await sendResendEmail({
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
-    to: [email],
+    to: [profile.email],
     reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
-    subject: 'Welcome to Clone Centre — start here',
-    html: welcomeEmailMarkup(),
-    tags: [{ name: 'automation', value: 'newsletter_welcome' }]
-  }, `clonecentre-welcome/${emailKey}`);
-  console.info(JSON.stringify({ type: 'newsletter.subscribed', resend_id: result.id }));
+    subject: 'Your Clone Centre Prompt Guidebook',
+    html: welcomeEmailMarkup(profile.firstName),
+    attachments: [{
+      filename: 'Clone_Centre_Prompt_Guidebook.pdf',
+      content: readFileSync(guidePath).toString('base64')
+    }],
+    tags: [{ name: 'automation', value: 'guide_delivery' }]
+  }, `clonecentre-guide/${emailKey}`);
+  const notification = await sendResendEmail({
+    from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
+    to: [process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai'],
+    reply_to: profile.email,
+    subject: `New AI profile — ${profile.firstName} · ${profileOptions.aiStage[profile.aiStage]}`,
+    html: leadNotificationMarkup(profile),
+    tags: [{ name: 'automation', value: 'lead_profile' }]
+  }, `clonecentre-lead/${emailKey}`);
+  console.info(JSON.stringify({ type: 'newsletter.subscribed', resend_id: result.id, notification_id: notification.id }));
 }
 
 function bookingDetails(payload) {
@@ -354,11 +406,20 @@ app.post('/api/subscribe', async (request, response) => {
   if (!subscriptionAllowed(request.ip || 'unknown')) return response.status(429).json({ error: 'too_many_requests' });
   if (request.body?.company) return response.status(200).json({ ok: true });
   const email = String(request.body?.email || '').trim().toLowerCase();
+  const firstName = String(request.body?.firstName || '').trim();
+  const role = String(request.body?.role || '');
+  const aiStage = String(request.body?.aiStage || '');
+  const goal = String(request.body?.goal || '');
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return response.status(400).json({ error: 'valid_email_required' });
   }
+  if (firstName.length < 2 || firstName.length > 60) return response.status(400).json({ error: 'valid_name_required' });
+  if (!Object.hasOwn(profileOptions.role, role)) return response.status(400).json({ error: 'valid_role_required' });
+  if (!Object.hasOwn(profileOptions.aiStage, aiStage)) return response.status(400).json({ error: 'valid_ai_stage_required' });
+  if (!Object.hasOwn(profileOptions.goal, goal)) return response.status(400).json({ error: 'valid_goal_required' });
+  if (request.body?.consent !== true) return response.status(400).json({ error: 'consent_required' });
   try {
-    await subscribe(email);
+    await subscribe({ email, firstName, role, aiStage, goal });
     return response.status(201).json({ ok: true });
   } catch (error) {
     console.error(JSON.stringify({ type: 'newsletter.failed', reason: error.message }));
@@ -405,6 +466,7 @@ for (const page of ['about', 'community', 'coaching', 'library', 'products']) {
   app.get(`/${page}`, (_request, response) => sendHtml(response, 'index.html'));
 }
 app.get('/order-complete', (_request, response) => sendHtml(response, 'order-complete.html'));
+app.use('/books/Clone_Centre_Prompt_Guidebook.pdf', (_request, response) => response.status(404).json({ error: 'guide_request_required' }));
 app.use('/books/paid', (_request, response) => response.status(404).json({ error: 'not_found' }));
 app.use(express.static(publicDir, {
   index: false,
