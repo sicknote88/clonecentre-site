@@ -17,6 +17,7 @@ const port = Number(process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === 'production';
 const dryRun = !isProduction && process.env.DELIVERY_DRY_RUN === 'true';
 const subscribeAttempts = new Map();
+const chatTranscriptAttempts = new Map();
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -123,6 +124,30 @@ function welcomeEmailMarkup(firstName) {
       <p style="line-height:1.65;color:#aeb8c2">I have also saved the answers you shared so the advice I send is relevant to how you actually use AI.</p>
       <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${siteUrl}/library">EXPLORE THE LIBRARY</a></p>
       <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">You asked to receive Clone Centre updates. Reply with “unsubscribe” at any time and I will remove you.</div>
+    </div>
+  </body></html>`;
+}
+
+function chatTranscriptEmailMarkup({ conversationId, sessionId, page, title, messages }) {
+  const rows = messages.map((message) => {
+    const visitor = message.role === 'user';
+    return `<div style="margin:0 0 12px;padding:12px 14px;border:1px solid ${visitor ? '#2e9bff' : '#263848'};background:${visitor ? '#07192a' : '#070b0f'}">
+      <div style="margin-bottom:5px;font:10px monospace;letter-spacing:1.5px;color:${visitor ? '#2e9bff' : '#8292a0'}">${visitor ? 'VISITOR' : 'CLONE CENTRE AI'}</div>
+      <div style="white-space:pre-wrap;color:#e1e7ec;font:13px/1.55 Arial,sans-serif">${escapeHtml(message.content)}</div>
+    </div>`;
+  }).join('');
+  return `<!doctype html>
+  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
+    <div style="max-width:680px;margin:auto;padding:32px 22px">
+      <div style="font:11px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE AI // CONVERSATION</div>
+      <h1 style="font-size:25px;margin:15px 0 7px">A visitor spoke with Clone Centre AI.</h1>
+      <div style="margin-bottom:22px;color:#82909b;font-size:12px;line-height:1.6">
+        <div><b style="color:#b9c4cd">Page:</b> ${escapeHtml(title || page)}</div>
+        <div><b style="color:#b9c4cd">URL:</b> ${escapeHtml(page)}</div>
+        <div><b style="color:#b9c4cd">Conversation:</b> ${escapeHtml(conversationId)} · HyperChat session ${escapeHtml(sessionId)}</div>
+      </div>
+      ${rows}
+      <div style="margin-top:22px;padding-top:15px;border-top:1px solid #26323e;color:#6f7d89;font-size:11px">Sent automatically after the conversation became inactive. The complete session remains available in HyperChat.</div>
     </div>
   </body></html>`;
 }
@@ -309,6 +334,21 @@ function subscriptionAllowed(ip) {
   return true;
 }
 
+function chatTranscriptAllowed(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 60 * 1000;
+  const recent = (chatTranscriptAttempts.get(ip) || []).filter((attempt) => now - attempt < windowMs);
+  if (recent.length >= 12) return false;
+  recent.push(now);
+  chatTranscriptAttempts.set(ip, recent);
+  if (chatTranscriptAttempts.size > 1000) {
+    for (const [key, attempts] of chatTranscriptAttempts) {
+      if (!attempts.some((attempt) => now - attempt < windowMs)) chatTranscriptAttempts.delete(key);
+    }
+  }
+  return true;
+}
+
 async function sendDelivery(session) {
   if (session.payment_status !== 'paid') return { skipped: 'payment_not_paid' };
   const email = customerEmail(session);
@@ -400,7 +440,7 @@ app.post('/api/cal/webhook', express.raw({ type: 'application/json', limit: '256
   }
 });
 
-app.use(express.json({ limit: '16kb' }));
+app.use(express.json({ limit: '128kb' }));
 
 app.post('/api/subscribe', async (request, response) => {
   if (!subscriptionAllowed(request.ip || 'unknown')) return response.status(429).json({ error: 'too_many_requests' });
@@ -427,6 +467,65 @@ app.post('/api/subscribe', async (request, response) => {
   }
 });
 
+app.post('/api/chat-transcript', async (request, response) => {
+  if (request.get('sec-fetch-site') === 'cross-site') return response.status(403).json({ error: 'cross_site_request_rejected' });
+  const conversationId = String(request.body?.conversationId || '').trim();
+  const sessionId = String(request.body?.sessionId || '').trim();
+  const page = String(request.body?.page || '').trim();
+  const title = String(request.body?.title || '').trim();
+  const rawMessages = request.body?.messages;
+  if (!/^ct_[a-z0-9]{8,80}$/i.test(conversationId)) return response.status(400).json({ error: 'invalid_conversation' });
+  if (!/^cc_[a-z0-9]{8,80}$/i.test(sessionId)) return response.status(400).json({ error: 'invalid_session' });
+  if (title.length > 200 || page.length > 2000) return response.status(400).json({ error: 'invalid_page' });
+  try {
+    const pageUrl = new URL(page);
+    if (!['http:', 'https:'].includes(pageUrl.protocol)) throw new Error('invalid protocol');
+  } catch {
+    return response.status(400).json({ error: 'invalid_page' });
+  }
+  if (!Array.isArray(rawMessages) || rawMessages.length < 2 || rawMessages.length > 40) {
+    return response.status(400).json({ error: 'invalid_messages' });
+  }
+  const messages = [];
+  let transcriptLength = 0;
+  for (const message of rawMessages) {
+    const role = message?.role;
+    const content = String(message?.content || '').trim();
+    if (!['user', 'assistant'].includes(role) || !content || content.length > 4000) {
+      return response.status(400).json({ error: 'invalid_messages' });
+    }
+    transcriptLength += content.length;
+    messages.push({ role, content });
+  }
+  if (transcriptLength > 100_000 || !messages.some((message) => message.role === 'user')) {
+    return response.status(400).json({ error: 'invalid_messages' });
+  }
+  if (!chatTranscriptAllowed(request.ip || 'unknown')) return response.status(429).json({ error: 'too_many_requests' });
+
+  const userTurns = messages.filter((message) => message.role === 'user').length;
+  const eventKey = createHash('sha256').update(`${conversationId}:${userTurns}`).digest('hex').slice(0, 32);
+  let pageLabel = title || 'Clone Centre website';
+  try {
+    const pageUrl = new URL(page);
+    pageLabel = `${title || 'Clone Centre'} · ${pageUrl.pathname}`;
+  } catch {}
+  try {
+    const result = await sendResendEmail({
+      from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
+      to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai'],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
+      subject: `Clone Centre AI chat — ${pageLabel.slice(0, 120)}`,
+      html: chatTranscriptEmailMarkup({ conversationId, sessionId, page, title, messages }),
+      tags: [{ name: 'automation', value: 'chat_transcript' }]
+    }, `clonecentre-chat/${eventKey}`);
+    console.info(JSON.stringify({ type: 'chat_transcript.sent', conversation: conversationId, user_turns: userTurns, resend_id: result.id }));
+    return response.status(202).json({ ok: true });
+  } catch (error) {
+    console.error(JSON.stringify({ type: 'chat_transcript.failed', conversation: conversationId, reason: error.message }));
+    return response.status(502).json({ error: 'transcript_delivery_unavailable' });
+  }
+});
+
 app.get('/api/site-config', (_request, response) => {
   response.set('Cache-Control', 'public, max-age=300');
   response.json({
@@ -449,6 +548,7 @@ app.get('/api/health', (_request, response) => {
     })),
     delivery_configured: Boolean(process.env.STRIPE_WEBHOOK_SECRET && process.env.RESEND_API_KEY),
     newsletter_configured: Boolean(process.env.RESEND_API_KEY),
+    chat_transcripts_configured: Boolean(process.env.RESEND_API_KEY && (process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO)),
     booking_links_configured: Boolean(process.env.CAL_PROFILE_URL && process.env.CAL_AI_FIX_URL && process.env.CAL_AI_POWER_URL && process.env.CAL_BUILD_PARTNER_URL),
     booking_automation_configured: Boolean(process.env.CAL_WEBHOOK_SECRET && process.env.RESEND_API_KEY),
     delivery_mode: dryRun ? 'dry_run' : 'live'

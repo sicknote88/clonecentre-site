@@ -48,7 +48,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;height:70px;padding:0 28px;bo
   background:rgba(0,0,0,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
 .nav-inner{position:relative;width:100%;max-width:1200px;height:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex:0 0 auto;}
-.brand img{height:34px;width:34px;object-fit:cover;border-radius:6px;mix-blend-mode:screen;}
+.brand img{height:42px;width:42px;object-fit:cover;border-radius:8px;}
 .brand span{font-family:var(--px);font-size:24px;letter-spacing:1px;color:#fff;}
 .brand span b{color:var(--blue);font-weight:400;}
 nav .links{display:flex;align-items:center;gap:clamp(12px,1.6vw,20px);}
@@ -64,7 +64,7 @@ nav .links a:hover::after,nav .links a:focus-visible::after{right:0;}
 
 @media(max-width:980px){
   nav{height:64px;padding:0 20px;}
-  .brand img{height:32px;width:32px;}
+  .brand img{height:38px;width:38px;}
   .brand span{font-size:23px;}
   .menu-toggle{display:flex;}
   nav .links{position:fixed;top:64px;left:0;right:0;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:10px 20px 18px;
@@ -241,57 +241,43 @@ body.guide-open{overflow:hidden;}
 .guide-success p{color:#9DA8B2;max-width:58ch;}
 
 /* ---------- Clone Centre AI · powered by our HyperChat product ---------- */
-.cc-chat-launcher{position:fixed;right:18px;bottom:18px;z-index:88;display:flex;align-items:center;gap:11px;border:1px solid var(--blue);background:#02070b;color:#fff;padding:9px 14px 9px 9px;box-shadow:0 14px 45px rgba(0,0,0,.78),0 0 24px rgba(46,155,255,.16);cursor:pointer;text-align:left;}
-.cc-chat-launcher:hover,.cc-chat-launcher:focus-visible{background:#07121d;box-shadow:0 14px 45px rgba(0,0,0,.8),0 0 30px rgba(46,155,255,.28);outline:none;}
-.cc-chat-launcher-icon{display:grid;place-items:center;width:38px;height:38px;background:var(--blue);color:#000;font-family:'Silkscreen',monospace;font-size:10px;box-shadow:4px 4px 0 rgba(46,155,255,.22);}
-.cc-chat-launcher-copy{display:flex;flex-direction:column;line-height:1.2;}
-.cc-chat-launcher-copy b{font-family:var(--px);font-size:21px;font-weight:400;letter-spacing:.6px;}
-.cc-chat-launcher-copy small{font-size:8px;letter-spacing:1.4px;color:#7E8B97;text-transform:uppercase;}
-.cc-chat-panel{position:fixed;right:18px;bottom:82px;z-index:89;display:none;flex-direction:column;width:min(410px,calc(100vw - 28px));height:min(650px,calc(100svh - 102px));border:1px solid #31506c;background:#020609;box-shadow:0 24px 90px rgba(0,0,0,.9),0 0 0 1px rgba(46,155,255,.09);overflow:hidden;}
+.cc-chat-launcher{position:fixed;right:18px;bottom:18px;z-index:88;display:grid;place-items:center;width:66px;height:66px;border:1px solid rgba(46,155,255,.72);border-radius:20px;background:radial-gradient(circle at 50% 42%,rgba(46,155,255,.2),rgba(2,7,11,.98) 70%);box-shadow:0 16px 48px rgba(0,0,0,.82),0 0 24px rgba(46,155,255,.16);cursor:pointer;overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s;}
+.cc-chat-launcher:hover,.cc-chat-launcher:focus-visible{transform:translateY(-3px);border-color:#fff;box-shadow:0 18px 54px rgba(0,0,0,.86),0 0 34px rgba(46,155,255,.3);outline:none;}
+.cc-chat-launcher img{width:60px;height:60px;object-fit:contain;object-position:center 54%;filter:drop-shadow(0 5px 12px rgba(46,155,255,.28));}
+.cc-chat-panel{position:fixed;right:18px;bottom:96px;z-index:89;display:none;flex-direction:column;width:min(368px,calc(100vw - 28px));height:min(548px,calc(100svh - 116px));border:1px solid #294762;border-radius:16px;background:#020609;box-shadow:0 24px 90px rgba(0,0,0,.92),0 0 0 1px rgba(46,155,255,.06);overflow:hidden;}
 .cc-chat-panel.open{display:flex;animation:ccChatIn .2s ease-out;}
 body.cc-chat-open{overflow:hidden;}
 @keyframes ccChatIn{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
-.cc-chat-head{display:flex;align-items:center;gap:11px;padding:14px 15px;border-bottom:1px solid #263848;background:linear-gradient(135deg,rgba(46,155,255,.17),rgba(0,0,0,.96));}
-.cc-chat-head-mark{display:grid;place-items:center;width:36px;height:36px;background:var(--blue);color:#000;font-family:'Silkscreen',monospace;font-size:9px;}
+.cc-chat-head{display:flex;align-items:center;gap:10px;padding:10px 11px;border-bottom:1px solid #203445;background:linear-gradient(135deg,rgba(46,155,255,.11),rgba(0,0,0,.97));}
+.cc-chat-head-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:rgba(46,155,255,.1);overflow:hidden;}
+.cc-chat-head-mark img{width:39px;height:39px;object-fit:contain;object-position:center 54%;}
 .cc-chat-head-copy{min-width:0;flex:1;}
-.cc-chat-head-copy b{display:block;font-family:var(--px);font-size:24px;font-weight:400;line-height:1;}
-.cc-chat-head-copy span{display:block;margin-top:4px;font-size:8px;letter-spacing:1.5px;color:#8DA1B2;text-transform:uppercase;}
-.cc-chat-close{display:grid;place-items:center;width:35px;height:35px;border:1px solid #3A4A57;background:#000;color:#A6B0B9;font-family:var(--px);font-size:24px;cursor:pointer;}
+.cc-chat-head-copy b{display:block;font-family:var(--px);font-size:21px;font-weight:400;line-height:1;}
+.cc-chat-head-copy span{display:block;margin-top:4px;font-size:7px;letter-spacing:1.45px;color:#7F91A1;text-transform:uppercase;}
+.cc-chat-close{display:grid;place-items:center;width:34px;height:34px;border:1px solid #324452;border-radius:10px;background:#010305;color:#A6B0B9;font-family:var(--mono);font-size:18px;cursor:pointer;}
 .cc-chat-close:hover,.cc-chat-close:focus-visible{color:var(--blue);border-color:var(--blue);outline:none;}
-.cc-chat-messages{flex:1;overflow-y:auto;padding:16px;background:linear-gradient(rgba(46,155,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(46,155,255,.025) 1px,transparent 1px),#010305;background-size:24px 24px;scrollbar-color:#31506c #05090d;}
+.cc-chat-messages{flex:1;overflow-y:auto;padding:14px;background:linear-gradient(rgba(46,155,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(46,155,255,.02) 1px,transparent 1px),#010305;background-size:28px 28px;scrollbar-color:#31506c #05090d;}
 .cc-chat-row{display:flex;margin-bottom:11px;animation:guideIn .2s ease-out;}
 .cc-chat-row.user{justify-content:flex-end;}
-.cc-chat-bubble{max-width:86%;border:1px solid #273746;background:#070c11;color:#D7DEE5;padding:10px 12px;font-size:12px;line-height:1.55;white-space:pre-wrap;}
-.cc-chat-row.user .cc-chat-bubble{border-color:var(--blue);background:rgba(46,155,255,.14);color:#fff;}
+.cc-chat-bubble{max-width:88%;border:1px solid #243646;border-radius:12px 12px 12px 3px;background:#070c11;color:#D7DEE5;padding:9px 11px;font-size:11px;line-height:1.55;white-space:pre-wrap;}
+.cc-chat-row.user .cc-chat-bubble{border-color:#267cc7;border-radius:12px 12px 3px 12px;background:rgba(46,155,255,.13);color:#fff;}
 .cc-chat-bubble.thinking{font-family:var(--px);font-size:21px;color:var(--blue);letter-spacing:4px;}
-.cc-chat-suggestions{display:flex;gap:7px;overflow-x:auto;padding:0 12px 10px;background:#010305;}
-.cc-chat-suggestions button{flex:0 0 auto;border:1px solid #2C4154;background:#050b10;color:#A9B5C0;padding:7px 9px;font-family:var(--mono);font-size:9px;cursor:pointer;}
+.cc-chat-suggestions{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 11px 10px;background:#010305;}
+.cc-chat-suggestions button{min-width:0;border:1px solid #293d4f;border-radius:9px;background:#050b10;color:#A9B5C0;padding:7px 8px;font-family:var(--mono);font-size:8px;line-height:1.35;cursor:pointer;}
 .cc-chat-suggestions button:hover,.cc-chat-suggestions button:focus-visible{border-color:var(--blue);color:#fff;outline:none;}
-.cc-chat-offer{border-top:1px solid #243646;border-bottom:1px solid #243646;background:linear-gradient(100deg,rgba(46,155,255,.16),rgba(3,7,11,.98) 55%);padding:12px 14px;}
-.cc-chat-offer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
-.cc-chat-offer .label{font-size:8px;letter-spacing:1.8px;color:var(--blue);text-transform:uppercase;}
-.cc-chat-offer strong{display:block;margin-top:3px;font-family:var(--px);font-size:22px;font-weight:400;line-height:1;color:#fff;}
-.cc-chat-offer p{margin-top:6px;color:#97A4AF;font-size:10px;line-height:1.45;}
-.cc-chat-offer-actions{display:flex;gap:7px;margin-top:10px;}
-.cc-chat-mini-btn{border:1px solid var(--blue);background:transparent;color:var(--blue);padding:7px 9px;font-family:var(--px);font-size:17px;line-height:1;text-decoration:none;cursor:pointer;text-align:center;}
-.cc-chat-mini-btn.primary{background:var(--blue);color:#000;}
-.cc-chat-mini-btn:hover,.cc-chat-mini-btn:focus-visible{background:#fff;border-color:#fff;color:#000;outline:none;}
-.cc-chat-lead{display:none;padding:12px 14px;border-bottom:1px solid #263848;background:#05090d;max-height:250px;overflow-y:auto;}
-.cc-chat-lead.open{display:block;}
-.cc-chat-lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.cc-chat-lead input,.cc-chat-lead select{width:100%;min-width:0;border:1px solid #354654;background:#000;color:#fff;padding:9px 10px;font-family:var(--mono);font-size:11px;outline:none;}
-.cc-chat-lead input:focus,.cc-chat-lead select:focus{border-color:var(--blue);}
-.cc-chat-lead .full{grid-column:1/-1;}
-.cc-chat-lead-consent{display:flex;align-items:flex-start;gap:7px;margin:8px 0;color:#8E9AA4;font-size:9px;line-height:1.45;}
-.cc-chat-lead-consent input{width:auto;margin-top:2px;accent-color:var(--blue);}
-.cc-chat-lead-status{font-size:9px;color:#9CA8B2;margin-left:8px;}
-.cc-chat-compose{display:flex;gap:8px;padding:11px 12px;background:#020609;}
-.cc-chat-compose input{flex:1;min-width:0;border:1px solid #364654;background:#000;color:#fff;padding:11px 12px;font-family:var(--mono);font-size:12px;outline:none;}
+.cc-chat-convert{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #203445;border-bottom:1px solid #203445;background:rgba(46,155,255,.055);padding:9px 12px;}
+.cc-chat-convert span{color:#8998A5;font-size:8px;line-height:1.4;}
+.cc-chat-convert span b{display:block;color:#DCE5EC;font-size:9px;font-weight:600;}
+.cc-chat-convert a{flex:0 0 auto;color:var(--blue);font-size:8px;letter-spacing:.65px;text-decoration:none;text-transform:uppercase;}
+.cc-chat-convert a:hover,.cc-chat-convert a:focus-visible{color:#fff;outline:none;}
+.cc-chat-compose{display:flex;gap:8px;padding:10px 11px 8px;background:#020609;}
+.cc-chat-compose input{flex:1;min-width:0;border:1px solid #304656;border-radius:10px;background:#000;color:#fff;padding:10px 11px;font-family:var(--mono);font-size:11px;outline:none;}
 .cc-chat-compose input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,155,255,.13);}
-.cc-chat-send{width:42px;border:1px solid var(--blue);background:var(--blue);color:#000;font-family:var(--px);font-size:24px;cursor:pointer;}
+.cc-chat-send{width:40px;border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#000;font-family:var(--px);font-size:22px;cursor:pointer;}
 .cc-chat-send:hover,.cc-chat-send:focus-visible{background:#fff;border-color:#fff;outline:none;}
-.cc-chat-brand{padding:0 12px 8px;text-align:center;color:#596A78;font-size:7px;letter-spacing:1.4px;text-transform:uppercase;background:#020609;}
-.cc-chat-brand b{color:#7DA7CC;font-weight:500;}
+.cc-chat-brand{padding:0 11px 8px;text-align:center;color:#52616E;font-size:6px;letter-spacing:.9px;background:#020609;}
+.cc-chat-brand a{color:#70879A;text-decoration:none;}
+.cc-chat-brand a:hover,.cc-chat-brand a:focus-visible{color:var(--blue);outline:none;}
 
 /* ---------- Library ---------- */
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:44px;}
@@ -470,7 +456,7 @@ body.cc-chat-open{overflow:hidden;}
 /* ---------- Footer ---------- */
 footer{border-top:1px solid var(--line);padding:48px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
 footer .l{display:flex;align-items:center;gap:12px;}
-footer img{height:30px;width:30px;object-fit:cover;border-radius:6px;mix-blend-mode:screen;}
+footer img{height:38px;width:38px;object-fit:cover;border-radius:8px;}
 footer span{font-family:var(--px);font-size:20px;color:var(--dim);}
 footer a{color:var(--blue);text-decoration:none;}
 footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
@@ -689,12 +675,9 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   .hero-cta{margin-top:24px;gap:10px;}
   .hero-cta .btn{width:100%;padding:10px 14px;text-align:center;font-size:20px;}
   .ai-line-note{font-size:8px;letter-spacing:1px;}
-  .cc-chat-launcher{right:12px;bottom:12px;width:54px;height:54px;padding:7px;border-radius:0;justify-content:center;}
-  .cc-chat-launcher-icon{width:36px;height:36px;}
-  .cc-chat-launcher-copy{display:none;}
-  .cc-chat-panel{right:6px;bottom:74px;width:calc(100vw - 12px);height:min(680px,calc(100svh - 82px));}
-  .cc-chat-lead-grid{grid-template-columns:1fr;}
-  .cc-chat-lead .full{grid-column:auto;}
+  .cc-chat-launcher{right:12px;bottom:12px;width:58px;height:58px;border-radius:17px;}
+  .cc-chat-launcher img{width:53px;height:53px;}
+  .cc-chat-panel{right:6px;bottom:80px;width:calc(100vw - 12px);height:min(560px,calc(100svh - 88px));border-radius:15px;}
 }
 </style>
 </head>
@@ -707,7 +690,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <nav aria-label="Primary navigation" id="site-nav">
   <div class="nav-inner">
     <a class="brand" href="/" aria-label="Clone Centre home">
-      <img src="assets/clonecentre_logo.png" alt="">
+      <img src="assets/clone_centre_latest_logo.png" alt="">
       <span>Clone<b>Centre</b></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
@@ -1429,7 +1412,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="l">
-    <img src="assets/clonecentre_logo.png" alt="Clone Centre logo">
+    <img src="assets/clone_centre_latest_logo.png" alt="Clone Centre logo">
     <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a> · AI line 07888 865560</span>
   </div>
   <div class="footer-links" aria-label="Footer navigation">
@@ -1439,53 +1422,30 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 </footer>
 
 <!-- ============ CLONE CENTRE AI · OUR HYPERCHAT PRODUCT ============ -->
-<button class="cc-chat-launcher" id="cc-chat-launcher" type="button" aria-controls="clonecentre-ai" aria-expanded="false">
-  <span class="cc-chat-launcher-icon">AI</span>
-  <span class="cc-chat-launcher-copy"><b>ASK CLONE CENTRE</b><small>Built with our HyperChat</small></span>
+<button class="cc-chat-launcher" id="cc-chat-launcher" type="button" aria-label="Ask Clone Centre AI" aria-controls="clonecentre-ai" aria-expanded="false">
+  <img src="assets/clone_centre_robot.png" alt="" aria-hidden="true">
 </button>
 
 <section class="cc-chat-panel" id="clonecentre-ai" role="dialog" aria-modal="false" aria-labelledby="cc-chat-title" aria-hidden="true">
   <header class="cc-chat-head">
-    <span class="cc-chat-head-mark">CC</span>
-    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>Online · built with HyperChat</span></span>
+    <span class="cc-chat-head-mark"><img src="assets/clone_centre_robot.png" alt=""></span>
+    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>Online · our HyperChat system</span></span>
     <button class="cc-chat-close" id="cc-chat-close" type="button" aria-label="Close Clone Centre AI">×</button>
   </header>
   <div class="cc-chat-messages" id="cc-chat-messages" aria-live="polite"></div>
   <div class="cc-chat-suggestions" id="cc-chat-suggestions" aria-label="Suggested questions">
-    <button type="button" data-cc-question="What should I start with?">What should I start with?</button>
-    <button type="button" data-cc-question="Which coaching session is right for me?">Help me choose a session</button>
-    <button type="button" data-cc-question="How can I get a chatbot like this?">I want a chatbot like this</button>
+    <button type="button" data-cc-question="Based on what Clone Centre offers, what is the best route for me?">Find my best route</button>
+    <button type="button" data-cc-question="Explain ANSAIR voice AI, HyperChat website chatbots, TRAICE AI governance and Pipeline UK acquisition intelligence using only Clone Centre's product directory.">Explore the AI products</button>
   </div>
-  <div class="cc-chat-offer">
-    <div class="cc-chat-offer-top">
-      <div><span class="label">This assistant is the demo</span><strong>WANT ONE ON YOUR SITE?</strong></div>
-    </div>
-    <p>One trained HyperChat setup is included with annual Clone Centre Pro. Or build and test yours free, then pay only when it goes live.</p>
-    <div class="cc-chat-offer-actions">
-      <button class="cc-chat-mini-btn primary" type="button" data-cc-lead-open>GET THIS INCLUDED</button>
-      <a class="cc-chat-mini-btn" href="https://hyperchat-app-production.up.railway.app/wizard" target="_blank" rel="noopener noreferrer">BUILD FREE</a>
-    </div>
+  <div class="cc-chat-convert">
+    <span><b>Want this on your website?</b>Included with annual Pro.</span>
+    <a href="mailto:hello@clonecentre.ai?subject=Annual%20Pro%20website%20AI%20chatbot">Get yours &gt;</a>
   </div>
-  <form class="cc-chat-lead" id="cc-chat-lead">
-    <div class="cc-chat-lead-grid">
-      <input id="cc-lead-name" name="name" type="text" maxlength="255" autocomplete="name" placeholder="Your name" required>
-      <input id="cc-lead-email" name="email" type="email" maxlength="320" autocomplete="email" placeholder="Email address" required>
-      <input class="full" id="cc-lead-website" name="website" type="text" maxlength="500" inputmode="url" placeholder="Your website (optional)">
-      <select class="full" id="cc-lead-route" name="route" required>
-        <option value="" selected disabled>How would you like to get it?</option>
-        <option value="Annual Clone Centre Pro — chatbot included">Annual Clone Centre Pro — chatbot included</option>
-        <option value="HyperChat Live — standalone chatbot">HyperChat Live — standalone chatbot</option>
-        <option value="Help me choose the right route">Help me choose</option>
-      </select>
-    </div>
-    <label class="cc-chat-lead-consent"><input id="cc-lead-consent" name="consent" type="checkbox" required><span>I agree that Clone Centre may contact me about my chatbot enquiry. <a href="https://hyperchat-app-production.up.railway.app/privacy" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">Privacy notice</a>.</span></label>
-    <button class="cc-chat-mini-btn primary" type="submit">SEND MY CHATBOT ENQUIRY</button><span class="cc-chat-lead-status" id="cc-chat-lead-status" role="status"></span>
-  </form>
   <form class="cc-chat-compose" id="cc-chat-compose">
-    <input id="cc-chat-input" type="text" maxlength="1200" autocomplete="off" placeholder="Ask about AI, books, coaching or HyperChat…" aria-label="Message Clone Centre AI">
+    <input id="cc-chat-input" type="text" maxlength="1200" autocomplete="off" placeholder="Ask anything about Clone Centre…" aria-label="Message Clone Centre AI">
     <button class="cc-chat-send" type="submit" aria-label="Send message">&gt;</button>
   </form>
-  <div class="cc-chat-brand"><b>HYPERCHAT</b> // A CLONE CENTRE PRODUCT</div>
+  <div class="cc-chat-brand"><a href="https://hyperchat-app-production.up.railway.app/wizard" target="_blank" rel="noopener noreferrer">Build with HyperChat</a> · Chats are saved and may be reviewed · <a href="https://hyperchat-app-production.up.railway.app/privacy" target="_blank" rel="noopener noreferrer">Privacy</a></div>
 </section>
 
 <!-- ============ AI PROFILE + GUIDE GATE ============ -->
@@ -1866,17 +1826,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()
 
 /* ---- Clone Centre AI · custom HyperChat-powered assistant ---- */
 const CC_CHAT_BASE='https://hyperchat-app-production.up.railway.app';
-const CC_CHAT_PROJECT='f4f0da7f-8e94-4217-9a34-e47a69444fb1';
+const CC_CHAT_PROJECT='96991323-4ffc-47a7-99bd-905af714a0d5';
 const ccChatLauncher=document.getElementById('cc-chat-launcher');
 const ccChatPanel=document.getElementById('clonecentre-ai');
 const ccChatClose=document.getElementById('cc-chat-close');
 const ccChatMessages=document.getElementById('cc-chat-messages');
 const ccChatCompose=document.getElementById('cc-chat-compose');
 const ccChatInput=document.getElementById('cc-chat-input');
-const ccLeadForm=document.getElementById('cc-chat-lead');
-const ccLeadStatus=document.getElementById('cc-chat-lead-status');
+const ccChatSuggestions=document.getElementById('cc-chat-suggestions');
 let ccChatBusy=false;
 let ccChatSession;
+const ccTranscript=[];
+const ccTranscriptId='ct_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+let ccTranscriptTimer=0;
+let ccLastTranscriptTurns=0;
 try{
   ccChatSession=localStorage.getItem('clonecentre_hyperchat_session');
   if(!ccChatSession){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('clonecentre_hyperchat_session',ccChatSession);}
@@ -1889,42 +1852,43 @@ function ccAddMessage(text,isUser,thinking=false){
   if(thinking)bubble.id='cc-chat-thinking';
   bubble.textContent=text;
   row.appendChild(bubble);ccChatMessages.appendChild(row);ccChatMessages.scrollTop=ccChatMessages.scrollHeight;
+  if(!thinking)ccTranscript.push({role:isUser?'user':'assistant',content:String(text).slice(0,4000)});
 }
-function ccSetChat(open,showOffer=false){
+function ccSetChat(open){
   ccChatPanel.classList.toggle('open',open);ccChatPanel.setAttribute('aria-hidden',String(!open));ccChatLauncher.setAttribute('aria-expanded',String(open));document.body.classList.toggle('cc-chat-open',open);
-  if(open){setTimeout(()=>ccChatInput.focus(),80);if(showOffer){ccLeadForm.classList.add('open');setTimeout(()=>document.getElementById('cc-lead-name').focus(),100);}}
+  if(open)setTimeout(()=>ccChatInput.focus(),80);
+}
+function ccSendTranscript(keepalive=false){
+  const userTurns=ccTranscript.filter(message=>message.role==='user').length;
+  if(!userTurns||userTurns===ccLastTranscriptTurns)return;
+  fetch('/api/chat-transcript',{method:'POST',headers:{'Content-Type':'application/json'},keepalive,body:JSON.stringify({conversationId:ccTranscriptId,sessionId:ccChatSession,page:location.href,title:document.title,messages:ccTranscript.slice(-40)})})
+    .then(response=>{if(response.ok)ccLastTranscriptTurns=userTurns;})
+    .catch(()=>{});
+}
+function ccScheduleTranscript(){
+  clearTimeout(ccTranscriptTimer);
+  ccTranscriptTimer=setTimeout(()=>ccSendTranscript(false),45000);
 }
 async function ccAsk(question){
   const message=String(question||'').trim();if(!message||ccChatBusy)return;
-  ccChatBusy=true;ccAddMessage(message,true);ccChatInput.value='';ccAddMessage('•••',false,true);
+  ccChatBusy=true;ccAddMessage(message,true);ccChatInput.value='';ccChatSuggestions.hidden=true;ccAddMessage('•••',false,true);
   try{
     const response=await fetch(CC_CHAT_BASE+'/api/chat/'+CC_CHAT_PROJECT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,session_id:ccChatSession})});
     const data=await response.json();if(!response.ok)throw new Error('Chat unavailable');
     document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage(data.answer||'I could not find a useful answer to that.',false);
-  }catch(_){document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage('I am having trouble connecting. You can still leave your details below and Joseph will follow up.',false);ccLeadForm.classList.add('open');}
-  finally{ccChatBusy=false;ccChatInput.focus();}
+  }catch(_){document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage('I am having trouble connecting right now. You can email Joseph at hello@clonecentre.ai.',false);}
+  finally{ccChatBusy=false;ccScheduleTranscript();ccChatInput.focus();}
 }
 
-ccAddMessage("Hi — I'm Clone Centre AI, built with our own HyperChat product. Ask me about practical AI, Joseph's books and coaching, or how to put a chatbot like this on your website.",false);
+ccAddMessage("Hi — I'm Clone Centre AI. Ask me what to learn, book or build.",false);
 ccChatLauncher.addEventListener('click',()=>ccSetChat(!ccChatPanel.classList.contains('open')));
 ccChatClose.addEventListener('click',()=>ccSetChat(false));
 ccChatCompose.addEventListener('submit',event=>{event.preventDefault();ccAsk(ccChatInput.value);});
 document.querySelectorAll('[data-cc-question]').forEach(button=>button.addEventListener('click',()=>ccAsk(button.dataset.ccQuestion)));
-document.querySelectorAll('[data-cc-lead-open]').forEach(button=>button.addEventListener('click',()=>{ccLeadForm.classList.toggle('open');if(ccLeadForm.classList.contains('open'))document.getElementById('cc-lead-name').focus();}));
-document.querySelectorAll('[data-cc-chat-offer]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();ccSetChat(true,true);}));
+document.querySelectorAll('[data-cc-chat-offer]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();ccSetChat(true);}));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&ccChatPanel.classList.contains('open'))ccSetChat(false);});
-
-ccLeadForm.addEventListener('submit',async event=>{
-  event.preventDefault();if(!ccLeadForm.reportValidity())return;
-  const submit=ccLeadForm.querySelector('[type="submit"]');submit.disabled=true;ccLeadStatus.textContent='SENDING…';
-  const name=document.getElementById('cc-lead-name').value.trim(),email=document.getElementById('cc-lead-email').value.trim(),website=document.getElementById('cc-lead-website').value.trim(),route=document.getElementById('cc-lead-route').value;
-  try{
-    const response=await fetch(CC_CHAT_BASE+'/api/leads/'+CC_CHAT_PROJECT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:ccChatSession,name,email,company:website||null,enquiry:route+(website?' · Website: '+website:''),source_url:location.href,consent:document.getElementById('cc-lead-consent').checked})});
-    const data=await response.json();if(!response.ok)throw new Error(typeof data.detail==='string'?data.detail:'Could not send your details.');
-    ccLeadStatus.textContent='✓ SENT';ccAddMessage('Thanks, '+name+'. Joseph now has your chatbot enquiry and can help you choose between annual Pro and standalone HyperChat.',false);ccLeadForm.reset();setTimeout(()=>ccLeadForm.classList.remove('open'),1200);
-  }catch(error){ccLeadStatus.textContent=error.message||'PLEASE TRY AGAIN';}
-  finally{submit.disabled=false;}
-});
+window.addEventListener('pagehide',()=>ccSendTranscript(true));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')ccSendTranscript(true);});
 </script>
 </body>
 </html>
