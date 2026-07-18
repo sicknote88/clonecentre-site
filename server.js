@@ -4,6 +4,7 @@ import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createMemberStore, createOpaqueToken, hashPassword, verifyPassword } from './member-store.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packagedPublicDir = join(here, 'public');
@@ -19,8 +20,33 @@ const dryRun = !isProduction && process.env.DELIVERY_DRY_RUN === 'true';
 const subscribeAttempts = new Map();
 const chatTranscriptAttempts = new Map();
 const memberInterestAttempts = new Map();
+const accountAttempts = new Map();
 const hyperChatBaseUrl = (process.env.HYPERCHAT_BASE_URL || 'https://hyperchat-app-production.up.railway.app').replace(/\/$/, '');
 const hyperChatProjectId = process.env.HYPERCHAT_PROJECT_ID || '96991323-4ffc-47a7-99bd-905af714a0d5';
+const memberStore = createMemberStore(process.env.DATABASE_URL);
+let memberStoreError = null;
+if (memberStore.enabled) {
+  try {
+    await memberStore.init();
+    console.info(JSON.stringify({ type: 'member_store.ready' }));
+  } catch (error) {
+    memberStoreError = error.message;
+    console.error(JSON.stringify({ type: 'member_store.init_failed', reason: error.message }));
+  }
+}
+
+async function ensureMemberStore() {
+  if (!memberStore.enabled) return false;
+  if (memberStore.ready) return true;
+  try {
+    await memberStore.init();
+    memberStoreError = null;
+    return true;
+  } catch (error) {
+    memberStoreError = error.message;
+    return false;
+  }
+}
 
 const memberOptions = {
   interest: {
@@ -31,6 +57,7 @@ const memberOptions = {
     accountability: 'Accountability founding seat — £149/month',
     switch: 'Switch from another community — £1 first month',
     clone_coach_waitlist: 'Clone Coach AI beta waitlist',
+    custom_coach_bot: 'A custom AI coach built for my needs',
     help_choose: 'Help me choose'
   },
   aiStage: {
@@ -57,6 +84,56 @@ function escapeHtml(value = '') {
 
 function publicSiteUrl() {
   return (process.env.SITE_URL || 'https://clonecentre-site-production.up.railway.app').replace(/\/$/, '');
+}
+
+function cookieValue(request, name) {
+  const source = request.get('cookie') || '';
+  for (const part of source.split(';')) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === name) return decodeURIComponent(rest.join('='));
+  }
+  return null;
+}
+
+function sessionCookie(token, maxAge = 30 * 24 * 60 * 60) {
+  const secure = isProduction ? '; Secure' : '';
+  return `cc_session=${encodeURIComponent(token || '')}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure}`;
+}
+
+function requestIpHash(request) {
+  return createHash('sha256').update(String(request.ip || 'unknown')).digest('hex');
+}
+
+function accountAllowed(ip, action, limit = 10, windowMs = 15 * 60 * 1000) {
+  const now = Date.now();
+  const key = `${ip}:${action}`;
+  const recent = (accountAttempts.get(key) || []).filter((attempt) => now - attempt < windowMs);
+  if (recent.length >= limit) return false;
+  recent.push(now);
+  accountAttempts.set(key, recent);
+  if (accountAttempts.size > 2000) {
+    for (const [attemptKey, attempts] of accountAttempts) {
+      if (!attempts.some((attempt) => now - attempt < windowMs)) accountAttempts.delete(attemptKey);
+    }
+  }
+  return true;
+}
+
+function validAccountPassword(password) {
+  return typeof password === 'string' && password.length >= 10 && password.length <= 200;
+}
+
+async function requestMember(request) {
+  if (!memberStore.ready) return null;
+  return memberStore.memberForToken(cookieValue(request, 'cc_session'));
+}
+
+function rejectCrossSite(request, response) {
+  if (request.get('sec-fetch-site') === 'cross-site') {
+    response.status(403).json({ error: 'cross_site_request_rejected' });
+    return true;
+  }
+  return false;
 }
 
 async function persistHyperChatLead({ sessionId, name, email, company, enquiry, sourceUrl }) {
@@ -232,7 +309,7 @@ function memberNotificationMarkup(profile) {
         <div><b style="color:#fff">Source:</b> ${escapeHtml(profile.page)}</div>
       </div>
       <div style="border-left:3px solid #2e9bff;padding:14px 17px;background:#07111a;color:#e0e7ed;white-space:pre-wrap;line-height:1.6">${escapeHtml(profile.goal)}</div>
-      <p style="margin-top:22px;color:#74818c;font-size:12px">The visitor explicitly agreed that Clone Centre may store these details and contact them about this enquiry. The structured record is stored in HyperChat.</p>
+      <p style="margin-top:22px;color:#74818c;font-size:12px">The visitor explicitly agreed that Clone Centre may store these details and contact them about this enquiry. Railway holds the master member record and the HyperChat session is linked when available.</p>
     </div>
   </body></html>`;
 }
@@ -247,6 +324,20 @@ function memberAcknowledgementMarkup(profile) {
       <p style="line-height:1.65;color:#aeb8c2">I have your interest in <b style="color:#fff">${escapeHtml(memberOptions.interest[profile.interest])}</b>, where you are with AI and what you want to achieve. I will reply with the right joining or next-step link.</p>
       <p style="margin:28px 0"><a style="display:inline-block;border:2px solid #2e9bff;color:#2e9bff;padding:11px 16px;text-decoration:none;font-weight:bold" href="${siteUrl}/community">RETURN TO CLONE CENTRE</a></p>
       <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</div>
+    </div>
+  </body></html>`;
+}
+
+function accountActionEmailMarkup({ name, heading, body, action, actionLabel, footer }) {
+  return `<!doctype html>
+  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
+    <div style="max-width:620px;margin:auto;padding:34px 24px">
+      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBER ACCOUNT</div>
+      <h1 style="font-size:30px;margin:18px 0 12px">${escapeHtml(heading)}</h1>
+      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(name || 'there')},</p>
+      <p style="line-height:1.65;color:#aeb8c2">${escapeHtml(body)}</p>
+      ${action ? `<p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${escapeHtml(action)}">${escapeHtml(actionLabel)}</a></p>` : ''}
+      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">${escapeHtml(footer || 'If you did not request this, you can ignore this email.')}</div>
     </div>
   </body></html>`;
 }
@@ -475,6 +566,111 @@ async function sendDelivery(session) {
   return { id: result.id, product: product.key };
 }
 
+async function deliverOutboxItem(item) {
+  const payload = item.payload || {};
+  const from = process.env.MEMBER_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>';
+  if (item.kind === 'account_verify') {
+    return sendResendEmail({
+      from,
+      to: [payload.email],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+      subject: 'Confirm your Clone Centre member account',
+      html: accountActionEmailMarkup({
+        name: payload.name,
+        heading: 'Confirm your member account.',
+        body: 'Your account and AI profile are safely stored. Confirm this email address to finish connecting your member identity.',
+        action: `${publicSiteUrl()}/verify-email?token=${encodeURIComponent(payload.token)}`,
+        actionLabel: 'CONFIRM MY ACCOUNT',
+        footer: 'This link expires after 24 hours. If you did not create the account, no action is needed.'
+      }),
+      tags: [{ name: 'automation', value: 'account_verify' }]
+    }, item.idempotency_key);
+  }
+  if (item.kind === 'password_reset') {
+    return sendResendEmail({
+      from,
+      to: [payload.email],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+      subject: 'Reset your Clone Centre password',
+      html: accountActionEmailMarkup({
+        name: payload.name,
+        heading: 'Reset your password.',
+        body: 'Use the secure link below to choose a new password for your Clone Centre member account.',
+        action: `${publicSiteUrl()}/member?reset=${encodeURIComponent(payload.token)}`,
+        actionLabel: 'RESET MY PASSWORD',
+        footer: 'This link expires after one hour and can only be used once.'
+      }),
+      tags: [{ name: 'automation', value: 'password_reset' }]
+    }, item.idempotency_key);
+  }
+  if (item.kind === 'member_notification') {
+    return sendResendEmail({
+      from,
+      to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
+      reply_to: payload.email,
+      subject: `Clone Centre enquiry — ${memberOptions.interest[payload.interest] || payload.interest} · ${payload.name}`.slice(0, 190),
+      html: memberNotificationMarkup(payload),
+      tags: [{ name: 'automation', value: 'member_interest' }]
+    }, item.idempotency_key);
+  }
+  if (item.kind === 'member_acknowledgement') {
+    return sendResendEmail({
+      from,
+      to: [payload.email],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+      subject: 'Your Clone Centre profile is saved',
+      html: memberAcknowledgementMarkup(payload),
+      tags: [{ name: 'automation', value: 'member_acknowledgement' }]
+    }, item.idempotency_key);
+  }
+  if (item.kind === 'guide_profile') return subscribe(payload);
+  if (item.kind === 'chat_transcript') {
+    const pageLabel = `${payload.title || 'Clone Centre'} · ${new URL(payload.page).pathname}`;
+    return sendResendEmail({
+      from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
+      to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+      subject: `Clone Centre AI chat — ${pageLabel.slice(0, 120)}`,
+      html: chatTranscriptEmailMarkup(payload),
+      tags: [{ name: 'automation', value: 'chat_transcript' }]
+    }, item.idempotency_key);
+  }
+  if (item.kind === 'booking') return sendBookingAutomation(payload.trigger, payload.payload, JSON.stringify(payload.event));
+  if (item.kind === 'stripe_delivery') return sendDelivery(payload.session);
+  if (item.kind === 'deletion_request') {
+    return sendResendEmail({
+      from,
+      to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
+      reply_to: payload.email,
+      subject: `Account deletion request — ${payload.email}`,
+      html: accountActionEmailMarkup({ name: 'Joseph', heading: 'A member requested account deletion.', body: `Review deletion request ${payload.requestId} for ${payload.email}. The request and audit event are stored in Railway.`, footer: 'Complete the request from the Railway-backed member administration workflow.' }),
+      tags: [{ name: 'automation', value: 'deletion_request' }]
+    }, item.idempotency_key);
+  }
+  throw new Error(`Unknown outbox kind: ${item.kind}`);
+}
+
+let outboxRunning = false;
+async function processEmailOutbox() {
+  if (!memberStore.ready || outboxRunning) return;
+  outboxRunning = true;
+  try {
+    const items = await memberStore.claimOutbox(8);
+    for (const item of items) {
+      try {
+        await deliverOutboxItem(item);
+        await memberStore.completeOutbox(item.id);
+        console.info(JSON.stringify({ type: 'outbox.sent', kind: item.kind, id: item.id }));
+      } catch (error) {
+        await memberStore.failOutbox(item.id, item.attempts, error.message);
+        console.error(JSON.stringify({ type: 'outbox.retry_scheduled', kind: item.kind, id: item.id, reason: error.message }));
+      }
+    }
+  } finally {
+    outboxRunning = false;
+  }
+}
+
 app.disable('x-powered-by');
 app.enable('strict routing');
 if (isProduction) app.set('trust proxy', 1);
@@ -503,11 +699,24 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json', limit: '
     return response.status(200).json({ received: true, ignored: event.type });
   }
 
+  if (memberStore.ready) {
+    try {
+      const product = resolveProduct(event.data.object);
+      await memberStore.recordPurchase(event.data.object, product.key);
+    } catch (error) {
+      console.error(JSON.stringify({ type: 'purchase.storage_failed', event: event.id, reason: error.message }));
+    }
+  }
   try {
     const result = await sendDelivery(event.data.object);
     return response.status(200).json({ received: true, delivery: result });
   } catch (error) {
     console.error(JSON.stringify({ type: 'delivery.failed', event: event.id, session: event.data.object?.id, reason: error.message }));
+    if (memberStore.ready) {
+      await memberStore.queueOutbox('stripe_delivery', customerEmail(event.data.object), { session: event.data.object }, `stripe-delivery/${event.data.object.id}`);
+      void processEmailOutbox();
+      return response.status(202).json({ received: true, delivery: { queued: true } });
+    }
     return response.status(500).json({ error: 'delivery_failed' });
   }
 });
@@ -529,16 +738,195 @@ app.post('/api/cal/webhook', express.raw({ type: 'application/json', limit: '256
 
   const trigger = event.triggerEvent;
   const payload = event.payload || event;
+  if (memberStore.ready) {
+    try { await memberStore.recordBooking(trigger, payload); }
+    catch (error) { console.error(JSON.stringify({ type: 'booking.storage_failed', trigger, reason: error.message })); }
+  }
   try {
     const result = await sendBookingAutomation(trigger, payload, request.body);
     return response.status(200).json({ received: true, automation: result });
   } catch (error) {
     console.error(JSON.stringify({ type: 'booking.email_failed', trigger, reason: error.message }));
+    if (memberStore.ready) {
+      const eventKey = createHash('sha256').update(request.body).digest('hex').slice(0, 32);
+      await memberStore.queueOutbox('booking', bookingDetails(payload).email, { trigger, payload, event }, `booking/${eventKey}`);
+      void processEmailOutbox();
+      return response.status(202).json({ received: true, automation: { queued: true } });
+    }
     return response.status(500).json({ error: 'booking_automation_failed' });
   }
 });
 
 app.use(express.json({ limit: '128kb' }));
+
+app.post('/api/account/register', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  if (!accountAllowed(request.ip || 'unknown', 'register', 6, 60 * 60 * 1000)) return response.status(429).json({ error: 'too_many_requests' });
+  if (!await ensureMemberStore()) return response.status(503).json({ error: 'member_database_unavailable' });
+  if (request.body?.fax) return response.status(200).json({ ok: true });
+  const name = String(request.body?.name || '').trim();
+  const email = String(request.body?.email || '').trim().toLowerCase();
+  const password = request.body?.password;
+  const company = String(request.body?.company || '').trim();
+  const aiStage = String(request.body?.aiStage || '');
+  const aiUse = String(request.body?.aiUse || '');
+  const goal = String(request.body?.goal || '').trim();
+  const sourceUrl = String(request.body?.sourceUrl || `${publicSiteUrl()}/member`).trim();
+  const hyperchatSessionId = String(request.body?.hyperchatSessionId || '').trim();
+  if (name.length < 2 || name.length > 80) return response.status(400).json({ error: 'valid_name_required' });
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return response.status(400).json({ error: 'valid_email_required' });
+  if (!validAccountPassword(password)) return response.status(400).json({ error: 'strong_password_required' });
+  if (company.length > 160) return response.status(400).json({ error: 'valid_company_required' });
+  if (!Object.hasOwn(memberOptions.aiStage, aiStage)) return response.status(400).json({ error: 'valid_ai_stage_required' });
+  if (!Object.hasOwn(memberOptions.aiUse, aiUse)) return response.status(400).json({ error: 'valid_ai_use_required' });
+  if (goal.length < 5 || goal.length > 1500) return response.status(400).json({ error: 'valid_goal_required' });
+  if (request.body?.consent !== true) return response.status(400).json({ error: 'consent_required' });
+  if (hyperchatSessionId && !/^cc_[a-z0-9]{8,120}$/i.test(hyperchatSessionId)) return response.status(400).json({ error: 'valid_chat_session_required' });
+  try {
+    const passwordHash = await hashPassword(password);
+    const sessionToken = createOpaqueToken();
+    const verificationToken = createOpaqueToken();
+    const member = await memberStore.createAccount({
+      name,
+      email,
+      passwordHash,
+      company,
+      aiStage,
+      aiUse,
+      goal,
+      consentText: 'I agree that Clone Centre may store my member profile and account data to provide the services I request.',
+      sourceUrl,
+      hyperchatSessionId: hyperchatSessionId || null,
+      sessionToken,
+      verificationToken,
+      ipHash: requestIpHash(request),
+      userAgent: String(request.get('user-agent') || '').slice(0, 500)
+    });
+    response.append('Set-Cookie', sessionCookie(sessionToken));
+    void processEmailOutbox();
+    return response.status(201).json({ ok: true, member, emailQueued: true });
+  } catch (error) {
+    if (error.code === '23505') return response.status(409).json({ error: 'account_already_exists' });
+    console.error(JSON.stringify({ type: 'account.register_failed', reason: error.message }));
+    return response.status(500).json({ error: 'account_creation_failed' });
+  }
+});
+
+app.post('/api/account/login', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  if (!accountAllowed(request.ip || 'unknown', 'login', 12, 15 * 60 * 1000)) return response.status(429).json({ error: 'too_many_requests' });
+  if (!await ensureMemberStore()) return response.status(503).json({ error: 'member_database_unavailable' });
+  const email = String(request.body?.email || '').trim().toLowerCase();
+  const password = request.body?.password;
+  if (!email || typeof password !== 'string') return response.status(400).json({ error: 'credentials_required' });
+  try {
+    const user = await memberStore.userForLogin(email);
+    const valid = user ? await verifyPassword(password, user.password_hash) : false;
+    if (!valid) return response.status(401).json({ error: 'invalid_credentials' });
+    const token = createOpaqueToken();
+    await memberStore.createSession({ userId: user.id, token, ipHash: requestIpHash(request), userAgent: String(request.get('user-agent') || '').slice(0, 500) });
+    response.append('Set-Cookie', sessionCookie(token));
+    return response.json({ ok: true, member: { id: user.id, email: user.email, name: user.name, emailVerified: Boolean(user.email_verified_at) } });
+  } catch (error) {
+    console.error(JSON.stringify({ type: 'account.login_failed', reason: error.message }));
+    return response.status(500).json({ error: 'login_failed' });
+  }
+});
+
+app.post('/api/account/logout', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  if (memberStore.ready) await memberStore.revokeSession(cookieValue(request, 'cc_session'));
+  response.append('Set-Cookie', sessionCookie('', 0));
+  return response.json({ ok: true });
+});
+
+app.get('/api/account/me', async (request, response) => {
+  response.set('Cache-Control', 'no-store');
+  const member = await requestMember(request);
+  if (!member) return response.status(401).json({ error: 'not_signed_in' });
+  return response.json({ member });
+});
+
+app.get('/api/account/dashboard', async (request, response) => {
+  response.set('Cache-Control', 'no-store');
+  const member = await requestMember(request);
+  if (!member) return response.status(401).json({ error: 'not_signed_in' });
+  const dashboard = await memberStore.dashboard(member.id);
+  return response.json(dashboard);
+});
+
+app.post('/api/account/profile', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  const member = await requestMember(request);
+  if (!member) return response.status(401).json({ error: 'not_signed_in' });
+  const profile = {
+    name: String(request.body?.name || '').trim(),
+    company: String(request.body?.company || '').trim(),
+    aiStage: String(request.body?.aiStage || ''),
+    aiUse: String(request.body?.aiUse || ''),
+    goal: String(request.body?.goal || '').trim(),
+    hyperchatSessionId: String(request.body?.hyperchatSessionId || '').trim(),
+    sourceUrl: `${publicSiteUrl()}/member`,
+    consentText: 'I asked Clone Centre to update and store this member profile.'
+  };
+  if (profile.name.length < 2 || profile.name.length > 80) return response.status(400).json({ error: 'valid_name_required' });
+  if (profile.company.length > 160) return response.status(400).json({ error: 'valid_company_required' });
+  if (!Object.hasOwn(memberOptions.aiStage, profile.aiStage)) return response.status(400).json({ error: 'valid_ai_stage_required' });
+  if (!Object.hasOwn(memberOptions.aiUse, profile.aiUse)) return response.status(400).json({ error: 'valid_ai_use_required' });
+  if (profile.goal.length < 5 || profile.goal.length > 1500) return response.status(400).json({ error: 'valid_goal_required' });
+  if (profile.hyperchatSessionId && !/^cc_[a-z0-9]{8,120}$/i.test(profile.hyperchatSessionId)) return response.status(400).json({ error: 'valid_chat_session_required' });
+  await memberStore.updateProfile(member.id, profile);
+  return response.json({ ok: true });
+});
+
+app.post('/api/account/link-chat', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  const member = await requestMember(request);
+  if (!member) return response.status(401).json({ error: 'not_signed_in' });
+  const sessionId = String(request.body?.sessionId || '').trim();
+  if (!/^cc_[a-z0-9]{8,120}$/i.test(sessionId)) return response.status(400).json({ error: 'valid_chat_session_required' });
+  await memberStore.linkChat(member.id, sessionId);
+  return response.json({ ok: true });
+});
+
+app.post('/api/account/forgot-password', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  if (!accountAllowed(request.ip || 'unknown', 'forgot', 6, 60 * 60 * 1000)) return response.status(429).json({ error: 'too_many_requests' });
+  if (!await ensureMemberStore()) return response.status(503).json({ error: 'member_database_unavailable' });
+  const email = String(request.body?.email || '').trim().toLowerCase();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) await memberStore.createPasswordReset(email, createOpaqueToken());
+  void processEmailOutbox();
+  return response.status(202).json({ ok: true, emailQueued: true });
+});
+
+app.post('/api/account/reset-password', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  if (!accountAllowed(request.ip || 'unknown', 'reset', 8, 60 * 60 * 1000)) return response.status(429).json({ error: 'too_many_requests' });
+  if (!await ensureMemberStore()) return response.status(503).json({ error: 'member_database_unavailable' });
+  const token = String(request.body?.token || '');
+  const password = request.body?.password;
+  if (token.length < 30 || token.length > 200 || !validAccountPassword(password)) return response.status(400).json({ error: 'valid_reset_required' });
+  const changed = await memberStore.resetPassword(token, await hashPassword(password));
+  if (!changed) return response.status(400).json({ error: 'reset_link_invalid_or_expired' });
+  response.append('Set-Cookie', sessionCookie('', 0));
+  return response.json({ ok: true });
+});
+
+app.post('/api/account/delete-request', async (request, response) => {
+  if (rejectCrossSite(request, response)) return;
+  const member = await requestMember(request);
+  if (!member) return response.status(401).json({ error: 'not_signed_in' });
+  const requestId = await memberStore.requestDeletion(member.id, member.email);
+  void processEmailOutbox();
+  return response.status(202).json({ ok: true, requestId });
+});
+
+app.get('/verify-email', async (request, response) => {
+  if (!await ensureMemberStore()) return response.redirect(303, '/member?verified=unavailable');
+  const token = String(request.query?.token || '');
+  const verified = token.length >= 30 && token.length <= 200 ? await memberStore.verifyEmail(token) : false;
+  return response.redirect(303, `/member?verified=${verified ? '1' : 'invalid'}`);
+});
 
 app.post('/api/subscribe', async (request, response) => {
   if (!subscriptionAllowed(request.ip || 'unknown')) return response.status(429).json({ error: 'too_many_requests' });
@@ -560,6 +948,25 @@ app.post('/api/subscribe', async (request, response) => {
   const sessionId = /^cc_[a-z0-9]{8,120}$/i.test(requestedSessionId)
     ? requestedSessionId
     : `cc_profile_${createHash('sha256').update(email).digest('hex').slice(0, 24)}`;
+  const profile = {
+    email,
+    firstName,
+    role,
+    aiStage,
+    goal,
+    sessionId,
+    consentText: 'Email my guide and send practical Clone Centre updates based on these answers.',
+    sourceUrl: `${publicSiteUrl()}/library#guide-gate`
+  };
+  if (memberStore.ready) {
+    try {
+      const member = await requestMember(request);
+      await memberStore.saveGuideProfile(profile, member?.id || null);
+    } catch (error) {
+      console.error(JSON.stringify({ type: 'newsletter.railway_storage_failed', reason: error.message }));
+      return response.status(502).json({ error: 'profile_storage_unavailable' });
+    }
+  }
   try {
     await persistHyperChatLead({
       sessionId,
@@ -574,11 +981,15 @@ app.post('/api/subscribe', async (request, response) => {
       sourceUrl: `${publicSiteUrl()}/library#guide-gate`
     });
   } catch (error) {
-    console.error(JSON.stringify({ type: 'newsletter.storage_failed', reason: error.message }));
-    return response.status(502).json({ error: 'profile_storage_unavailable' });
+    console.error(JSON.stringify({ type: 'newsletter.hyperchat_storage_failed', reason: error.message }));
+    if (!memberStore.ready) return response.status(502).json({ error: 'profile_storage_unavailable' });
+  }
+  if (memberStore.ready) {
+    void processEmailOutbox();
+    return response.status(202).json({ ok: true, stored: true, emailQueued: true, emailSent: false });
   }
   try {
-    await subscribe({ email, firstName, role, aiStage, goal });
+    await subscribe(profile);
     return response.status(201).json({ ok: true, stored: true, emailSent: true });
   } catch (error) {
     console.error(JSON.stringify({ type: 'newsletter.failed', reason: error.message }));
@@ -599,7 +1010,8 @@ app.post('/api/member-interest', async (request, response) => {
     aiStage: String(request.body?.aiStage || ''),
     aiUse: String(request.body?.aiUse || ''),
     goal: String(request.body?.goal || '').trim(),
-    page: String(request.body?.page || '').trim()
+    page: String(request.body?.page || '').trim(),
+    consentText: 'I agree that Clone Centre may save these details and contact me about this enquiry.'
   };
   if (!/^cc_[a-z0-9]{8,120}$/i.test(profile.sessionId)) return response.status(400).json({ error: 'valid_session_required' });
   if (profile.name.length < 2 || profile.name.length > 80) return response.status(400).json({ error: 'valid_name_required' });
@@ -622,6 +1034,15 @@ app.post('/api/member-interest', async (request, response) => {
     `Main AI use: ${memberOptions.aiUse[profile.aiUse]}`,
     `Goal: ${profile.goal}`
   ].join('\n');
+  if (memberStore.ready) {
+    try {
+      const member = await requestMember(request);
+      await memberStore.saveMemberInterest(profile, member?.id || null);
+    } catch (error) {
+      console.error(JSON.stringify({ type: 'member.railway_storage_failed', session: profile.sessionId, reason: error.message }));
+      return response.status(502).json({ error: 'profile_storage_unavailable' });
+    }
+  }
   try {
     await persistHyperChatLead({
       sessionId: profile.sessionId,
@@ -632,10 +1053,14 @@ app.post('/api/member-interest', async (request, response) => {
       sourceUrl: profile.page
     });
   } catch (error) {
-    console.error(JSON.stringify({ type: 'member.storage_failed', session: profile.sessionId, reason: error.message }));
-    return response.status(502).json({ error: 'profile_storage_unavailable' });
+    console.error(JSON.stringify({ type: 'member.hyperchat_storage_failed', session: profile.sessionId, reason: error.message }));
+    if (!memberStore.ready) return response.status(502).json({ error: 'profile_storage_unavailable' });
   }
 
+  if (memberStore.ready) {
+    void processEmailOutbox();
+    return response.status(202).json({ ok: true, stored: true, emailQueued: true, emailSent: false });
+  }
   const eventKey = createHash('sha256').update(`${profile.sessionId}:${profile.interest}:${profile.email}`).digest('hex').slice(0, 32);
   try {
     const [notification, acknowledgement] = await Promise.all([
@@ -706,6 +1131,24 @@ app.post('/api/chat-transcript', async (request, response) => {
     const pageUrl = new URL(page);
     pageLabel = `${title || 'Clone Centre'} · ${pageUrl.pathname}`;
   } catch {}
+  if (memberStore.ready) {
+    try {
+      const member = await requestMember(request);
+      if (member) await memberStore.linkChat(member.id, sessionId);
+      await memberStore.queueOutbox('chat_transcript', process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai', {
+        conversationId,
+        sessionId,
+        page,
+        title,
+        messages
+      }, `clonecentre-chat/${eventKey}`);
+      void processEmailOutbox();
+      return response.status(202).json({ ok: true, stored: true, emailQueued: true });
+    } catch (error) {
+      console.error(JSON.stringify({ type: 'chat_transcript.queue_failed', conversation: conversationId, reason: error.message }));
+      return response.status(502).json({ error: 'transcript_storage_unavailable' });
+    }
+  }
   try {
     const result = await sendResendEmail({
       from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
@@ -735,7 +1178,17 @@ app.get('/api/site-config', (_request, response) => {
   });
 });
 
-app.get('/api/health', (_request, response) => {
+app.get('/api/health', async (_request, response) => {
+  let memberDatabaseReady = false;
+  let outbox = null;
+  if (memberStore.ready) {
+    try {
+      memberDatabaseReady = await memberStore.ping();
+      outbox = await memberStore.outboxStats();
+    } catch (error) {
+      memberStoreError = error.message;
+    }
+  }
   response.json({
     ok: true,
     service: 'clonecentre-site',
@@ -748,6 +1201,11 @@ app.get('/api/health', (_request, response) => {
     chat_transcripts_configured: Boolean(process.env.RESEND_API_KEY && (process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO)),
     member_capture_configured: Boolean(hyperChatBaseUrl && hyperChatProjectId),
     member_notifications_configured: Boolean(process.env.RESEND_API_KEY && (process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO)),
+    member_database_configured: memberStore.enabled,
+    member_database_ready: memberDatabaseReady,
+    account_system_ready: memberDatabaseReady,
+    email_outbox: outbox,
+    member_database_error: memberDatabaseReady ? null : memberStoreError,
     booking_links_configured: Boolean(process.env.CAL_PROFILE_URL && process.env.CAL_AI_FIX_URL && process.env.CAL_AI_POWER_URL && process.env.CAL_BUILD_PARTNER_URL),
     booking_automation_configured: Boolean(process.env.CAL_WEBHOOK_SECRET && process.env.RESEND_API_KEY),
     delivery_mode: dryRun ? 'dry_run' : 'live'
@@ -766,6 +1224,8 @@ for (const page of ['about', 'community', 'coaching', 'library', 'products']) {
 }
 app.get('/order-complete', (_request, response) => sendHtml(response, 'order-complete.html'));
 app.get('/chatbot-knowledge', (_request, response) => sendHtml(response, 'chatbot-knowledge.html'));
+app.get('/member/', (_request, response) => response.redirect(308, '/member'));
+app.get('/member', (_request, response) => sendHtml(response, 'member.html'));
 app.use('/books/Clone_Centre_Prompt_Guidebook.pdf', (_request, response) => response.status(404).json({ error: 'guide_request_required' }));
 app.use('/books/paid', (_request, response) => response.status(404).json({ error: 'not_found' }));
 app.use(express.static(publicDir, {
@@ -780,10 +1240,17 @@ app.use((_request, response) => sendHtml(response, 'index.html', 404));
 const server = app.listen(port, () => {
   console.info(JSON.stringify({ type: 'server.started', port, dry_run: dryRun, catalog_products: Object.keys(catalog.products).length }));
 });
+const outboxInterval = setInterval(() => {
+  if (!memberStore.ready) void ensureMemberStore();
+  void processEmailOutbox();
+}, 60_000);
+outboxInterval.unref();
+if (memberStore.ready) void processEmailOutbox();
 
 function stop(signal) {
   console.info(JSON.stringify({ type: 'server.stopping', signal }));
-  server.close(() => process.exit(0));
+  clearInterval(outboxInterval);
+  server.close(() => memberStore.close().finally(() => process.exit(0)));
   setTimeout(() => process.exit(1), 10_000).unref();
 }
 process.on('SIGTERM', () => stop('SIGTERM'));

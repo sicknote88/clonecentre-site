@@ -589,6 +589,21 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 .mini-link:hover,.mini-link:focus-visible{border-color:var(--blue);color:#fff;outline:none;}
 .mini-link b{font-family:var(--px);font-size:24px;color:#fff;font-weight:400;}
 .mini-link i{font-style:normal;color:var(--blue);}
+.home-coach{position:relative;margin-top:78px;border:1px solid #31506c;background:linear-gradient(145deg,rgba(46,155,255,.14),rgba(2,5,8,.98) 42%,#020202);padding:clamp(28px,5vw,58px);overflow:hidden;}
+.home-coach::after{content:"COACH";position:absolute;right:-24px;top:-35px;font-family:'Silkscreen',monospace;font-size:clamp(72px,13vw,168px);color:rgba(46,155,255,.04);pointer-events:none;}
+.home-coach-head{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:52px;align-items:end;}
+.home-coach-head h2{max-width:740px;margin-bottom:0;}
+.home-coach-intro{color:#AAB3BC;font-size:14px;max-width:62ch;}
+.home-coach-intro b{color:#fff;}
+.home-coach-principle{position:relative;z-index:1;margin:36px 0 26px;padding:21px 24px;border-left:3px solid var(--blue);background:rgba(0,0,0,.48);color:#CBD2D9;font-size:13px;}
+.home-coach-principle b{color:#fff;}
+.coach-cap-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.coach-capability{min-height:152px;border:1px solid #273747;background:rgba(3,8,13,.78);padding:22px;}
+.coach-capability span{display:block;font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
+.coach-capability h3{font-family:var(--px);font-size:27px;font-weight:400;line-height:1;color:#fff;margin:12px 0 9px;}
+.coach-capability p{font-size:11px;line-height:1.65;color:#909BA6;}
+.home-coach-actions{position:relative;z-index:1;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:30px;}
+.home-coach-actions p{max-width:54ch;font-size:10px;line-height:1.6;color:#76818C;}
 .choice-guide{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:36px 0 8px;}
 .choice{border-left:2px solid #26313c;background:#050505;padding:18px 16px;}
 .choice b{display:block;font-family:var(--px);font-size:22px;color:#fff;font-weight:400;margin-bottom:5px;}
@@ -666,6 +681,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   .library-start{grid-template-columns:1fr;}
   .bundle-grid{grid-template-columns:1fr;}
   .mini-links{grid-template-columns:1fr;}
+  .home-coach-head{grid-template-columns:1fr;gap:20px;align-items:start;}
+  .coach-cap-grid{grid-template-columns:1fr;}
+  .coach-capability{min-height:0;}
+  .home-coach-actions{align-items:stretch;flex-direction:column;}
+  .home-coach-actions .btn{width:100%;text-align:center;}
   .choice-guide{grid-template-columns:1fr;}
   .page-library .lib-grid,html[data-page="library"] .lib-grid{grid-template-columns:1fr;gap:18px;}
   html[data-page="library"] .book{padding:24px 20px;gap:12px;}
@@ -677,7 +697,8 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   html[data-page="library"] .everything-card{grid-column:1/-1;}
   .hero-inner{grid-template-columns:1fr;}
   .hero-copy,.hero-img{grid-column:1;grid-row:auto;}
-  .hero-img{order:-1;}
+  .hero-copy{order:1;}
+  .hero-img{order:2;}
 }
 @media(max-width:430px){
   .choice-guide{grid-template-columns:1fr;}
@@ -697,10 +718,10 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 @media(max-width:560px){
   .scrollcue{display:none;}
   .hero{min-height:auto;align-items:flex-start;overflow:hidden;}
-  .hero-inner{display:flex;flex-direction:column;padding:88px 20px 54px;gap:0;}
-  .hero-img{display:flex;flex-direction:column;align-items:center;width:100%;margin-bottom:16px;order:-1;}
-  .hero-img img{width:min(188px,48vw);max-height:245px;object-fit:contain;}
-  .hero-img .tag{position:static;transform:none;margin-top:-8px;font-size:8px;letter-spacing:1.7px;}
+  .hero-inner{display:flex;flex-direction:column;padding:92px 20px 36px;gap:0;}
+  .hero-img{display:flex;flex-direction:column;align-items:center;width:100%;margin:34px 0 0;order:2;}
+  .hero-img img{width:min(390px,100%);max-height:none;object-fit:contain;}
+  .hero-img .tag{position:static;transform:none;margin-top:-18px;font-size:9px;letter-spacing:2px;}
   .hero-copy{width:100%;min-width:0;}
   .hero .kicker{font-size:9px;letter-spacing:1.45px;margin-bottom:13px;white-space:normal;}
   .hero h1{font-size:clamp(54px,17vw,66px);line-height:.9;max-width:100%;}
@@ -736,6 +757,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <a href="/coaching" data-nav-page="coaching">Coaching</a>
       <a href="/library" data-nav-page="library">Library</a>
       <a href="/products" data-nav-page="products">Products</a>
+      <a href="/member">Member</a>
     </div>
   </div>
 </nav>
@@ -744,10 +766,6 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <header class="hero" id="top">
   <canvas id="rain"></canvas>
   <div class="hero-inner">
-    <div class="hero-img">
-      <img src="assets/joseph_code_dither.png" alt="Pixel portrait of Joseph Conlan">
-      <div class="tag">JOSEPH.EXE · ONLINE</div>
-    </div>
     <div class="hero-copy">
       <div class="kicker">Joseph Conlan · Founder, Clone Centre</div>
       <h1>I MAKE AI<br>USEFUL<span class="cursor"></span></h1>
@@ -757,6 +775,10 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <a class="btn" href="#guide-gate" data-guide-gate>GET THE PROMPT GUIDE</a>
       </div>
       <p class="ai-line-note">PREFER TO TALK? CLONE CENTRE AI · <strong><a href="tel:+447888865560">07888 865560</a></strong></p>
+    </div>
+    <div class="hero-img">
+      <img src="assets/joseph_code_dither.png" alt="Pixel portrait of Joseph Conlan">
+      <div class="tag">JOSEPH.EXE · ONLINE</div>
     </div>
   </div>
   <div class="scrollcue">SCROLL</div>
@@ -873,6 +895,33 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <a class="mini-link" href="/about"><span><b>MEET JOSEPH</b><br>Background, approach and why AI matters now.</span><i>OPEN &gt;</i></a>
     <a class="mini-link" href="/community?interest=help_choose#membership-apply"><span><b>ASK A HUMAN</b><br>Share the problem and Joseph will point you in the right direction.</span><i>ASK &gt;</i></a>
   </div>
+
+  <section class="home-coach" id="clone-coach">
+    <div class="home-coach-head">
+      <div>
+        <div class="sec-kicker">Clone Coach · built around you</div>
+        <h2>AI COACHING IS THE FUTURE OF FOLLOW-THROUGH.</h2>
+      </div>
+      <p class="home-coach-intro">Advice is easy to find. <b>Remembering your goals, noticing the pattern and helping you take the next useful action</b> is where a great coach becomes valuable. We build private AI coach bots around your needs, your method, your language and the moments where you tend to get stuck.</p>
+    </div>
+    <p class="home-coach-principle"><b>Always available does not mean human-free.</b> Your coach can handle the daily rhythm, preserve context and prepare better conversations—then hand over to a person whenever judgement, care or genuine expertise is needed.</p>
+    <div class="coach-cap-grid">
+      <article class="coach-capability"><span>01 · Context</span><h3>REMEMBER WHAT MATTERS</h3><p>Keep goals, preferences, working context and previous check-ins connected so every conversation can begin further forward.</p></article>
+      <article class="coach-capability"><span>02 · Action</span><h3>TURN GOALS INTO NEXT MOVES</h3><p>Break large outcomes into clear milestones, practical weekly priorities and small actions that are easy to begin.</p></article>
+      <article class="coach-capability"><span>03 · Accountability</span><h3>CREATE A USEFUL RHYTHM</h3><p>Run daily check-ins, weekly reviews, reminders and progress summaries without making the experience feel like admin.</p></article>
+      <article class="coach-capability"><span>04 · Insight</span><h3>NOTICE PATTERNS + BLOCKERS</h3><p>Surface repeated obstacles, decisions and habits, then ask the right reflective question before momentum disappears.</p></article>
+      <article class="coach-capability"><span>05 · Practice</span><h3>REHEARSE IMPORTANT MOMENTS</h3><p>Prepare meetings, interviews, presentations, sales conversations and difficult decisions with realistic role-play and feedback.</p></article>
+      <article class="coach-capability"><span>06 · Personalisation</span><h3>WORK YOUR WAY</h3><p>Adapt tone, cadence, frameworks, playbooks and boundaries to the individual, team, programme or coaching methodology.</p></article>
+      <article class="coach-capability"><span>07 · Creation</span><h3>MAKE THE WORK WITH YOU</h3><p>Draft plans, questions, summaries, templates and personalised resources from the context already shared.</p></article>
+      <article class="coach-capability"><span>08 · Connection</span><h3>FIT INTO REAL WORKFLOWS</h3><p>Connect agreed calendars, tools and systems so useful actions and progress records do not stay trapped inside a chat window.</p></article>
+      <article class="coach-capability"><span>09 · Boundaries</span><h3>KNOW WHEN TO HAND OVER</h3><p>Use clear guardrails, privacy choices and human escalation for situations where an AI coach should never pretend to be the expert.</p></article>
+    </div>
+    <div class="home-coach-actions">
+      <a class="btn blue" href="/community?interest=custom_coach_bot#membership-apply">BUILD MY COACH BOT &gt;</a>
+      <a class="btn" href="/member">CREATE MY MEMBER PROFILE &gt;</a>
+      <p>Every build is scoped around a real use case. AI coaching supports action, reflection and practice; it is not therapy, medical care, legal advice or financial advice.</p>
+    </div>
+  </section>
 </section>
 
 <!-- ============ ABOUT ============ -->
@@ -1037,6 +1086,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <option value="accountability">Accountability founding seat · £149/month</option>
         <option value="switch">Switch from another community · £1 first month</option>
         <option value="clone_coach_waitlist">Clone Coach AI beta waitlist</option>
+        <option value="custom_coach_bot">A custom AI coach built for my needs</option>
         <option value="help_choose">Help me choose</option>
       </select></div>
       <div class="member-field"><label for="member-ai-stage">Where are you with AI?</label><select id="member-ai-stage" name="aiStage" required>
@@ -1485,7 +1535,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a> · AI line 07888 865560</span>
   </div>
   <div class="footer-links" aria-label="Footer navigation">
-    <a href="/about">About</a><a href="/community">Community</a><a href="/coaching">Coaching</a><a href="/library">Library</a><a href="/products">Products</a>
+    <a href="/about">About</a><a href="/community">Community</a><a href="/coaching">Coaching</a><a href="/library">Library</a><a href="/products">Products</a><a href="/member">Member</a>
   </div>
   <div class="r">© 2026 JOSEPH CONLAN · PHASE 5 LIVE</div>
 </footer>
@@ -1505,6 +1555,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <div class="cc-chat-suggestions" id="cc-chat-suggestions" aria-label="Suggested questions">
     <button type="button" data-cc-question="Based on what Clone Centre offers, what is the best route for me?">Find my best route</button>
     <button type="button" data-cc-question="Explain ANSAIR voice AI, HyperChat website chatbots, TRAICE AI governance and Pipeline UK acquisition intelligence using only Clone Centre's product directory.">Explore the AI products</button>
+    <button type="button" data-cc-question="What could Clone Centre build into a custom AI coach for me or my team?">Build my AI coach</button>
   </div>
   <div class="cc-chat-convert">
     <span><b>Want this on your website?</b>Included with annual Pro.</span>
