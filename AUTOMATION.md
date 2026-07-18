@@ -7,15 +7,16 @@ The production site keeps fulfilment on the shortest reliable path and holds its
 Stripe, Cal.com, HyperChat and Resend update or support that central record through signed webhooks and server-to-server requests. Those services continue to retain the operational data they require; PostgreSQL is the master Clone Centre member layer.
 
 1. Stripe sends signed Checkout events directly to `/api/stripe/webhook`.
-2. The server maps the Payment Link to `fulfillment/catalog.json`.
-3. Resend sends the purchased files to the Checkout email address.
+2. The server maps book and membership Payment Links through `fulfillment/catalog.json`.
+3. Resend sends purchased files or a membership welcome to the Checkout email address. If sending is unavailable, Railway's outbox retries without losing the payment record.
 
 The same server also owns the other customer email flows:
 
 - `/api/subscribe` validates the visitor's AI profile, adds the explicitly opted-in address to the **Clone Centre Community** Resend segment, emails the private Prompt Guidebook as an attachment, and sends Joseph a concise lead-profile notification.
 - `/api/cal/webhook` verifies Cal.com's HMAC signature and sends branded booking, reschedule, cancellation, and post-meeting emails.
 - `/api/chat-transcript` validates and rate-limits first-party HyperChat transcripts, then emails Joseph the conversation after 45 seconds of inactivity or when the visitor leaves. HyperChat remains the complete conversation record.
-- `/api/member-interest` stores every consented membership, annual-Pro chatbot, custom coach, switch, waitlist and help-me-choose profile in PostgreSQL, then links the HyperChat session when available. Resend then notifies Joseph and acknowledges the visitor; a sending outage never discards the stored profile.
+- Standard Community, Pro and Accountability buttons open their exact monthly or annual Stripe subscription checkout directly; visitors do not repeat their plan choice in a form.
+- `/api/member-interest` is reserved for £1 switch verification, custom coach, waitlist and help-me-choose enquiries. Switch applications require the current paid community plus a redacted PNG, JPG, WEBP or PDF proof file, stored privately in PostgreSQL for manual review before a discounted link is issued.
 - `/api/subscribe` stores the visitor's AI profile in PostgreSQL before attempting the Prompt Guidebook email, so a temporary sending suspension does not lose the lead. HyperChat receives a secondary linked lead record.
 - `/member` provides account registration, secure sessions, email verification, password reset, profile editing, linked-chat references, membership status and purchased-access records.
 - The PostgreSQL email outbox retries account, guide, booking, chat, member and Stripe delivery emails with exponential backoff while Resend is unavailable.
@@ -27,6 +28,7 @@ The dedicated service stores:
 
 - Member accounts, password hashes and secure session-token hashes
 - AI profiles, explicit consent records and enquiries
+- Pending £1 switch evidence and review status
 - HyperChat session links (full conversations remain in HyperChat)
 - Membership tier and Stripe subscription references
 - Cal.com booking references

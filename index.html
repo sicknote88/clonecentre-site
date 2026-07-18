@@ -359,6 +359,10 @@ body.cc-chat-open{overflow:hidden;}
 .tier .tier-cta:hover{border-color:var(--blue);color:var(--blue);}
 .tier.recommended .tier-cta{border-color:var(--blue);background:var(--blue);color:#000;}
 .tier.recommended .tier-cta:hover{background:#fff;border-color:#fff;}
+.tier-actions{display:grid;gap:9px;}
+.tier-actions .tier-cta.secondary{background:transparent;color:var(--ink);border-color:var(--line);}
+.tier-actions .tier-cta.secondary:hover{border-color:var(--blue);color:var(--blue);}
+.tier-checkout-note{margin-top:10px;text-align:center;color:#647180;font-size:9px;letter-spacing:.5px;}
 .pricing-note{margin-top:18px;font-size:11px;color:#5E6672;text-align:center;letter-spacing:.5px;}
 @media(max-width:1040px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:620px){.pricing-grid{grid-template-columns:1fr;}}
@@ -397,6 +401,10 @@ body.cc-chat-open{overflow:hidden;}
 .member-field input,.member-field select,.member-field textarea{width:100%;min-width:0;border:1px solid #34495b;border-radius:0;background:#000;color:#fff;padding:12px 13px;font-family:var(--mono);font-size:12px;line-height:1.45;outline:none;}
 .member-field textarea{min-height:108px;resize:vertical;}
 .member-field input:focus,.member-field select:focus,.member-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,155,255,.12);}
+.switch-proof-fields{display:none;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;border:1px solid rgba(46,155,255,.35);background:#03090e;padding:18px;}
+.switch-proof-fields.on{display:grid;}
+.switch-proof-fields .proof-note{grid-column:1/-1;color:#82909c;font-size:10px;line-height:1.55;}
+.switch-proof-fields input[type="file"]{padding:9px;background:#020304;}
 .member-consent{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;color:#7F8D99;font-size:10px;line-height:1.55;}
 .member-consent input{accent-color:var(--blue);margin-top:3px;}
 .member-form-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:3px;}
@@ -406,7 +414,7 @@ body.cc-chat-open{overflow:hidden;}
 .member-status.success{color:#DCEEFF;}
 .member-status a{display:inline-block;margin-top:9px;color:var(--blue);font-family:var(--px);font-size:20px;text-decoration:none;}
 .member-form.is-complete>*:not(.member-status){display:none;}
-@media(max-width:760px){.member-capture{padding:26px 21px;}.member-capture-head,.member-form{grid-template-columns:1fr;}.member-field.full,.member-consent,.member-form-actions,.member-status{grid-column:auto;}.member-form-actions{align-items:stretch;flex-direction:column;}.member-form-actions .btn{width:100%;text-align:center;}}
+@media(max-width:760px){.member-capture{padding:26px 21px;}.member-capture-head,.member-form,.switch-proof-fields{grid-template-columns:1fr;}.member-field.full,.member-consent,.member-form-actions,.member-status,.switch-proof-fields,.switch-proof-fields .proof-note{grid-column:auto;}.member-form-actions{align-items:stretch;flex-direction:column;}.member-form-actions .btn{width:100%;text-align:center;}}
 
 .switch-offer{margin-top:34px;border:2px solid var(--blue);background:
   linear-gradient(90deg,rgba(46,155,255,.10) 1px,transparent 1px),
@@ -1027,7 +1035,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Weekly prompt and build thread</li>
         <li>Saturday and Sunday accountability drops</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=community_monthly#membership-apply">CHOOSE COMMUNITY &gt;</a>
+      <div class="tier-actions">
+        <a class="tier-cta" href="https://buy.stripe.com/3cI7sL4HZ1Pg2Yj7loaZi0j">JOIN MONTHLY · £19 &gt;</a>
+        <a class="tier-cta secondary" href="https://buy.stripe.com/3cI7sL0rJ0Lc2Yj8psaZi0k">JOIN ANNUALLY · £190 &gt;</a>
+      </div>
+      <div class="tier-checkout-note">SECURE STRIPE CHECKOUT · CANCEL ANY TIME</div>
     </article>
 
     <article class="tier recommended">
@@ -1045,7 +1057,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>HyperChat member workspace access</li>
         <li>Annual Pro: one website AI chatbot setup included</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=pro_monthly#membership-apply">CHOOSE PRO &gt;</a>
+      <div class="tier-actions">
+        <a class="tier-cta" href="https://buy.stripe.com/fZu4gzcar1PgdCX358aZi0l">JOIN MONTHLY · £49 &gt;</a>
+        <a class="tier-cta secondary" href="https://buy.stripe.com/bJecN57Ub51scyT8psaZi0m">JOIN ANNUALLY · £490 &gt;</a>
+      </div>
+      <div class="tier-checkout-note">SECURE STRIPE CHECKOUT · CANCEL ANY TIME</div>
     </article>
 
     <article class="tier">
@@ -1060,10 +1076,14 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Private 90-day goal tracker</li>
         <li>Priority questions and DM access</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=accountability_monthly#membership-apply">APPLY FOR A SEAT &gt;</a>
+      <div class="tier-actions">
+        <a class="tier-cta" href="https://buy.stripe.com/4gMbJ1b6n9hIeH1358aZi0n">JOIN MONTHLY · £149 &gt;</a>
+        <a class="tier-cta secondary" href="https://buy.stripe.com/aFafZheizfG656r214aZi0o">JOIN ANNUALLY · £1,490 &gt;</a>
+      </div>
+      <div class="tier-checkout-note">5 FOUNDING SEATS · SECURE STRIPE CHECKOUT</div>
     </article>
   </div>
-  <div class="pricing-note">MONTHLY PLANS CANCEL ANY TIME · ANNUAL PRICES EQUAL TEN MONTHS · VAT INCLUDED WHERE APPLICABLE · NO PAYMENT IS TAKEN BY THE FORM BELOW</div>
+  <div class="pricing-note">BUTTONS OPEN THE EXACT SECURE STRIPE CHECKOUT · MONTHLY PLANS CANCEL ANY TIME · ANNUAL PRICES EQUAL TEN MONTHS · VAT INCLUDED WHERE APPLICABLE</div>
 
   <div class="annual-bonus" id="annual-chatbot">
     <div>
@@ -1072,17 +1092,17 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <p>Choose <b>Clone Centre Pro annually</b> and we will set up one trained website AI chatbot like the assistant on this page, included at no extra setup charge while your annual membership stays active.</p>
       <p class="small-print">The standard starter build covers one website and one approved business knowledge set. Usage beyond fair-use, third-party usage costs and bespoke integrations are not automatically included; any extras are scoped and agreed before launch. The assistant remains subject to acceptable-use and safety checks.</p>
     </div>
-    <a class="btn blue" href="/community?interest=pro_annual#membership-apply">CHOOSE ANNUAL PRO &gt;</a>
+    <a class="btn blue" href="https://buy.stripe.com/bJecN57Ub51scyT8psaZi0m">JOIN ANNUAL PRO · £490 &gt;</a>
   </div>
 
   <div class="switch-offer">
     <div>
       <div class="switch-code">PAY <b>£1</b> TO SWITCH</div>
-      <p class="switch-copy">Already paying for another business, coaching or AI community? Your <b style="color:#fff;">first month</b> is £1. Choose Community and it then renews at £19/month, or choose Pro and it then renews at £49/month, unless you cancel. No long contract.</p>
+      <p class="switch-copy">Already paying for another business, coaching or AI community? Apply with proof of your active paid membership. Once verified, your <b style="color:#fff;">first month</b> is £1; Community then renews at £19/month or Pro at £49/month unless cancelled. The £1 link is issued only after approval.</p>
     </div>
     <div class="switch-actions">
-      <a class="btn" href="/community?interest=switch_community#membership-apply">£1 COMMUNITY &gt;</a>
-      <a class="btn blue" href="/community?interest=switch_pro#membership-apply">£1 PRO &gt;</a>
+      <a class="btn" href="/community?interest=switch_community#membership-apply">CHECK £1 COMMUNITY ELIGIBILITY &gt;</a>
+      <a class="btn blue" href="/community?interest=switch_pro#membership-apply">CHECK £1 PRO ELIGIBILITY &gt;</a>
     </div>
   </div>
 
@@ -1093,8 +1113,8 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 
   <div class="member-capture" id="membership-apply">
     <div class="member-capture-head">
-      <div><div class="sec-kicker">One joining form</div><h3>CHOOSE YOUR ROUTE.</h3></div>
-      <p>This form does not take payment. Choose the exact membership and billing route you want, share your context once, and Joseph will send the correct joining or payment link. You can create or sign in to your dashboard with the same email at any time.</p>
+      <div><div class="sec-kicker">Only when a form is needed</div><h3 id="member-form-title">TELL US WHAT YOU NEED.</h3></div>
+      <p id="member-form-intro">Standard Community, Pro and Accountability plans go directly to Stripe above. Use this form only for £1 switch verification, help choosing, Clone Coach or a bespoke coach build.</p>
     </div>
     <form class="member-form" id="member-interest-form" action="/api/member-interest" method="POST">
       <label class="hp-field" aria-hidden="true">Fax<input type="text" name="fax" tabindex="-1" autocomplete="off"></label>
@@ -1102,16 +1122,8 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="member-field"><label for="member-email">Email address</label><input id="member-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
       <div class="member-field"><label for="member-company">Company or website <span>(optional)</span></label><input id="member-company" name="company" type="text" autocomplete="organization" maxlength="160"></div>
       <div class="member-field"><label for="member-interest">What are you interested in?</label><select id="member-interest" name="interest" required>
-        <option value="" selected disabled>Choose one exact route</option>
-        <optgroup label="Community membership">
-          <option value="community_monthly">Community monthly · £19/mo</option>
-          <option value="community_annual">Community annual · £190/yr</option>
-          <option value="pro_monthly">Pro monthly · £49/mo</option>
-          <option value="pro_annual">Pro annual + chatbot · £490/yr</option>
-          <option value="accountability_monthly">Accountability monthly · £149/mo</option>
-          <option value="accountability_annual">Accountability annual · £1,490/yr</option>
-        </optgroup>
-        <optgroup label="£1 switch offer · eligible existing paid members">
+        <option value="" selected disabled>Choose the reason a form is needed</option>
+        <optgroup label="£1 switch offer · proof required">
           <option value="switch_community">Switch → Community · £1, then £19/mo</option>
           <option value="switch_pro">Switch → Pro · £1, then £49/mo</option>
         </optgroup>
@@ -1121,6 +1133,12 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
           <option value="help_choose">Help me choose</option>
         </optgroup>
       </select></div>
+      <div class="switch-proof-fields" id="switch-proof-fields">
+        <p class="proof-note"><b style="color:#fff;">Eligibility check:</b> the £1 offer is only for someone currently paying for another business, coaching or AI community. Please redact card numbers, bank details and unrelated personal information from your proof.</p>
+        <div class="member-field"><label for="current-community">Current paid community</label><input id="current-community" name="currentCommunity" type="text" maxlength="160" placeholder="Community or programme name"></div>
+        <div class="member-field"><label for="current-membership-url">Community website <span>(optional)</span></label><input id="current-membership-url" name="currentMembershipUrl" type="url" maxlength="500" placeholder="https://"></div>
+        <div class="member-field full"><label for="switch-proof">Proof of active paid membership</label><input id="switch-proof" name="switchProof" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"><span class="proof-note">Upload a recent receipt, invoice or membership screenshot. PNG, JPG, WEBP or PDF; maximum 3 MB.</span></div>
+      </div>
       <div class="member-field"><label for="member-ai-stage">Where are you with AI?</label><select id="member-ai-stage" name="aiStage" required>
         <option value="" selected disabled>Choose the closest answer</option>
         <option value="new">I have barely started</option><option value="exploring">I am experimenting</option><option value="regular">I use AI most weeks</option><option value="building">I am already building systems</option>
@@ -1131,7 +1149,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       </select></div>
       <div class="member-field full"><label for="member-goal">What would make this useful for you?</label><textarea id="member-goal" name="goal" maxlength="1500" placeholder="A sentence or two is enough. Tell Joseph what you want to achieve or what is currently getting in the way." required></textarea></div>
       <label class="member-consent"><input type="checkbox" name="consent" required><span>I agree that Clone Centre may save these details and contact me about this enquiry. I can ask for my information to be removed at any time.</span></label>
-      <div class="member-form-actions"><p>No payment is taken here. Stored with your conversation session so you do not have to repeat yourself. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" type="submit">SEND MY JOINING REQUEST &gt;</button></div>
+      <div class="member-form-actions"><p>No payment is taken here. £1 switch applications are checked before a private discounted Stripe link is issued. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" id="member-submit" type="submit">SEND MY REQUEST &gt;</button></div>
       <div class="member-status" id="member-form-status" role="status"></div>
     </form>
   </div>
@@ -1225,7 +1243,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Clear review notes: celebrate, learn, drop and reset</li>
       </ul>
       <div class="coach-actions">
-        <a class="btn blue" href="/community?interest=accountability_monthly#membership-apply">APPLY FOR A PLACE &gt;</a>
+        <a class="btn blue" href="https://buy.stripe.com/4gMbJ1b6n9hIeH1358aZi0n">JOIN MONTHLY · £149 &gt;</a>
         <a class="btn" href="goal-tracker.html">OPEN THE TRACKER &gt;</a>
       </div>
     </article>
@@ -1818,11 +1836,38 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&guideGate.c
 /* ---- stored membership + enquiry profile ---- */
 const memberForm=document.getElementById('member-interest-form');
 const memberStatus=document.getElementById('member-form-status');
+const memberInterestSelect=document.getElementById('member-interest');
+const switchProofFields=document.getElementById('switch-proof-fields');
+const currentCommunityField=document.getElementById('current-community');
+const currentMembershipUrlField=document.getElementById('current-membership-url');
+const switchProofField=document.getElementById('switch-proof');
+const memberFormTitle=document.getElementById('member-form-title');
+const memberFormIntro=document.getElementById('member-form-intro');
+const memberSubmit=document.getElementById('member-submit');
 const requestedInterestRaw=new URLSearchParams(location.search).get('interest');
 const legacyInterestMap={community:'community_monthly',pro:'pro_monthly',annual_pro_chatbot:'pro_annual',accountability:'accountability_monthly',switch:'switch_community'};
 const requestedInterest=legacyInterestMap[requestedInterestRaw]||requestedInterestRaw;
 if(memberForm&&requestedInterest&&memberForm.elements.interest.querySelector('option[value="'+CSS.escape(requestedInterest)+'"]')){
   memberForm.elements.interest.value=requestedInterest;
+}
+function syncMemberEnquiryRoute(){
+  if(!memberForm)return;
+  const isSwitch=memberInterestSelect.value==='switch_community'||memberInterestSelect.value==='switch_pro';
+  switchProofFields.classList.toggle('on',isSwitch);
+  currentCommunityField.required=isSwitch;
+  switchProofField.required=isSwitch;
+  memberFormTitle.textContent=isSwitch?'PROVE YOUR SWITCH.':'TELL US WHAT YOU NEED.';
+  memberFormIntro.textContent=isSwitch?'Show that you currently pay for another business, coaching or AI community. Joseph will review the evidence and issue the private £1 Stripe link only when the offer is eligible.':'Standard Community, Pro and Accountability plans go directly to Stripe above. Use this form only for help choosing, Clone Coach or a bespoke coach build.';
+  memberSubmit.textContent=isSwitch?'SUBMIT £1 ELIGIBILITY CHECK >':'SEND MY REQUEST >';
+}
+if(memberInterestSelect){memberInterestSelect.addEventListener('change',syncMemberEnquiryRoute);syncMemberEnquiryRoute();}
+function proofFilePayload(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve({name:file.name,type:file.type,data:String(reader.result||'').split(',')[1]||''});
+    reader.onerror=()=>reject(new Error('file_read_failed'));
+    reader.readAsDataURL(file);
+  });
 }
 if(memberForm)memberForm.addEventListener('submit',async event=>{
   event.preventDefault();
@@ -1832,13 +1877,21 @@ if(memberForm)memberForm.addEventListener('submit',async event=>{
   let sessionId;
   try{sessionId=localStorage.getItem('clonecentre_hyperchat_session');}catch(_){}
   if(!sessionId)sessionId='cc_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
-  const payload={sessionId,name:data.get('name'),email:data.get('email'),company:data.get('company'),interest:data.get('interest'),aiStage:data.get('aiStage'),aiUse:data.get('aiUse'),goal:data.get('goal'),consent:data.has('consent'),fax:data.get('fax'),page:location.href};
+  const isSwitch=data.get('interest')==='switch_community'||data.get('interest')==='switch_pro';
+  let proofFile=null;
+  if(isSwitch){
+    const file=switchProofField.files&&switchProofField.files[0];
+    const allowed=['image/png','image/jpeg','image/webp','application/pdf'];
+    if(!file||!allowed.includes(file.type)||file.size>3*1024*1024){memberStatus.className='member-status on';memberStatus.textContent='Please upload a PNG, JPG, WEBP or PDF proof file no larger than 3 MB.';button.disabled=false;button.textContent='TRY AGAIN >';return;}
+    try{proofFile=await proofFilePayload(file);}catch(_){memberStatus.className='member-status on';memberStatus.textContent='That proof file could not be read. Please choose it again.';button.disabled=false;button.textContent='TRY AGAIN >';return;}
+  }
+  const payload={sessionId,name:data.get('name'),email:data.get('email'),company:data.get('company'),interest:data.get('interest'),aiStage:data.get('aiStage'),aiUse:data.get('aiUse'),goal:data.get('goal'),currentCommunity:data.get('currentCommunity'),currentMembershipUrl:data.get('currentMembershipUrl'),proofFile,consent:data.has('consent'),fax:data.get('fax'),page:location.href};
   try{
     const response=await fetch(memberForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
     const result=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(result.error||'profile_failed');
     memberForm.classList.add('is-complete');memberStatus.className='member-status on success';
-    memberStatus.textContent=result.emailSent?'Saved. Check your inbox for confirmation; Joseph now has the context you shared.':'Saved securely. Joseph now has the context you shared and will reply from joseph@clonecentre.ai or clone@clonecentre.ai.';
+    memberStatus.textContent=isSwitch?'Eligibility evidence saved securely. Joseph will review it before any private £1 Stripe link is issued.':(result.emailSent?'Saved. Check your inbox for confirmation; Joseph now has the context you shared.':'Saved securely. Joseph now has the context you shared and will reply from joseph@clonecentre.ai or clone@clonecentre.ai.');
     const dashboardLink=document.createElement('a');dashboardLink.href='/member';dashboardLink.textContent='CREATE OR OPEN MY DASHBOARD >';memberStatus.appendChild(document.createElement('br'));memberStatus.appendChild(dashboardLink);
   }catch(_){
     memberStatus.className='member-status on';memberStatus.textContent='That did not save. Please check each field and try again, or contact joseph@clonecentre.ai.';button.disabled=false;button.textContent='TRY AGAIN >';

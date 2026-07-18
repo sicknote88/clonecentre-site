@@ -84,6 +84,14 @@ function escapeHtml(value = '') {
   })[character]);
 }
 
+function proofFileMatchesType(buffer, type) {
+  if (type === 'application/pdf') return buffer.subarray(0, 5).toString('ascii') === '%PDF-';
+  if (type === 'image/png') return buffer.subarray(0, 8).toString('hex') === '89504e470d0a1a0a';
+  if (type === 'image/jpeg') return buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  if (type === 'image/webp') return buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP';
+  return false;
+}
+
 function publicSiteUrl() {
   return (process.env.SITE_URL || 'https://clonecentre-site-production.up.railway.app').replace(/\/$/, '');
 }
@@ -200,6 +208,10 @@ function resolveProduct(session) {
   return { key: productKey, ...product };
 }
 
+function membershipTierFromSession(session) {
+  return session.metadata?.membership_tier || catalog.membershipLinks?.[session.payment_link] || null;
+}
+
 function customerEmail(session) {
   return session.customer_details?.email || session.customer_email || null;
 }
@@ -214,6 +226,20 @@ function emailMarkup(product) {
       <p style="line-height:1.65;color:#aeb8c2">Thank you for your purchase. This email contains ${count === 1 ? 'your PDF' : `all ${count} included files`} as attachments, ready to save and read.</p>
       <p style="line-height:1.65;color:#aeb8c2">These files are licensed for your personal use. Please do not redistribute them or publish private download copies.</p>
       <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact <a style="color:#2e9bff" href="mailto:joseph@clonecentre.ai">joseph@clonecentre.ai</a>.</div>
+    </div>
+  </body></html>`;
+}
+
+function membershipPaymentMarkup(name, tier) {
+  const label = tier === 'accountability' ? 'Accountability' : tier === 'pro' ? 'Pro' : 'Community';
+  return `<!doctype html>
+  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
+    <div style="max-width:620px;margin:auto;padding:34px 24px">
+      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBERSHIP PAYMENT RECEIVED</div>
+      <h1 style="font-size:30px;margin:18px 0 12px">Welcome to Clone Centre ${escapeHtml(label)}.</h1>
+      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(name || 'there')}, Stripe has confirmed your membership payment. Create or sign in to the Member Centre with the same email address you used at checkout so your access can connect automatically.</p>
+      <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${publicSiteUrl()}/member">OPEN THE MEMBER CENTRE</a></p>
+      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact joseph@clonecentre.ai.</div>
     </div>
   </body></html>`;
 }
@@ -297,6 +323,10 @@ function leadNotificationMarkup(profile) {
 }
 
 function memberNotificationMarkup(profile) {
+  const switchEvidence = profile.currentCommunity ? `
+        <div><b style="color:#fff">Current paid community:</b> ${escapeHtml(profile.currentCommunity)}</div>
+        <div><b style="color:#fff">Community website:</b> ${escapeHtml(profile.currentMembershipUrl || 'Not provided')}</div>
+        <div><b style="color:#fff">Proof stored in Railway:</b> ${escapeHtml(profile.proofFile?.name || 'No')}</div>` : '';
   return `<!doctype html>
   <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
     <div style="max-width:660px;margin:auto;padding:34px 24px">
@@ -309,6 +339,7 @@ function memberNotificationMarkup(profile) {
         <div><b style="color:#fff">Main AI use:</b> ${escapeHtml(memberOptions.aiUse[profile.aiUse])}</div>
         <div><b style="color:#fff">Session:</b> ${escapeHtml(profile.sessionId)}</div>
         <div><b style="color:#fff">Source:</b> ${escapeHtml(profile.page)}</div>
+        ${switchEvidence}
       </div>
       <div style="border-left:3px solid #2e9bff;padding:14px 17px;background:#07111a;color:#e0e7ed;white-space:pre-wrap;line-height:1.6">${escapeHtml(profile.goal)}</div>
       <p style="margin-top:22px;color:#74818c;font-size:12px">The visitor explicitly agreed that Clone Centre may store these details and contact them about this enquiry. Railway holds the master member record and the HyperChat session is linked when available.</p>
@@ -544,6 +575,19 @@ async function sendDelivery(session) {
   if (session.payment_status !== 'paid') return { skipped: 'payment_not_paid' };
   const email = customerEmail(session);
   if (!email) throw new Error(`Checkout Session ${session.id} has no customer email`);
+  const membershipTier = membershipTierFromSession(session);
+  if (membershipTier) {
+    if (dryRun) return { id: `dry_run_${session.id}`, membership: membershipTier };
+    const result = await sendResendEmail({
+      from: process.env.MEMBER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
+      to: [email],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+      subject: `Welcome to Clone Centre ${membershipTier === 'accountability' ? 'Accountability' : membershipTier === 'pro' ? 'Pro' : 'Community'}`,
+      html: membershipPaymentMarkup(session.customer_details?.name, membershipTier),
+      tags: [{ name: 'automation', value: 'membership_welcome' }]
+    }, `clonecentre-membership/${session.id}`);
+    return { id: result.id, membership: membershipTier };
+  }
   const product = resolveProduct(session);
   const attachments = product.files.map((relativePath) => {
     const fullPath = assertPrivateFile(relativePath);
@@ -606,12 +650,14 @@ async function deliverOutboxItem(item) {
     }, item.idempotency_key);
   }
   if (item.kind === 'member_notification') {
+    const attachments = payload.proofFile?.data ? [{ filename: payload.proofFile.name, content: payload.proofFile.data }] : undefined;
     return sendResendEmail({
       from,
       to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: payload.email,
       subject: `Clone Centre enquiry — ${memberOptions.interest[payload.interest] || payload.interest} · ${payload.name}`.slice(0, 190),
       html: memberNotificationMarkup(payload),
+      attachments,
       tags: [{ name: 'automation', value: 'member_interest' }]
     }, item.idempotency_key);
   }
@@ -703,8 +749,11 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json', limit: '
 
   if (memberStore.ready) {
     try {
-      const product = resolveProduct(event.data.object);
-      await memberStore.recordPurchase(event.data.object, product.key);
+      const session = event.data.object;
+      const membershipTier = membershipTierFromSession(session);
+      if (membershipTier) session.metadata = { ...(session.metadata || {}), membership_tier: membershipTier };
+      const product = membershipTier ? null : resolveProduct(session);
+      await memberStore.recordPurchase(session, product?.key || null);
     } catch (error) {
       console.error(JSON.stringify({ type: 'purchase.storage_failed', event: event.id, reason: error.message }));
     }
@@ -759,6 +808,7 @@ app.post('/api/cal/webhook', express.raw({ type: 'application/json', limit: '256
   }
 });
 
+app.use('/api/member-interest', express.json({ limit: '5mb' }));
 app.use(express.json({ limit: '128kb' }));
 
 app.post('/api/account/register', async (request, response) => {
@@ -1012,6 +1062,9 @@ app.post('/api/member-interest', async (request, response) => {
     aiStage: String(request.body?.aiStage || ''),
     aiUse: String(request.body?.aiUse || ''),
     goal: String(request.body?.goal || '').trim(),
+    currentCommunity: String(request.body?.currentCommunity || '').trim(),
+    currentMembershipUrl: String(request.body?.currentMembershipUrl || '').trim(),
+    proofFile: null,
     page: String(request.body?.page || '').trim(),
     consentText: 'I agree that Clone Centre may save these details and contact me about this enquiry.'
   };
@@ -1024,6 +1077,23 @@ app.post('/api/member-interest', async (request, response) => {
   if (!Object.hasOwn(memberOptions.aiUse, profile.aiUse)) return response.status(400).json({ error: 'valid_ai_use_required' });
   if (profile.goal.length < 5 || profile.goal.length > 1500) return response.status(400).json({ error: 'valid_goal_required' });
   if (request.body?.consent !== true) return response.status(400).json({ error: 'consent_required' });
+  const isSwitch = profile.interest === 'switch_community' || profile.interest === 'switch_pro';
+  if (isSwitch) {
+    if (profile.currentCommunity.length < 2 || profile.currentCommunity.length > 160) return response.status(400).json({ error: 'current_community_required' });
+    if (profile.currentMembershipUrl) {
+      try {
+        const membershipUrl = new URL(profile.currentMembershipUrl);
+        if (!['http:', 'https:'].includes(membershipUrl.protocol)) throw new Error('invalid protocol');
+      } catch { return response.status(400).json({ error: 'valid_membership_url_required' }); }
+    }
+    const incomingProof = request.body?.proofFile;
+    const allowedProofTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'application/pdf']);
+    if (!incomingProof || typeof incomingProof.data !== 'string' || typeof incomingProof.name !== 'string' || !allowedProofTypes.has(incomingProof.type)) return response.status(400).json({ error: 'valid_switch_proof_required' });
+    const proofBuffer = Buffer.from(incomingProof.data, 'base64');
+    if (!proofBuffer.length || proofBuffer.length > 3 * 1024 * 1024 || incomingProof.name.length > 180 || !proofFileMatchesType(proofBuffer, incomingProof.type)) return response.status(400).json({ error: 'valid_switch_proof_required' });
+    profile.proofFile = { name: incomingProof.name, type: incomingProof.type, buffer: proofBuffer };
+    if (!memberStore.ready) return response.status(503).json({ error: 'switch_verification_storage_unavailable' });
+  }
   try {
     const pageUrl = new URL(profile.page);
     if (!['http:', 'https:'].includes(pageUrl.protocol)) throw new Error('invalid protocol');
@@ -1034,6 +1104,7 @@ app.post('/api/member-interest', async (request, response) => {
     `Interest: ${memberOptions.interest[profile.interest]}`,
     `AI stage: ${memberOptions.aiStage[profile.aiStage]}`,
     `Main AI use: ${memberOptions.aiUse[profile.aiUse]}`,
+    ...(isSwitch ? [`Current paid community: ${profile.currentCommunity}`, `Proof stored: ${profile.proofFile.name}`] : []),
     `Goal: ${profile.goal}`
   ].join('\n');
   if (memberStore.ready) {

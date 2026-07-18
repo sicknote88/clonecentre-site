@@ -123,6 +123,17 @@ export function createMemberStore(databaseUrl) {
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
       CREATE INDEX IF NOT EXISTS cc_enquiries_email_idx ON cc_enquiries(email, created_at DESC);
+      CREATE TABLE IF NOT EXISTS cc_switch_proofs (
+        enquiry_id UUID PRIMARY KEY REFERENCES cc_enquiries(id) ON DELETE CASCADE,
+        current_community TEXT NOT NULL,
+        current_membership_url TEXT,
+        file_name TEXT NOT NULL,
+        mime_type TEXT NOT NULL,
+        file_data BYTEA NOT NULL,
+        verification_status TEXT NOT NULL DEFAULT 'pending',
+        reviewed_at TIMESTAMPTZ,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
       CREATE TABLE IF NOT EXISTS cc_chat_links (
         id UUID PRIMARY KEY,
         user_id UUID NOT NULL REFERENCES cc_users(id) ON DELETE CASCADE,
@@ -408,6 +419,13 @@ export function createMemberStore(databaseUrl) {
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NOW(),$11,$12)`,
         [enquiryId, userId, profile.sessionId || null, profile.name, profile.email, profile.company || null, profile.interest, profile.aiStage || null, profile.aiUse || null, profile.goal || null, profile.consentText, profile.page || null]
       );
+      if (profile.interest === 'switch_community' || profile.interest === 'switch_pro') {
+        await client.query(
+          `INSERT INTO cc_switch_proofs (enquiry_id,current_community,current_membership_url,file_name,mime_type,file_data)
+           VALUES ($1,$2,$3,$4,$5,$6)`,
+          [enquiryId, profile.currentCommunity, profile.currentMembershipUrl || null, profile.proofFile.name, profile.proofFile.type, profile.proofFile.buffer]
+        );
+      }
       if (userId) {
         await client.query(
           `INSERT INTO cc_member_profiles (user_id,company,ai_stage,ai_use,goal,consent_at,consent_text,source_url,hyperchat_session_id)
@@ -420,8 +438,10 @@ export function createMemberStore(databaseUrl) {
         }
       }
       const key = createHash('sha256').update(`${profile.sessionId}:${profile.interest}:${profile.email}:${profile.goal}`).digest('hex').slice(0, 32);
-      await enqueue(client, { kind: 'member_notification', recipient: profile.email, payload: profile, idempotencyKey: `member-notify/${key}` });
-      await enqueue(client, { kind: 'member_acknowledgement', recipient: profile.email, payload: profile, idempotencyKey: `member-ack/${key}` });
+      const notificationProfile = profile.proofFile ? { ...profile, proofFile: { name: profile.proofFile.name, type: profile.proofFile.type, stored: true, data: profile.proofFile.buffer.toString('base64') } } : profile;
+      const acknowledgementProfile = profile.proofFile ? { ...profile, proofFile: { name: profile.proofFile.name, type: profile.proofFile.type, stored: true } } : profile;
+      await enqueue(client, { kind: 'member_notification', recipient: profile.email, payload: notificationProfile, idempotencyKey: `member-notify/${key}` });
+      await enqueue(client, { kind: 'member_acknowledgement', recipient: profile.email, payload: acknowledgementProfile, idempotencyKey: `member-ack/${key}` });
       await audit(client, { userId, action: 'enquiry.created', subjectType: 'enquiry', subjectId: enquiryId, details: { interest: profile.interest, sessionId: profile.sessionId } });
       return enquiryId;
     });
@@ -508,7 +528,7 @@ export function createMemberStore(databaseUrl) {
          ON CONFLICT (stripe_checkout_session_id) DO UPDATE SET user_id=COALESCE(EXCLUDED.user_id,cc_purchases.user_id),payment_status=EXCLUDED.payment_status,updated_at=NOW(),details=EXCLUDED.details`,
         [randomUUID(), userId, email, session.id, catalogKey || null, session.amount_total || null, session.currency || null, session.payment_status || null, safeJson({ paymentLink: session.payment_link || null, metadata: session.metadata || {} })]
       );
-      if (userId && catalogKey && session.payment_status === 'paid') {
+      if (userId && catalogKey && !session.metadata?.membership_tier && session.payment_status === 'paid') {
         await client.query(
           `INSERT INTO cc_entitlements (id,user_id,entitlement_key,source,metadata) VALUES ($1,$2,$3,'stripe',$4::jsonb)
            ON CONFLICT (user_id,entitlement_key) DO UPDATE SET source='stripe',metadata=EXCLUDED.metadata`,
