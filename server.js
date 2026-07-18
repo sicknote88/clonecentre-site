@@ -50,12 +50,14 @@ async function ensureMemberStore() {
 
 const memberOptions = {
   interest: {
-    free: 'Free community access',
-    community: 'Community — £19/month or £190/year',
-    pro: 'Pro — £49/month or £490/year',
-    annual_pro_chatbot: 'Annual Pro plus included website chatbot — £490/year',
-    accountability: 'Accountability founding seat — £149/month',
-    switch: 'Switch from another community — £1 first month',
+    community_monthly: 'Community monthly — £19/month',
+    community_annual: 'Community annual — £190/year',
+    pro_monthly: 'Pro monthly — £49/month',
+    pro_annual: 'Pro annual plus included website chatbot setup — £490/year',
+    accountability_monthly: 'Accountability monthly — £149/month',
+    accountability_annual: 'Accountability annual — £1,490/year',
+    switch_community: 'Switch to Community — £1 first month, then £19/month',
+    switch_pro: 'Switch to Pro — £1 first month, then £49/month',
     clone_coach_waitlist: 'Clone Coach AI beta waitlist',
     custom_coach_bot: 'A custom AI coach built for my needs',
     help_choose: 'Help me choose'

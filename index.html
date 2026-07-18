@@ -31,6 +31,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 section[id]{scroll-margin-top:64px;}
+#membership-apply,#annual-chatbot{scroll-margin-top:84px;}
 body{background:
   radial-gradient(1200px 800px at 85% -10%,rgba(46,155,255,.10),transparent 60%),
   radial-gradient(900px 700px at -10% 110%,rgba(46,155,255,.06),transparent 55%),
@@ -341,7 +342,7 @@ body.cc-chat-open{overflow:hidden;}
 }
 
 /* ---------- Community ---------- */
-.pricing-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:46px;align-items:stretch;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:34px;align-items:stretch;}
 .tier{position:relative;border:1px solid var(--line);background:rgba(5,5,5,.92);padding:28px 22px;display:flex;flex-direction:column;min-height:100%;transition:border-color .2s,transform .2s;}
 .tier:hover{border-color:#3A3A3A;transform:translateY(-3px);}
 .tier.recommended{border:2px solid var(--blue);background:linear-gradient(145deg,rgba(46,155,255,.12),#050505 42%);}
@@ -361,6 +362,19 @@ body.cc-chat-open{overflow:hidden;}
 .pricing-note{margin-top:18px;font-size:11px;color:#5E6672;text-align:center;letter-spacing:.5px;}
 @media(max-width:1040px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:620px){.pricing-grid{grid-template-columns:1fr;}}
+
+.community-choice-guide{grid-template-columns:repeat(3,minmax(0,1fr));}
+.starter-path{margin-top:30px;border:1px solid #263d50;background:#03080c;padding:22px 24px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
+.starter-path .label{font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
+.starter-path b{display:block;margin-top:4px;font-family:var(--px);font-size:27px;font-weight:400;color:#fff;}
+.starter-path p{margin-top:5px;max-width:72ch;font-size:11px;color:#85919c;}
+.starter-path .btn{white-space:nowrap;text-align:center;}
+.member-dashboard-callout{margin-top:18px;border:1px solid #31506c;background:linear-gradient(135deg,rgba(46,155,255,.12),rgba(3,7,10,.98) 62%);padding:24px 26px;display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;}
+.member-dashboard-callout .label{font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
+.member-dashboard-callout b{display:block;margin-top:5px;font-family:var(--px);font-size:29px;font-weight:400;color:#fff;}
+.member-dashboard-callout p{margin-top:5px;max-width:72ch;font-size:11px;color:#8e9aa5;}
+.member-dashboard-callout .btn{white-space:nowrap;text-align:center;}
+@media(max-width:760px){.community-choice-guide{grid-template-columns:1fr;}.starter-path,.member-dashboard-callout{grid-template-columns:1fr;padding:21px 19px;}.starter-path .btn,.member-dashboard-callout .btn{width:100%;}}
 
 .annual-bonus{position:relative;margin-top:34px;border:1px solid #37526C;background:linear-gradient(135deg,rgba(46,155,255,.15),rgba(3,6,9,.96) 58%);padding:30px 32px;display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;overflow:hidden;}
 .annual-bonus::after{content:"AI BOT";position:absolute;right:-8px;bottom:-20px;font-family:'Silkscreen',monospace;font-size:72px;color:rgba(46,155,255,.055);pointer-events:none;}
@@ -390,6 +404,7 @@ body.cc-chat-open{overflow:hidden;}
 .member-status{display:none;grid-column:1/-1;border-left:3px solid var(--blue);background:#040b11;padding:13px 15px;color:#A9B8C4;font-size:11px;}
 .member-status.on{display:block;}
 .member-status.success{color:#DCEEFF;}
+.member-status a{display:inline-block;margin-top:9px;color:var(--blue);font-family:var(--px);font-size:20px;text-decoration:none;}
 .member-form.is-complete>*:not(.member-status){display:none;}
 @media(max-width:760px){.member-capture{padding:26px 21px;}.member-capture-head,.member-form{grid-template-columns:1fr;}.member-field.full,.member-consent,.member-form-actions,.member-status{grid-column:auto;}.member-form-actions{align-items:stretch;flex-direction:column;}.member-form-actions .btn{width:100%;text-align:center;}}
 
@@ -401,7 +416,10 @@ body.cc-chat-open{overflow:hidden;}
 .switch-code b{color:var(--blue);font-weight:400;}
 .switch-copy{margin-top:12px;max-width:68ch;color:#A3A3A3;font-size:13px;}
 .switch-offer .btn{white-space:nowrap;text-align:center;}
+.switch-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+.switch-actions .btn{font-size:20px;padding-left:18px;padding-right:18px;}
 @media(max-width:760px){.switch-offer{grid-template-columns:1fr;padding:26px 22px;}.switch-offer .btn{justify-self:start;}}
+@media(max-width:760px){.switch-actions{justify-content:stretch;flex-direction:column;}.switch-actions .btn{width:100%;}}
 
 /* ---------- Live programme ---------- */
 .live-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:42px;}
@@ -873,7 +891,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <a class="offer-card" href="/community">
         <span class="offer-count">Four membership levels</span>
         <h3>LEARN LIVE</h3>
-        <ul><li>Free community</li><li>Weekly AI Lab</li><li>Build Before Breakfast</li><li>Pro + accountability</li></ul>
+        <ul><li>Free AI profile + guide</li><li>Paid member community</li><li>Weekly AI Lab</li><li>Pro + accountability</li></ul>
         <span class="offer-action">COMPARE LEVELS &gt;</span>
       </a>
       <a class="offer-card" href="/coaching">
@@ -933,7 +951,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <div>
       <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. My work has spanned <b>SMEs through to multi-billion-dollar venture capital funds</b>, and my background includes <b>Oxford AI</b>. That range is why I care about making serious AI useful without making it obscure.</p>
       <br>
-      <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site, the books, the newsletter and the <b>free community</b>, exists to teach you that one skill in plain English.</p>
+      <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site—the free AI profile, books, newsletter and paid community—exists to teach you that skill in plain English.</p>
       <div class="statrow">
         <div class="stat"><div class="n">8</div><div class="l">Books in the library</div></div>
         <div class="stat"><div class="n">30+</div><div class="l">Prompt recipes</div></div>
@@ -983,48 +1001,38 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <section class="block reveal" id="community">
   <div class="sec-kicker">The Community</div>
   <h2>DO NOT LEARN AI ALONE</h2>
-  <p class="lede">A practical community for founders, professionals and complete beginners who want to <b>use AI this week</b>, not talk about it for six months. Pick the level of access that fits the result you want.</p>
+  <p class="lede">A practical paid community for founders, professionals and complete beginners who want to <b>use AI this week</b>, not talk about it for six months. There are three ways to join. Your free AI profile and Prompt Guidebook remain available separately, without pretending they are a membership.</p>
 
-  <div class="choice-guide" aria-label="Quick membership guide">
-    <div class="choice"><b>Free</b><span>Choose this if you are curious and want a useful place to begin.</span></div>
+  <div class="choice-guide community-choice-guide" aria-label="Quick membership guide">
     <div class="choice"><b>Community</b><span>Choose this for the books, member chat and a steady weekly prompt rhythm.</span></div>
     <div class="choice"><b>Pro</b><span>Choose this to build live with Joseph and use the complete recordings vault.</span></div>
     <div class="choice"><b>Accountability</b><span>Choose this when personal follow-through matters more than more information.</span></div>
   </div>
 
+  <div class="starter-path">
+    <div><span class="label">Free starting point · not community membership</span><b>NOT READY TO JOIN?</b><p>Build your AI profile and request the Prompt Guidebook for £0. Community access begins with the £19 Community plan below.</p></div>
+    <a class="btn" href="#signup">GET MY FREE GUIDE &gt;</a>
+  </div>
+
   <div class="pricing-grid">
     <article class="tier">
-      <div class="tier-no">Level 00</div>
-      <h3>Free</h3>
-      <div class="tier-price">£0<small> / FOREVER</small></div>
-      <div class="annual">START HERE. NO CARD.</div>
-      <ul>
-        <li>Private Telegram launch room</li>
-        <li>Weekly plain-English AI email</li>
-        <li>Free Prompt Guidebook</li>
-        <li>Public prompts and session clips</li>
-      </ul>
-      <a class="tier-cta" href="/community#signup">GET FREE ACCESS &gt;</a>
-    </article>
-
-    <article class="tier">
-      <div class="tier-no">Level 01</div>
+      <div class="tier-no">Membership 01</div>
       <h3>Community</h3>
       <div class="tier-price">£19<small> / MONTH</small></div>
       <div class="annual">£190 / YEAR · TWO MONTHS FREE</div>
       <ul>
-        <li>Everything in Free</li>
+        <li>AI profile and Prompt Guidebook</li>
         <li>Member chat and introductions</li>
-        <li>All eight Clone Centre books</li>
+        <li>All eight Plain English books</li>
         <li>Weekly prompt and build thread</li>
         <li>Saturday and Sunday accountability drops</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=community#membership-apply">JOIN COMMUNITY &gt;</a>
+      <a class="tier-cta" href="/community?interest=community_monthly#membership-apply">CHOOSE COMMUNITY &gt;</a>
     </article>
 
     <article class="tier recommended">
       <span class="flag">Best value</span>
-      <div class="tier-no">Level 02</div>
+      <div class="tier-no">Membership 02</div>
       <h3>Pro</h3>
       <div class="tier-price">£49<small> / MONTH</small></div>
       <div class="annual">£490 / YEAR · TWO MONTHS FREE</div>
@@ -1037,11 +1045,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>HyperChat member workspace access</li>
         <li>Annual Pro: one website AI chatbot setup included</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=pro#membership-apply">GO PRO &gt;</a>
+      <a class="tier-cta" href="/community?interest=pro_monthly#membership-apply">CHOOSE PRO &gt;</a>
     </article>
 
     <article class="tier">
-      <div class="tier-no">Level 03 · 5 founding seats</div>
+      <div class="tier-no">Membership 03 · 5 founding seats</div>
       <h3>Accountability</h3>
       <div class="tier-price">£149<small> / MONTH</small></div>
       <div class="annual">£1,490 / YEAR · TWO MONTHS FREE</div>
@@ -1052,10 +1060,10 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Private 90-day goal tracker</li>
         <li>Priority questions and DM access</li>
       </ul>
-      <a class="tier-cta" href="/community?interest=accountability#membership-apply">APPLY FOR A SEAT &gt;</a>
+      <a class="tier-cta" href="/community?interest=accountability_monthly#membership-apply">APPLY FOR A SEAT &gt;</a>
     </article>
   </div>
-  <div class="pricing-note">MONTHLY PLANS CANCEL ANY TIME · PRICES INCLUDE VAT WHERE APPLICABLE · FOUNDING PRICES ARE LOCKED WHILE MEMBERSHIP STAYS ACTIVE</div>
+  <div class="pricing-note">MONTHLY PLANS CANCEL ANY TIME · ANNUAL PRICES EQUAL TEN MONTHS · VAT INCLUDED WHERE APPLICABLE · NO PAYMENT IS TAKEN BY THE FORM BELOW</div>
 
   <div class="annual-bonus" id="annual-chatbot">
     <div>
@@ -1064,13 +1072,29 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <p>Choose <b>Clone Centre Pro annually</b> and we will set up one trained website AI chatbot like the assistant on this page, included at no extra setup charge while your annual membership stays active.</p>
       <p class="small-print">The standard starter build covers one website and one approved business knowledge set. Usage beyond fair-use, third-party usage costs and bespoke integrations are not automatically included; any extras are scoped and agreed before launch. The assistant remains subject to acceptable-use and safety checks.</p>
     </div>
-    <a class="btn blue" href="/community?interest=annual_pro_chatbot#membership-apply">CHOOSE ANNUAL PRO &gt;</a>
+    <a class="btn blue" href="/community?interest=pro_annual#membership-apply">CHOOSE ANNUAL PRO &gt;</a>
+  </div>
+
+  <div class="switch-offer">
+    <div>
+      <div class="switch-code">PAY <b>£1</b> TO SWITCH</div>
+      <p class="switch-copy">Already paying for another business, coaching or AI community? Your <b style="color:#fff;">first month</b> is £1. Choose Community and it then renews at £19/month, or choose Pro and it then renews at £49/month, unless you cancel. No long contract.</p>
+    </div>
+    <div class="switch-actions">
+      <a class="btn" href="/community?interest=switch_community#membership-apply">£1 COMMUNITY &gt;</a>
+      <a class="btn blue" href="/community?interest=switch_pro#membership-apply">£1 PRO &gt;</a>
+    </div>
+  </div>
+
+  <div class="member-dashboard-callout">
+    <div><span class="label">Already saved a profile or joined?</span><b>YOUR MEMBER DASHBOARD IS READY.</b><p>Sign in to see your AI profile, linked website chats, membership status, purchases and product access. Use the same email when joining so records connect automatically.</p></div>
+    <a class="btn blue" href="/member">OPEN MEMBER CENTRE &gt;</a>
   </div>
 
   <div class="member-capture" id="membership-apply">
     <div class="member-capture-head">
-      <div><div class="sec-kicker">Your next move</div><h3>MAKE IT PERSONAL.</h3></div>
-      <p>Tell us what you want to join or build. Your details and answers are saved securely against this visit, then Joseph will send the right joining, payment or next-step link—without making you start the conversation again.</p>
+      <div><div class="sec-kicker">One joining form</div><h3>CHOOSE YOUR ROUTE.</h3></div>
+      <p>This form does not take payment. Choose the exact membership and billing route you want, share your context once, and Joseph will send the correct joining or payment link. You can create or sign in to your dashboard with the same email at any time.</p>
     </div>
     <form class="member-form" id="member-interest-form" action="/api/member-interest" method="POST">
       <label class="hp-field" aria-hidden="true">Fax<input type="text" name="fax" tabindex="-1" autocomplete="off"></label>
@@ -1078,16 +1102,24 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="member-field"><label for="member-email">Email address</label><input id="member-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
       <div class="member-field"><label for="member-company">Company or website <span>(optional)</span></label><input id="member-company" name="company" type="text" autocomplete="organization" maxlength="160"></div>
       <div class="member-field"><label for="member-interest">What are you interested in?</label><select id="member-interest" name="interest" required>
-        <option value="" selected disabled>Choose one clear next move</option>
-        <option value="free">Free community access</option>
-        <option value="community">Community · £19/month or £190/year</option>
-        <option value="pro">Pro · £49/month or £490/year</option>
-        <option value="annual_pro_chatbot">Annual Pro + included website chatbot · £490/year</option>
-        <option value="accountability">Accountability founding seat · £149/month</option>
-        <option value="switch">Switch from another community · £1 first month</option>
-        <option value="clone_coach_waitlist">Clone Coach AI beta waitlist</option>
-        <option value="custom_coach_bot">A custom AI coach built for my needs</option>
-        <option value="help_choose">Help me choose</option>
+        <option value="" selected disabled>Choose one exact route</option>
+        <optgroup label="Community membership">
+          <option value="community_monthly">Community monthly · £19/mo</option>
+          <option value="community_annual">Community annual · £190/yr</option>
+          <option value="pro_monthly">Pro monthly · £49/mo</option>
+          <option value="pro_annual">Pro annual + chatbot · £490/yr</option>
+          <option value="accountability_monthly">Accountability monthly · £149/mo</option>
+          <option value="accountability_annual">Accountability annual · £1,490/yr</option>
+        </optgroup>
+        <optgroup label="£1 switch offer · eligible existing paid members">
+          <option value="switch_community">Switch → Community · £1, then £19/mo</option>
+          <option value="switch_pro">Switch → Pro · £1, then £49/mo</option>
+        </optgroup>
+        <optgroup label="AI coach + other help">
+          <option value="clone_coach_waitlist">Clone Coach AI beta waitlist</option>
+          <option value="custom_coach_bot">A custom AI coach built for my needs</option>
+          <option value="help_choose">Help me choose</option>
+        </optgroup>
       </select></div>
       <div class="member-field"><label for="member-ai-stage">Where are you with AI?</label><select id="member-ai-stage" name="aiStage" required>
         <option value="" selected disabled>Choose the closest answer</option>
@@ -1099,18 +1131,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       </select></div>
       <div class="member-field full"><label for="member-goal">What would make this useful for you?</label><textarea id="member-goal" name="goal" maxlength="1500" placeholder="A sentence or two is enough. Tell Joseph what you want to achieve or what is currently getting in the way." required></textarea></div>
       <label class="member-consent"><input type="checkbox" name="consent" required><span>I agree that Clone Centre may save these details and contact me about this enquiry. I can ask for my information to be removed at any time.</span></label>
-      <div class="member-form-actions"><p>Stored with your conversation session so you do not have to repeat yourself. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" type="submit">SAVE MY PROFILE + CONTINUE &gt;</button></div>
+      <div class="member-form-actions"><p>No payment is taken here. Stored with your conversation session so you do not have to repeat yourself. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" type="submit">SEND MY JOINING REQUEST &gt;</button></div>
       <div class="member-status" id="member-form-status" role="status"></div>
     </form>
   </div>
 
-  <div class="switch-offer">
-    <div>
-      <div class="switch-code">PAY <b>£1</b> TO SWITCH</div>
-      <p class="switch-copy">Already paying for another business, coaching or AI community? Move to Community or Pro for <b style="color:#fff;">£1 for your first month</b>. No long contract. Choose Switch in the short form and I will send your private joining link.</p>
-    </div>
-    <a class="btn blue" href="/community?interest=switch#membership-apply">SWITCH FOR £1 &gt;</a>
-  </div>
 </section>
 
 <!-- ============ LIVE PROGRAMME ============ -->
@@ -1200,7 +1225,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Clear review notes: celebrate, learn, drop and reset</li>
       </ul>
       <div class="coach-actions">
-        <a class="btn blue" href="/community?interest=accountability#membership-apply">APPLY FOR A PLACE &gt;</a>
+        <a class="btn blue" href="/community?interest=accountability_monthly#membership-apply">APPLY FOR A PLACE &gt;</a>
         <a class="btn" href="goal-tracker.html">OPEN THE TRACKER &gt;</a>
       </div>
     </article>
@@ -1279,11 +1304,11 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <!-- ============ SIGNUP ============ -->
 <section class="block reveal" id="signup">
   <div class="signup">
-    <div class="sec-kicker">A useful introduction</div>
-    <h2>TELL ME HOW YOU USE AI.</h2>
-    <p class="lede" style="margin:0 auto;">Answer four quick questions. I will email your Prompt Guidebook, save your starting point and make future Clone Centre advice more relevant to you.</p>
-    <p style="margin-top:30px;"><a class="btn blue" href="#guide-gate" data-guide-gate>BUILD MY AI PROFILE &gt;</a></p>
-    <div class="form-note">Clear consent, no card and no generic spam. You can leave whenever you like.</div>
+    <div class="sec-kicker">Free starting point · not community access</div>
+    <h2>BUILD YOUR AI PROFILE.</h2>
+    <p class="lede" style="margin:0 auto;">Not ready for a paid membership? Answer four quick questions and request the Prompt Guidebook for £0. This saves your starting point but does not unlock the member community.</p>
+    <p style="margin-top:30px;"><a class="btn blue" href="#guide-gate" data-guide-gate>GET MY FREE GUIDE &gt;</a></p>
+    <div class="form-note">Clear consent, no card and no community membership. You can ask us to remove your profile at any time.</div>
   </div>
 </section>
 
@@ -1675,7 +1700,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 const currentPage=document.documentElement.dataset.page||'home';
 const pageCopy={
   about:{title:'Joseph Conlan · About',kicker:'About Joseph',heading:'THE PERSON BEHIND THE SYSTEMS.',lede:'My background, my plain-English approach, and the numbers that explain why learning to use AI well matters now.',jump:'<a class="btn blue" href="#about">MEET JOSEPH &gt;</a><a class="btn" href="#numbers">SEE THE EVIDENCE &gt;</a>'},
-  community:{title:'Clone Centre Community · Joseph Conlan',kicker:'Membership + weekly programme',heading:'ONE COMMUNITY. FOUR LEVELS.',lede:'Start free, learn with the group, build live with Joseph, or add personal accountability. Every level and every weekly touchpoint is explained below.',jump:'<a class="btn blue" href="#community">COMPARE LEVELS &gt;</a><a class="btn" href="#live">SEE THE WEEK &gt;</a><a class="btn" href="#signup">START FREE &gt;</a>'},
+  community:{title:'Clone Centre Community · Joseph Conlan',kicker:'Membership + weekly programme',heading:'ONE COMMUNITY. THREE WAYS TO JOIN.',lede:'Choose Community for the member rhythm, Pro to build live with Joseph, or Accountability for personal follow-through. The free AI profile and Prompt Guidebook are a separate starting point, not a membership level.',jump:'<a class="btn blue" href="#community">COMPARE MEMBERSHIPS &gt;</a><a class="btn" href="#live">SEE THE WEEK &gt;</a><a class="btn" href="/member">MEMBER DASHBOARD &gt;</a>'},
   coaching:{title:'AI Coaching · Joseph Conlan',kicker:'Private help + accountability',heading:'GET THE RIGHT KIND OF HELP.',lede:'Choose focused expert working time when the AI problem is technical. Choose accountability when the real problem is keeping momentum.',jump:'<a class="btn blue" href="#accountability">ACCOUNTABILITY &gt;</a><a class="btn" href="#coaching">PRIVATE SESSIONS &gt;</a>'},
   library:{title:'Clone Centre PDF Library · Joseph Conlan',kicker:'15 books · one smart starting point',heading:'START WITH ONE CLEAR RESULT.',lede:'Build your AI profile to receive the Prompt Guidebook, use the pre-filled picker for one recommendation, or compare three complete learning paths before browsing the full shelf.',jump:'<a class="btn blue" href="#library-picker">GET A RECOMMENDATION &gt;</a><a class="btn" href="#library-bundles">COMPARE 3 BUNDLES &gt;</a>'},
   products:{title:'Clone Centre Products · Joseph Conlan',kicker:'The Clone Centre stack',heading:'WORKING SYSTEMS. NOT SLIDE DECKS.',lede:'Meet the live AI products behind the teaching: voice assistance, website AI, governance and acquisition intelligence.',jump:'<a class="btn blue" href="#ecosystem">EXPLORE THE STACK &gt;</a>'}
@@ -1793,7 +1818,9 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&guideGate.c
 /* ---- stored membership + enquiry profile ---- */
 const memberForm=document.getElementById('member-interest-form');
 const memberStatus=document.getElementById('member-form-status');
-const requestedInterest=new URLSearchParams(location.search).get('interest');
+const requestedInterestRaw=new URLSearchParams(location.search).get('interest');
+const legacyInterestMap={community:'community_monthly',pro:'pro_monthly',annual_pro_chatbot:'pro_annual',accountability:'accountability_monthly',switch:'switch_community'};
+const requestedInterest=legacyInterestMap[requestedInterestRaw]||requestedInterestRaw;
 if(memberForm&&requestedInterest&&memberForm.elements.interest.querySelector('option[value="'+CSS.escape(requestedInterest)+'"]')){
   memberForm.elements.interest.value=requestedInterest;
 }
@@ -1812,6 +1839,7 @@ if(memberForm)memberForm.addEventListener('submit',async event=>{
     if(!response.ok)throw new Error(result.error||'profile_failed');
     memberForm.classList.add('is-complete');memberStatus.className='member-status on success';
     memberStatus.textContent=result.emailSent?'Saved. Check your inbox for confirmation; Joseph now has the context you shared.':'Saved securely. Joseph now has the context you shared and will reply from joseph@clonecentre.ai or clone@clonecentre.ai.';
+    const dashboardLink=document.createElement('a');dashboardLink.href='/member';dashboardLink.textContent='CREATE OR OPEN MY DASHBOARD >';memberStatus.appendChild(document.createElement('br'));memberStatus.appendChild(dashboardLink);
   }catch(_){
     memberStatus.className='member-status on';memberStatus.textContent='That did not save. Please check each field and try again, or contact joseph@clonecentre.ai.';button.disabled=false;button.textContent='TRY AGAIN >';
   }

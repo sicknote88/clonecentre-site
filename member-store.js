@@ -89,7 +89,7 @@ export function createMemberStore(databaseUrl) {
       CREATE INDEX IF NOT EXISTS cc_sessions_user_idx ON cc_sessions(user_id, expires_at DESC);
       CREATE TABLE IF NOT EXISTS cc_memberships (
         user_id UUID PRIMARY KEY REFERENCES cc_users(id) ON DELETE CASCADE,
-        tier TEXT NOT NULL DEFAULT 'free',
+        tier TEXT NOT NULL DEFAULT 'profile',
         status TEXT NOT NULL DEFAULT 'active',
         stripe_customer_id TEXT,
         stripe_subscription_id TEXT,
@@ -203,6 +203,8 @@ export function createMemberStore(databaseUrl) {
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
       CREATE INDEX IF NOT EXISTS cc_audit_user_idx ON cc_audit_events(user_id, created_at DESC);
+      ALTER TABLE cc_memberships ALTER COLUMN tier SET DEFAULT 'profile';
+      UPDATE cc_memberships SET tier='profile',updated_at=NOW() WHERE tier='free';
     `);
     ready = true;
     return true;
@@ -247,7 +249,7 @@ export function createMemberStore(databaseUrl) {
          VALUES ($1,$2,$3,$4,$5,NOW(),$6,$7,$8,FALSE)`,
         [userId, company || null, aiStage || null, aiUse || null, goal || null, consentText, sourceUrl || null, hyperchatSessionId || null]
       );
-      await client.query('INSERT INTO cc_memberships (user_id,tier,status) VALUES ($1,$2,$3)', [userId, 'free', 'active']);
+      await client.query('INSERT INTO cc_memberships (user_id,tier,status) VALUES ($1,$2,$3)', [userId, 'profile', 'active']);
       await client.query('UPDATE cc_enquiries SET user_id=$1 WHERE LOWER(email)=$2 AND user_id IS NULL', [userId, email]);
       await client.query('UPDATE cc_purchases SET user_id=$1,updated_at=NOW() WHERE LOWER(email)=$2 AND user_id IS NULL', [userId, email]);
       await client.query('UPDATE cc_booking_refs SET user_id=$1,updated_at=NOW() WHERE LOWER(attendee_email)=$2 AND user_id IS NULL', [userId, email]);
@@ -289,7 +291,7 @@ export function createMemberStore(databaseUrl) {
         idempotencyKey: `account-verify/${userId}`
       });
       await audit(client, { userId, action: 'account.created', subjectType: 'user', subjectId: userId, details: { sourceUrl, hyperchatSessionId } });
-      return { id: userId, email, name, emailVerified: false, membership: { tier: 'free', status: 'active' } };
+      return { id: userId, email, name, emailVerified: false, membership: { tier: 'profile', status: 'active' } };
     });
   }
 
