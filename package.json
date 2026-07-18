@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check member-store.js"
+    "check": "node --check server.js && node --check member-store.js && node --check email-templates.js"
   },
   "engines": {
     "node": ">=20"

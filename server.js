@@ -5,6 +5,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createMemberStore, createOpaqueToken, hashPassword, verifyPassword } from './member-store.js';
+import { brandEmail, completeEmailMessage, emailCallout, emailDetailTable, emailSteps } from './email-templates.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packagedPublicDir = join(here, 'public');
@@ -183,7 +184,7 @@ async function resendRequest(path, { method = 'POST', body, idempotencyKey } = {
 }
 
 async function sendResendEmail(message, idempotencyKey) {
-  const { response, result } = await resendRequest('/emails', { body: message, idempotencyKey });
+  const { response, result } = await resendRequest('/emails', { body: completeEmailMessage(message), idempotencyKey });
   if (!response.ok) {
     throw new Error(`Resend rejected email (${response.status}): ${result.message || result.name || 'unknown error'}`);
   }
@@ -218,30 +219,53 @@ function customerEmail(session) {
 
 function emailMarkup(product) {
   const count = product.files.length;
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // DELIVERY COMPLETE</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">Your ${product.title} files are attached.</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Thank you for your purchase. This email contains ${count === 1 ? 'your PDF' : `all ${count} included files`} as attachments, ready to save and read.</p>
-      <p style="line-height:1.65;color:#aeb8c2">These files are licensed for your personal use. Please do not redistribute them or publish private download copies.</p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact <a style="color:#2e9bff" href="mailto:joseph@clonecentre.ai">joseph@clonecentre.ai</a>.</div>
-    </div>
-  </body></html>`;
+  const attachmentLabel = count === 1 ? '1 private file attached' : `${count} private files attached`;
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: `${product.title} is attached and ready to use.`,
+    eyebrow: 'PURCHASE COMPLETE // FILES DELIVERED',
+    heading: 'Your Clone Centre library just landed.',
+    lead: `Your ${product.title} purchase is complete. Everything included is attached to this email and ready to save.`,
+    content: `${emailCallout('DELIVERY STATUS', attachmentLabel, 'Keep this email somewhere safe so your files are easy to find.')}
+      ${emailSteps([
+        'Download the attached files to a folder you will remember.',
+        'Open the guide that solves the problem in front of you today.',
+        'Reply to this email if you want Joseph to point you to the right starting page.'
+      ])}
+      <p style="margin:12px 0 0;color:#7f91a1;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6">Your purchase is licensed for your personal use. Please do not redistribute the files or publish private download copies.</p>`,
+    action: `${publicSiteUrl()}/library`,
+    actionLabel: 'EXPLORE THE LIBRARY',
+    secondaryAction: `${publicSiteUrl()}/member`,
+    secondaryActionLabel: 'OPEN MEMBER CENTRE',
+    footer: 'Purchase receipt and private file delivery from Clone Centre. Questions? Reply directly to this email.'
+  });
 }
 
 function membershipPaymentMarkup(name, tier) {
   const label = tier === 'accountability' ? 'Accountability' : tier === 'pro' ? 'Pro' : 'Community';
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBERSHIP PAYMENT RECEIVED</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">Welcome to Clone Centre ${escapeHtml(label)}.</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(name || 'there')}, Stripe has confirmed your membership payment. Create or sign in to the Member Centre with the same email address you used at checkout so your access can connect automatically.</p>
-      <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${publicSiteUrl()}/member">OPEN THE MEMBER CENTRE</a></p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact joseph@clonecentre.ai.</div>
-    </div>
-  </body></html>`;
+  const access = {
+    Community: 'Member chat, the Plain English AI library, weekly prompts and accountability drops.',
+    Pro: 'Everything in Community plus Joseph’s live AI Lab, build sessions, office hours and the recordings vault.',
+    Accountability: 'Everything in Pro plus personal check-ins, private reviews and your 90-day goal tracker.'
+  }[label];
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: `Stripe confirmed your Clone Centre ${label} membership.`,
+    eyebrow: 'MEMBERSHIP ACTIVE // WELCOME IN',
+    heading: `Welcome to Clone Centre ${label}.`,
+    lead: `Hi ${name || 'there'}, your payment is confirmed and your membership journey starts now.`,
+    content: `${emailCallout('YOUR MEMBERSHIP', label, access)}
+      ${emailSteps([
+        'Create your Member Centre account or sign in.',
+        'Use the same email address you entered at Stripe so access connects automatically.',
+        'Complete your AI profile and choose the first thing you want to build.'
+      ])}`,
+    action: `${publicSiteUrl()}/member`,
+    actionLabel: 'ENTER THE MEMBER CENTRE',
+    secondaryAction: `${publicSiteUrl()}/community`,
+    secondaryActionLabel: 'SEE YOUR MEMBERSHIP',
+    footer: 'Your membership is managed securely by Stripe. Reply directly if your access does not connect or you need a human.'
+  });
 }
 
 const profileOptions = {
@@ -269,110 +293,151 @@ const profileOptions = {
 
 function welcomeEmailMarkup(firstName) {
   const siteUrl = publicSiteUrl();
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // YOU ARE IN</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">Your Prompt Guidebook is attached.</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(firstName)}, welcome to Clone Centre. Your guide includes the CLEAR framework, more than 30 copy-and-paste prompts and the ten mistakes that make AI feel harder than it is.</p>
-      <p style="line-height:1.65;color:#aeb8c2">I have also saved the answers you shared so the advice I send is relevant to how you actually use AI.</p>
-      <p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${siteUrl}/library">EXPLORE THE LIBRARY</a></p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">You asked to receive Clone Centre updates. Reply with “unsubscribe” at any time and I will remove you.</div>
-    </div>
-  </body></html>`;
+  return brandEmail({
+    siteUrl,
+    preheader: 'Your Prompt Guidebook is attached. Start with the CLEAR framework.',
+    eyebrow: 'YOUR AI STARTING POINT // ATTACHED',
+    heading: 'Make AI useful from the very next prompt.',
+    lead: `Hi ${firstName}, your Clone Centre Prompt Guidebook is attached. It is built to get you from vague instructions to work you can actually use.`,
+    content: `${emailDetailTable([
+      ['Inside', 'The CLEAR prompting framework'],
+      ['Use immediately', '30+ copy-and-paste prompts'],
+      ['Avoid', 'The 10 mistakes that make AI harder than it needs to be']
+    ])}
+      ${emailCallout('YOUR PROFILE IS SAVED', 'You will not need to start from zero.', 'The answers you shared help Clone Centre make future guidance relevant to how you actually use AI.')}`,
+    action: `${siteUrl}/library`,
+    actionLabel: 'EXPLORE THE AI LIBRARY',
+    secondaryAction: `${siteUrl}/member`,
+    secondaryActionLabel: 'CREATE MY MEMBER PROFILE',
+    footer: 'You requested the Prompt Guidebook and practical Clone Centre updates. Reply with “unsubscribe” at any time and you will be removed.'
+  });
 }
 
 function chatTranscriptEmailMarkup({ conversationId, sessionId, page, title, messages }) {
   const rows = messages.map((message) => {
     const visitor = message.role === 'user';
-    return `<div style="margin:0 0 12px;padding:12px 14px;border:1px solid ${visitor ? '#2e9bff' : '#263848'};background:${visitor ? '#07192a' : '#070b0f'}">
-      <div style="margin-bottom:5px;font:10px monospace;letter-spacing:1.5px;color:${visitor ? '#2e9bff' : '#8292a0'}">${visitor ? 'VISITOR' : 'CLONE CENTRE AI'}</div>
-      <div style="white-space:pre-wrap;color:#e1e7ec;font:13px/1.55 Arial,sans-serif">${escapeHtml(message.content)}</div>
-    </div>`;
+    return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 10px;border:1px solid ${visitor ? '#2e9bff' : '#1d3448'};background:${visitor ? '#061827' : '#060b10'}"><tr><td style="padding:13px 15px">
+      <div style="margin-bottom:6px;color:${visitor ? '#2e9bff' : '#8292a0'};font-family:'Courier New',Courier,monospace;font-size:9px;font-weight:700;letter-spacing:1.5px">${visitor ? 'VISITOR' : 'CLONE CENTRE AI'}</div>
+      <div style="white-space:pre-wrap;color:#e1e7ec;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6">${escapeHtml(message.content)}</div>
+    </td></tr></table>`;
   }).join('');
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:680px;margin:auto;padding:32px 22px">
-      <div style="font:11px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE AI // CONVERSATION</div>
-      <h1 style="font-size:25px;margin:15px 0 7px">A visitor spoke with Clone Centre AI.</h1>
-      <div style="margin-bottom:22px;color:#82909b;font-size:12px;line-height:1.6">
-        <div><b style="color:#b9c4cd">Page:</b> ${escapeHtml(title || page)}</div>
-        <div><b style="color:#b9c4cd">URL:</b> ${escapeHtml(page)}</div>
-        <div><b style="color:#b9c4cd">Conversation:</b> ${escapeHtml(conversationId)} · HyperChat session ${escapeHtml(sessionId)}</div>
-      </div>
-      ${rows}
-      <div style="margin-top:22px;padding-top:15px;border-top:1px solid #26323e;color:#6f7d89;font-size:11px">Sent automatically after the conversation became inactive. The complete session remains available in HyperChat.</div>
-    </div>
-  </body></html>`;
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: `New Clone Centre AI conversation on ${title || page}.`,
+    eyebrow: 'CLONE CENTRE AI // CONVERSATION CAPTURED',
+    heading: 'A visitor spoke with Clone Centre AI.',
+    lead: 'The useful context is below, ready for follow-up without losing the thread.',
+    content: `${emailDetailTable([
+      ['Page', title || page],
+      ['URL', page],
+      ['Conversation', conversationId],
+      ['HyperChat session', sessionId]
+    ])}${rows}`,
+    footer: 'Sent automatically after the conversation became inactive. The complete session remains available in HyperChat and its Railway-backed records.',
+    internal: true,
+    wide: true
+  });
 }
 
 function leadNotificationMarkup(profile) {
-  return `<!doctype html>
-  <html><body style="font-family:Arial,sans-serif;background:#f3f5f7;color:#101820;margin:0;padding:28px">
-    <div style="max-width:620px;margin:auto;background:#fff;border:1px solid #d9e0e7;padding:28px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#1676c4">NEW CLONE CENTRE PROFILE</div>
-      <h1 style="font-size:28px;margin:16px 0">${escapeHtml(profile.firstName)} requested the Prompt Guidebook.</h1>
-      <table style="width:100%;border-collapse:collapse;font-size:14px">
-        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">Email</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profile.email)}</td></tr>
-        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">Context</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profileOptions.role[profile.role])}</td></tr>
-        <tr><td style="padding:10px;border-bottom:1px solid #e4e8ec;color:#647180">AI stage</td><td style="padding:10px;border-bottom:1px solid #e4e8ec">${escapeHtml(profileOptions.aiStage[profile.aiStage])}</td></tr>
-        <tr><td style="padding:10px;color:#647180">Main goal</td><td style="padding:10px">${escapeHtml(profileOptions.goal[profile.goal])}</td></tr>
-      </table>
-    </div>
-  </body></html>`;
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: `${profile.firstName} requested the Prompt Guidebook.`,
+    eyebrow: 'NEW GUIDE PROFILE // FOLLOW-UP READY',
+    heading: `${profile.firstName} requested the Prompt Guidebook.`,
+    lead: 'Their consented AI starting point is stored and ready to make future contact relevant.',
+    content: emailDetailTable([
+      ['Email', profile.email],
+      ['Context', profileOptions.role[profile.role]],
+      ['AI stage', profileOptions.aiStage[profile.aiStage]],
+      ['Main goal', profileOptions.goal[profile.goal]],
+      ['Session', profile.sessionId]
+    ]),
+    action: `mailto:${profile.email}`,
+    actionLabel: 'REPLY TO THIS LEAD',
+    footer: 'Private Clone Centre lead notification. Consent and source details are stored in Railway.',
+    internal: true
+  });
 }
 
 function memberNotificationMarkup(profile) {
-  const switchEvidence = profile.currentCommunity ? `
-        <div><b style="color:#fff">Current paid community:</b> ${escapeHtml(profile.currentCommunity)}</div>
-        <div><b style="color:#fff">Community website:</b> ${escapeHtml(profile.currentMembershipUrl || 'Not provided')}</div>
-        <div><b style="color:#fff">Proof stored in Railway:</b> ${escapeHtml(profile.proofFile?.name || 'No')}</div>` : '';
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:660px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBER PROFILE</div>
-      <h1 style="font-size:28px;margin:18px 0 10px">${escapeHtml(profile.name)} chose ${escapeHtml(memberOptions.interest[profile.interest])}.</h1>
-      <div style="margin:22px 0;border:1px solid #26323e;background:#080c10;padding:18px;line-height:1.7;color:#b8c3cc;font-size:14px">
-        <div><b style="color:#fff">Email:</b> ${escapeHtml(profile.email)}</div>
-        <div><b style="color:#fff">Company / website:</b> ${escapeHtml(profile.company || 'Not provided')}</div>
-        <div><b style="color:#fff">AI stage:</b> ${escapeHtml(memberOptions.aiStage[profile.aiStage])}</div>
-        <div><b style="color:#fff">Main AI use:</b> ${escapeHtml(memberOptions.aiUse[profile.aiUse])}</div>
-        <div><b style="color:#fff">Session:</b> ${escapeHtml(profile.sessionId)}</div>
-        <div><b style="color:#fff">Source:</b> ${escapeHtml(profile.page)}</div>
-        ${switchEvidence}
-      </div>
-      <div style="border-left:3px solid #2e9bff;padding:14px 17px;background:#07111a;color:#e0e7ed;white-space:pre-wrap;line-height:1.6">${escapeHtml(profile.goal)}</div>
-      <p style="margin-top:22px;color:#74818c;font-size:12px">The visitor explicitly agreed that Clone Centre may store these details and contact them about this enquiry. Railway holds the master member record and the HyperChat session is linked when available.</p>
-    </div>
-  </body></html>`;
+  const details = [
+    ['Email', profile.email],
+    ['Interest', memberOptions.interest[profile.interest] || profile.interest],
+    ['Company / website', profile.company || 'Not provided'],
+    ['AI stage', memberOptions.aiStage[profile.aiStage]],
+    ['Main AI use', memberOptions.aiUse[profile.aiUse]],
+    ['Session', profile.sessionId],
+    ['Source', profile.page]
+  ];
+  if (profile.currentCommunity) {
+    details.push(
+      ['Current paid community', profile.currentCommunity],
+      ['Community website', profile.currentMembershipUrl || 'Not provided'],
+      ['Proof', profile.proofFile?.name ? `${profile.proofFile.name} · attached and stored` : 'Not supplied']
+    );
+  }
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: `${profile.name} submitted a Clone Centre enquiry.`,
+    eyebrow: profile.currentCommunity ? '£1 SWITCH CHECK // REVIEW REQUIRED' : 'NEW MEMBER ENQUIRY // ACTION READY',
+    heading: `${profile.name} chose ${memberOptions.interest[profile.interest] || profile.interest}.`,
+    lead: profile.currentCommunity ? 'Review the attached proof before issuing any private £1 checkout link.' : 'Their brief is captured below so the next reply can be specific and useful.',
+    content: `${emailDetailTable(details)}${emailCallout('THE OUTCOME THEY WANT', profile.goal, 'Reply directly to this email to continue the conversation.')}`,
+    action: `mailto:${profile.email}`,
+    actionLabel: 'REPLY TO THIS ENQUIRY',
+    footer: 'The visitor explicitly consented to storage and follow-up. Railway holds the master member record and links the HyperChat session when available.',
+    internal: true,
+    wide: true
+  });
 }
 
 function memberAcknowledgementMarkup(profile) {
   const siteUrl = publicSiteUrl();
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // PROFILE SAVED</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">Thanks, ${escapeHtml(profile.name)}. You will not need to repeat yourself.</h1>
-      <p style="line-height:1.65;color:#aeb8c2">I have your interest in <b style="color:#fff">${escapeHtml(memberOptions.interest[profile.interest])}</b>, where you are with AI and what you want to achieve. I will reply with the right joining or next-step link.</p>
-      <p style="margin:28px 0"><a style="display:inline-block;border:2px solid #2e9bff;color:#2e9bff;padding:11px 16px;text-decoration:none;font-weight:bold" href="${siteUrl}/community">RETURN TO CLONE CENTRE</a></p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</div>
-    </div>
-  </body></html>`;
+  const isSwitch = profile.interest === 'switch_community' || profile.interest === 'switch_pro';
+  return brandEmail({
+    siteUrl,
+    preheader: isSwitch ? 'Your £1 switch evidence is safely stored for review.' : 'Your Clone Centre brief is saved.',
+    eyebrow: isSwitch ? 'SWITCH CHECK RECEIVED // REVIEW PENDING' : 'PROFILE SAVED // NEXT STEP READY',
+    heading: isSwitch ? `Thanks, ${profile.name}. Your evidence is in review.` : `Thanks, ${profile.name}. You will not need to repeat yourself.`,
+    lead: isSwitch
+      ? 'No payment has been taken. Joseph will review the active membership proof and send the private £1 Stripe link only if the offer is eligible.'
+      : `Your interest in ${memberOptions.interest[profile.interest]} and the outcome you want are now safely captured.`,
+    content: `${emailDetailTable([
+      ['Your route', memberOptions.interest[profile.interest]],
+      ['Where you are', memberOptions.aiStage[profile.aiStage]],
+      ['Main AI use', memberOptions.aiUse[profile.aiUse]],
+      ...(isSwitch ? [['Evidence', profile.proofFile?.name || 'Stored securely']] : [])
+    ])}${emailCallout('YOUR BRIEF', profile.goal, isSwitch ? 'You will receive a personal eligibility response rather than a generic checkout link.' : 'Joseph can now reply with the most relevant next step.')}`,
+    action: `${siteUrl}/community`,
+    actionLabel: 'RETURN TO THE COMMUNITY',
+    secondaryAction: `${siteUrl}/member`,
+    secondaryActionLabel: 'OPEN MEMBER CENTRE',
+    footer: 'Replies come from joseph@clonecentre.ai or clone@clonecentre.ai. Reply directly if anything in your brief needs correcting.'
+  });
 }
 
-function accountActionEmailMarkup({ name, heading, body, action, actionLabel, footer }) {
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBER ACCOUNT</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">${escapeHtml(heading)}</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Hi ${escapeHtml(name || 'there')},</p>
-      <p style="line-height:1.65;color:#aeb8c2">${escapeHtml(body)}</p>
-      ${action ? `<p style="margin:28px 0"><a style="display:inline-block;background:#2e9bff;color:#000;padding:13px 18px;text-decoration:none;font-weight:bold" href="${escapeHtml(action)}">${escapeHtml(actionLabel)}</a></p>` : ''}
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">${escapeHtml(footer || 'If you did not request this, you can ignore this email.')}</div>
-    </div>
-  </body></html>`;
+function memberAcknowledgementSubject(profile) {
+  return profile.interest === 'switch_community' || profile.interest === 'switch_pro'
+    ? 'Your £1 switch check is safely in review'
+    : 'We saved your Clone Centre brief';
+}
+
+function accountActionEmailMarkup({ name, heading, body, action, actionLabel, footer, internal = false }) {
+  return brandEmail({
+    siteUrl: publicSiteUrl(),
+    preheader: body,
+    eyebrow: internal ? 'MEMBER ADMIN // ACTION REQUIRED' : 'MEMBER ACCOUNT // SECURE ACTION',
+    heading,
+    lead: internal ? body : `Hi ${name || 'there'}, ${body}`,
+    content: action
+      ? emailCallout('SECURE LINK', 'Use the button below to continue.', 'Clone Centre will never ask you to email your password or payment details.')
+      : emailCallout('REQUEST RECORDED', name || 'Member account', body),
+    action,
+    actionLabel,
+    footer: footer || 'If you did not request this, you can safely ignore this email.',
+    internal
+  });
 }
 
 async function addNewsletterContact(email, firstName) {
@@ -413,8 +478,9 @@ async function subscribe(profile) {
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [profile.email],
     reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-    subject: 'Your Clone Centre Prompt Guidebook',
+    subject: 'Your Prompt Guidebook is here — start with CLEAR',
     html: welcomeEmailMarkup(profile.firstName),
+    headers: { 'List-Unsubscribe': '<mailto:joseph@clonecentre.ai?subject=Unsubscribe%20from%20Clone%20Centre>' },
     attachments: [{
       filename: 'Clone_Centre_Prompt_Guidebook.pdf',
       content: readFileSync(guidePath).toString('base64')
@@ -454,44 +520,56 @@ function readableDate(value) {
 
 function bookingEmailMarkup(trigger, details) {
   const siteUrl = publicSiteUrl();
-  const title = escapeHtml(details.title);
-  const name = escapeHtml(details.name);
+  const title = details.title;
+  const name = details.name;
   const when = readableDate(details.start);
   const copy = {
     BOOKING_CREATED: {
       label: 'BOOKING CONFIRMED',
       heading: `You are booked for ${title}.`,
-      body: 'Reply to this email with the one problem you most want to solve. Bring any examples, drafts or workflow notes that will help us get straight to useful work.'
+      body: `Hi ${name}, the time is in the diary. Reply with the one problem you most want to solve so we can get straight to useful work.`,
+      status: 'CONFIRMED'
     },
     BOOKING_RESCHEDULED: {
       label: 'BOOKING UPDATED',
       heading: `${title} has a new time.`,
-      body: 'Your booking has been rescheduled. The calendar invitation contains the latest meeting time and joining link.'
+      body: `Hi ${name}, your booking has been rescheduled. The calendar invitation contains the latest meeting time and joining link.`,
+      status: 'UPDATED'
     },
     BOOKING_CANCELLED: {
       label: 'BOOKING CANCELLED',
       heading: `${title} has been cancelled.`,
-      body: 'Your booking has been cancelled. If that was not intentional, reply to this email and we will get it sorted.'
+      body: `Hi ${name}, the booking is cancelled. If that was not intentional, reply and we will get it sorted.`,
+      status: 'CANCELLED'
     },
     MEETING_ENDED: {
       label: 'SESSION COMPLETE',
       heading: `Keep the momentum from ${title}.`,
-      body: 'Write down the next smallest useful action while the session is fresh. If you need another working session, the booking desk is always open.'
+      body: `Hi ${name}, write down the next smallest useful action while the session is fresh. Progress beats a perfect plan.`,
+      status: 'COMPLETE'
     }
   }[trigger];
   if (!copy) return null;
-  return `<!doctype html>
-  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
-    <div style="max-width:620px;margin:auto;padding:34px 24px">
-      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // ${copy.label}</div>
-      <h1 style="font-size:30px;margin:18px 0 12px">${copy.heading}</h1>
-      <p style="line-height:1.65;color:#aeb8c2">Hi ${name},</p>
-      <p style="line-height:1.65;color:#aeb8c2">${copy.body}</p>
-      ${when ? `<div style="margin:22px 0;border-left:3px solid #2e9bff;padding:12px 16px;background:#0b1117">${escapeHtml(when)} · UK time</div>` : ''}
-      <p style="margin:28px 0"><a style="display:inline-block;border:2px solid #2e9bff;color:#2e9bff;padding:11px 16px;text-decoration:none;font-weight:bold" href="${siteUrl}/coaching">VIEW COACHING DESK</a></p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions or preparation notes? Reply directly to this email.</div>
-    </div>
-  </body></html>`;
+  const preparation = trigger === 'BOOKING_CREATED'
+    ? emailSteps([
+      'Reply with the one outcome that would make the session worthwhile.',
+      'Bring any examples, drafts, prompts or workflow notes we should see.',
+      'Join from somewhere you can share your screen and build.'
+    ])
+    : '';
+  return brandEmail({
+    siteUrl,
+    preheader: when ? `${copy.status}: ${title} · ${when} UK time.` : `${copy.status}: ${title}.`,
+    eyebrow: `${copy.label} // UK TIME`,
+    heading: copy.heading,
+    lead: copy.body,
+    content: `${emailCallout('SESSION STATUS', copy.status, when ? `${when} · UK time` : 'See the calendar invitation for the latest details.')}${preparation}`,
+    action: `${siteUrl}/coaching`,
+    actionLabel: trigger === 'BOOKING_CANCELLED' ? 'BOOK ANOTHER SESSION' : 'VIEW THE COACHING DESK',
+    secondaryAction: `${siteUrl}/member`,
+    secondaryActionLabel: 'OPEN MEMBER CENTRE',
+    footer: 'Questions, changes or preparation notes? Reply directly to this email and they will reach Joseph.'
+  });
 }
 
 async function sendBookingAutomation(trigger, payload, rawBody) {
@@ -582,7 +660,7 @@ async function sendDelivery(session) {
       from: process.env.MEMBER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
       to: [email],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: `Welcome to Clone Centre ${membershipTier === 'accountability' ? 'Accountability' : membershipTier === 'pro' ? 'Pro' : 'Community'}`,
+      subject: `You’re in — welcome to Clone Centre ${membershipTier === 'accountability' ? 'Accountability' : membershipTier === 'pro' ? 'Pro' : 'Community'}`,
       html: membershipPaymentMarkup(session.customer_details?.name, membershipTier),
       tags: [{ name: 'automation', value: 'membership_welcome' }]
     }, `clonecentre-membership/${session.id}`);
@@ -603,7 +681,7 @@ async function sendDelivery(session) {
     from: process.env.DELIVERY_FROM_EMAIL || 'Clone Centre <books@updates.clonecentre.ai>',
     to: [email],
     reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-    subject: `Your Clone Centre files — ${product.title}`,
+    subject: `Your ${product.title} files are ready`,
     html: emailMarkup(product),
     attachments,
     tags: [{ name: 'catalog_key', value: product.key }]
@@ -620,7 +698,7 @@ async function deliverOutboxItem(item) {
       from,
       to: [payload.email],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: 'Confirm your Clone Centre member account',
+      subject: 'One click to confirm your Clone Centre account',
       html: accountActionEmailMarkup({
         name: payload.name,
         heading: 'Confirm your member account.',
@@ -637,7 +715,7 @@ async function deliverOutboxItem(item) {
       from,
       to: [payload.email],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: 'Reset your Clone Centre password',
+      subject: 'Your secure Clone Centre password reset',
       html: accountActionEmailMarkup({
         name: payload.name,
         heading: 'Reset your password.',
@@ -666,7 +744,7 @@ async function deliverOutboxItem(item) {
       from,
       to: [payload.email],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: 'Your Clone Centre profile is saved',
+      subject: memberAcknowledgementSubject(payload),
       html: memberAcknowledgementMarkup(payload),
       tags: [{ name: 'automation', value: 'member_acknowledgement' }]
     }, item.idempotency_key);
@@ -691,7 +769,7 @@ async function deliverOutboxItem(item) {
       to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: payload.email,
       subject: `Account deletion request — ${payload.email}`,
-      html: accountActionEmailMarkup({ name: 'Joseph', heading: 'A member requested account deletion.', body: `Review deletion request ${payload.requestId} for ${payload.email}. The request and audit event are stored in Railway.`, footer: 'Complete the request from the Railway-backed member administration workflow.' }),
+      html: accountActionEmailMarkup({ name: 'Joseph', heading: 'A member requested account deletion.', body: `Review deletion request ${payload.requestId} for ${payload.email}. The request and audit event are stored in Railway.`, footer: 'Complete the request from the Railway-backed member administration workflow.', internal: true }),
       tags: [{ name: 'automation', value: 'deletion_request' }]
     }, item.idempotency_key);
   }
@@ -1149,7 +1227,7 @@ app.post('/api/member-interest', async (request, response) => {
         from: process.env.MEMBER_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
         to: [profile.email],
         reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-        subject: 'Your Clone Centre profile is saved',
+        subject: memberAcknowledgementSubject(profile),
         html: memberAcknowledgementMarkup(profile),
         tags: [{ name: 'automation', value: 'member_acknowledgement' }]
       }, `clonecentre-member-ack/${eventKey}`)
@@ -1288,6 +1366,40 @@ app.get('/api/health', async (_request, response) => {
 function sendHtml(response, filename, status = 200) {
   response.status(status).set('Cache-Control', 'no-cache, no-store, must-revalidate');
   return response.sendFile(join(publicDir, filename));
+}
+
+if (!isProduction) {
+  const previewProfile = {
+    firstName: 'Alex',
+    name: 'Alex Morgan',
+    email: 'alex@example.com',
+    role: 'founder',
+    interest: 'switch_pro',
+    aiStage: 'exploring',
+    aiUse: 'automation',
+    goal: 'Turn a manual client onboarding process into a clear AI-assisted workflow without losing the personal touch.',
+    sessionId: 'cc_preview_12345678',
+    company: 'Northstar Studio',
+    page: `${publicSiteUrl()}/community`,
+    currentCommunity: 'Founder Network',
+    currentMembershipUrl: 'https://example.com/community',
+    proofFile: { name: 'membership-receipt.pdf' }
+  };
+  const previewTemplates = {
+    guide: () => welcomeEmailMarkup(previewProfile.firstName),
+    membership: () => membershipPaymentMarkup(previewProfile.name, 'pro'),
+    purchase: () => emailMarkup({ title: 'The Full Library', files: Array.from({ length: 8 }, (_, index) => `book-${index + 1}.pdf`) }),
+    booking: () => bookingEmailMarkup('BOOKING_CREATED', { name: previewProfile.name, title: 'AI Power Session', start: '2026-07-22T18:00:00.000Z' }),
+    enquiry: () => memberNotificationMarkup(previewProfile),
+    acknowledgement: () => memberAcknowledgementMarkup(previewProfile),
+    account: () => accountActionEmailMarkup({ name: previewProfile.name, heading: 'Confirm your member account.', body: 'Your account and AI profile are safely stored. Confirm this email address to connect your member identity.', action: `${publicSiteUrl()}/verify-email?token=preview`, actionLabel: 'CONFIRM MY ACCOUNT' }),
+    chat: () => chatTranscriptEmailMarkup({ conversationId: 'ct_preview_12345678', sessionId: previewProfile.sessionId, page: `${publicSiteUrl()}/products`, title: 'Clone Centre Products', messages: [{ role: 'user', content: 'Which product would help me automate onboarding?' }, { role: 'assistant', content: 'Start with The AI Automation Playbook, then use HyperChat when you are ready to put the workflow in front of customers.' }] })
+  };
+  app.get('/__email-preview', (request, response) => {
+    const render = previewTemplates[String(request.query.template || 'guide')];
+    if (!render) return response.status(404).send('Unknown email preview');
+    return response.type('html').send(render());
+  });
 }
 
 app.get('/', (_request, response) => sendHtml(response, 'index.html'));

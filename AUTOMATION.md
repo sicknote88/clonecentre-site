@@ -22,6 +22,8 @@ The same server also owns the other customer email flows:
 - The PostgreSQL email outbox retries account, guide, booking, chat, member and Stripe delivery emails with exponential backoff while Resend is unavailable.
 - Cal.com itself sends a default 24-hour reminder with the calendar event attached.
 
+All Resend messages use the shared `email-templates.js` design system. It provides the Clone Centre logo, black and electric-blue styling, mobile-safe table layouts, hidden preview text, consistent actions and an automatic plain-text alternative. Customer and internal templates cover guide delivery, purchased files, memberships, bookings, account verification, password resets, enquiries, £1 switch reviews and HyperChat transcripts. Marketing-enabled guide delivery also includes a visible unsubscribe instruction and a `List-Unsubscribe` mail header.
+
 ## Railway member data
 
 The dedicated service stores:

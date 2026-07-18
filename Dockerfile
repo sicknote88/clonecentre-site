@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-COPY server.js member-store.js ./
+COPY server.js member-store.js email-templates.js ./
 COPY fulfillment ./fulfillment
 
 RUN mkdir -p /app/public /app/private/books
