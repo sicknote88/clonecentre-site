@@ -6,7 +6,8 @@
 <title>Joseph Conlan · Clone Centre</title>
 <meta name="description" content="Practical AI training, weekly live calls, 1-to-1 coaching and a community for people who want to put AI to work, from Joseph Conlan at Clone Centre.">
 <meta name="release" content="phase-5">
-<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="icon" type="image/png" href="/assets/clone_centre_latest_logo.png?v=2">
+<link rel="apple-touch-icon" href="/assets/clone_centre_latest_logo.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Silkscreen:wght@400;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
@@ -254,6 +255,7 @@ body.cc-chat-open{overflow:hidden;}
 .cc-chat-head-copy{min-width:0;flex:1;}
 .cc-chat-head-copy b{display:block;font-family:var(--px);font-size:21px;font-weight:400;line-height:1;}
 .cc-chat-head-copy span{display:block;margin-top:4px;font-size:7px;letter-spacing:1.45px;color:#7F91A1;text-transform:uppercase;}
+.cc-chat-head-copy span strong{color:var(--blue);font-weight:500;}
 .cc-chat-close{display:grid;place-items:center;width:34px;height:34px;border:1px solid #324452;border-radius:10px;background:#010305;color:#A6B0B9;font-family:var(--mono);font-size:18px;cursor:pointer;}
 .cc-chat-close:hover,.cc-chat-close:focus-visible{color:var(--blue);border-color:var(--blue);outline:none;}
 .cc-chat-messages{flex:1;overflow-y:auto;padding:14px;background:linear-gradient(rgba(46,155,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(46,155,255,.02) 1px,transparent 1px),#010305;background-size:28px 28px;scrollbar-color:#31506c #05090d;}
@@ -274,9 +276,14 @@ body.cc-chat-open{overflow:hidden;}
 .cc-chat-convert span b{display:block;color:#DCE5EC;font-size:9px;font-weight:600;}
 .cc-chat-convert a{flex:0 0 auto;color:var(--blue);font-size:8px;letter-spacing:.65px;text-decoration:none;text-transform:uppercase;}
 .cc-chat-convert a:hover,.cc-chat-convert a:focus-visible{color:#fff;outline:none;}
+.cc-chat-expired{display:none;border-top:1px solid #203445;background:#06111a;padding:11px 12px;color:#9EAFBD;font-size:9px;line-height:1.5;}
+.cc-chat-expired.on{display:block;}
+.cc-chat-expired a{display:inline-block;margin-top:7px;color:var(--blue);font-size:9px;letter-spacing:.6px;text-decoration:none;text-transform:uppercase;}
+.cc-chat-expired a:hover,.cc-chat-expired a:focus-visible{color:#fff;outline:none;}
 .cc-chat-compose{display:flex;gap:8px;padding:10px 11px 8px;background:#020609;}
 .cc-chat-compose input{flex:1;min-width:0;border:1px solid #304656;border-radius:10px;background:#000;color:#fff;padding:10px 11px;font-family:var(--mono);font-size:11px;outline:none;}
 .cc-chat-compose input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,155,255,.13);}
+.cc-chat-compose input:disabled,.cc-chat-compose button:disabled{cursor:not-allowed;opacity:.46;}
 .cc-chat-send{width:40px;border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#000;font-family:var(--px);font-size:22px;cursor:pointer;}
 .cc-chat-send:hover,.cc-chat-send:focus-visible{background:#fff;border-color:#fff;outline:none;}
 .cc-chat-brand{padding:0 11px 8px;text-align:center;color:#52616E;font-size:6px;letter-spacing:.9px;background:#020609;}
@@ -364,6 +371,27 @@ body.cc-chat-open{overflow:hidden;}
 .annual-bonus .small-print{font-size:10px;color:#647180;letter-spacing:.25px;}
 .annual-bonus .btn{position:relative;z-index:1;white-space:nowrap;text-align:center;}
 @media(max-width:760px){.annual-bonus{grid-template-columns:1fr;padding:26px 22px;}.annual-bonus .btn{justify-self:start;}}
+
+.member-capture{margin-top:18px;border:1px solid #263d50;background:linear-gradient(145deg,rgba(46,155,255,.09),rgba(3,6,9,.98) 48%);padding:32px;}
+.member-capture-head{display:grid;grid-template-columns:.82fr 1.18fr;gap:34px;align-items:end;margin-bottom:26px;}
+.member-capture h3{font-family:var(--px);font-size:clamp(34px,5vw,52px);font-weight:400;line-height:.95;color:#fff;margin-top:10px;}
+.member-capture-head p{max-width:62ch;color:#97A3AD;font-size:12px;}
+.member-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.member-field{display:flex;flex-direction:column;gap:7px;min-width:0;}
+.member-field.full{grid-column:1/-1;}
+.member-field label{font-size:9px;letter-spacing:1.3px;color:#98A7B4;text-transform:uppercase;}
+.member-field input,.member-field select,.member-field textarea{width:100%;min-width:0;border:1px solid #34495b;border-radius:0;background:#000;color:#fff;padding:12px 13px;font-family:var(--mono);font-size:12px;line-height:1.45;outline:none;}
+.member-field textarea{min-height:108px;resize:vertical;}
+.member-field input:focus,.member-field select:focus,.member-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,155,255,.12);}
+.member-consent{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;color:#7F8D99;font-size:10px;line-height:1.55;}
+.member-consent input{accent-color:var(--blue);margin-top:3px;}
+.member-form-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:3px;}
+.member-form-actions p{color:#667684;font-size:9px;max-width:60ch;}
+.member-status{display:none;grid-column:1/-1;border-left:3px solid var(--blue);background:#040b11;padding:13px 15px;color:#A9B8C4;font-size:11px;}
+.member-status.on{display:block;}
+.member-status.success{color:#DCEEFF;}
+.member-form.is-complete>*:not(.member-status){display:none;}
+@media(max-width:760px){.member-capture{padding:26px 21px;}.member-capture-head,.member-form{grid-template-columns:1fr;}.member-field.full,.member-consent,.member-form-actions,.member-status{grid-column:auto;}.member-form-actions{align-items:stretch;flex-direction:column;}.member-form-actions .btn{width:100%;text-align:center;}}
 
 .switch-offer{margin-top:34px;border:2px solid var(--blue);background:
   linear-gradient(90deg,rgba(46,155,255,.10) 1px,transparent 1px),
@@ -453,6 +481,7 @@ body.cc-chat-open{overflow:hidden;}
 .app-card .app-status{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
 .app-card h3{font-family:var(--px);font-size:28px;font-weight:400;color:#fff;margin-top:12px;}
 .app-card p{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.55;}
+.app-card .app-price{display:block;margin-top:14px;color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.7px;}
 .app-card .open{display:block;margin-top:18px;font-family:var(--px);font-size:18px;color:var(--blue);}
 @media(max-width:900px){.app-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:520px){.app-grid{grid-template-columns:1fr;}}
@@ -722,7 +751,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <div class="hero-copy">
       <div class="kicker">Joseph Conlan · Founder, Clone Centre</div>
       <h1>I MAKE AI<br>USEFUL<span class="cursor"></span></h1>
-      <p class="sub">I am <b>Joseph Conlan</b>. I build practical AI systems, teach people how to use them without the jargon, and help good ideas become working tools. This is my place to show you <b>what AI can do and how we make it useful</b>.</p>
+      <p class="sub">I am <b>Joseph Conlan</b>. I build practical AI systems, teach people how to use them without the jargon, and help good ideas become working tools. My work spans <b>SMEs through to multi-billion-dollar venture capital funds</b>, backed by a background in Oxford AI. This is my place to show you <b>what AI can do and how we make it useful</b>.</p>
       <div class="hero-cta">
         <a class="btn blue" href="#start">SEE HOW I CAN HELP</a>
         <a class="btn" href="#guide-gate" data-guide-gate>GET THE PROMPT GUIDE</a>
@@ -842,7 +871,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 
   <div class="mini-links">
     <a class="mini-link" href="/about"><span><b>MEET JOSEPH</b><br>Background, approach and why AI matters now.</span><i>OPEN &gt;</i></a>
-    <a class="mini-link" href="mailto:hello@clonecentre.ai?subject=Help%20me%20choose"><span><b>ASK A HUMAN</b><br>Email the problem and Joseph will point you in the right direction.</span><i>EMAIL &gt;</i></a>
+    <a class="mini-link" href="/community?interest=help_choose#membership-apply"><span><b>ASK A HUMAN</b><br>Share the problem and Joseph will point you in the right direction.</span><i>ASK &gt;</i></a>
   </div>
 </section>
 
@@ -853,7 +882,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <div class="about-grid">
     <img src="assets/joseph_bw.jpg" alt="Black and white portrait of Joseph Conlan">
     <div>
-      <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. I have sat in rooms with <b>billion dollar venture capital funds</b> and watched how the smartest investors in the world use AI every single day.</p>
+      <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. My work has spanned <b>SMEs through to multi-billion-dollar venture capital funds</b>, and my background includes <b>Oxford AI</b>. That range is why I care about making serious AI useful without making it obscure.</p>
       <br>
       <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site, the books, the newsletter and the <b>free community</b>, exists to teach you that one skill in plain English.</p>
       <div class="statrow">
@@ -941,7 +970,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Weekly prompt and build thread</li>
         <li>Saturday and Sunday accountability drops</li>
       </ul>
-      <a class="tier-cta" href="mailto:hello@clonecentre.ai?subject=Join%20Clone%20Centre%20Community">JOIN COMMUNITY &gt;</a>
+      <a class="tier-cta" href="/community?interest=community#membership-apply">JOIN COMMUNITY &gt;</a>
     </article>
 
     <article class="tier recommended">
@@ -959,7 +988,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>HyperChat member workspace access</li>
         <li>Annual Pro: one website AI chatbot setup included</li>
       </ul>
-      <a class="tier-cta" href="mailto:hello@clonecentre.ai?subject=Join%20Clone%20Centre%20Pro">GO PRO &gt;</a>
+      <a class="tier-cta" href="/community?interest=pro#membership-apply">GO PRO &gt;</a>
     </article>
 
     <article class="tier">
@@ -974,27 +1003,63 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Private 90-day goal tracker</li>
         <li>Priority questions and DM access</li>
       </ul>
-      <a class="tier-cta" href="mailto:hello@clonecentre.ai?subject=Accountability%20Founding%20Seat">APPLY FOR A SEAT &gt;</a>
+      <a class="tier-cta" href="/community?interest=accountability#membership-apply">APPLY FOR A SEAT &gt;</a>
     </article>
   </div>
   <div class="pricing-note">MONTHLY PLANS CANCEL ANY TIME · PRICES INCLUDE VAT WHERE APPLICABLE · FOUNDING PRICES ARE LOCKED WHILE MEMBERSHIP STAYS ACTIVE</div>
 
-  <div class="annual-bonus">
+  <div class="annual-bonus" id="annual-chatbot">
     <div>
       <div class="tag">Annual Pro bonus · AI website assistant</div>
       <h3>GET A CHATBOT LIKE THIS ON YOUR SITE.</h3>
       <p>Choose <b>Clone Centre Pro annually</b> and we will set up one trained website AI chatbot like the assistant on this page, included at no extra setup charge while your annual membership stays active.</p>
       <p class="small-print">Standard starter build for one website and one approved business knowledge set. Fair-use, third-party usage costs and bespoke integrations are agreed before launch; the assistant remains subject to acceptable-use and safety checks.</p>
     </div>
-    <a class="btn blue" href="#clonecentre-ai" data-cc-chat-offer>SEE IT LIVE + GET YOURS &gt;</a>
+    <a class="btn blue" href="/community?interest=annual_pro_chatbot#membership-apply">CHOOSE ANNUAL PRO &gt;</a>
+  </div>
+
+  <div class="member-capture" id="membership-apply">
+    <div class="member-capture-head">
+      <div><div class="sec-kicker">Your next move</div><h3>MAKE IT PERSONAL.</h3></div>
+      <p>Tell us what you want to join or build. Your details and answers are saved securely against this visit, then Joseph will send the right joining, payment or next-step link—without making you start the conversation again.</p>
+    </div>
+    <form class="member-form" id="member-interest-form" action="/api/member-interest" method="POST">
+      <label class="hp-field" aria-hidden="true">Fax<input type="text" name="fax" tabindex="-1" autocomplete="off"></label>
+      <div class="member-field"><label for="member-name">Your name</label><input id="member-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required></div>
+      <div class="member-field"><label for="member-email">Email address</label><input id="member-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+      <div class="member-field"><label for="member-company">Company or website <span>(optional)</span></label><input id="member-company" name="company" type="text" autocomplete="organization" maxlength="160"></div>
+      <div class="member-field"><label for="member-interest">What are you interested in?</label><select id="member-interest" name="interest" required>
+        <option value="" selected disabled>Choose one clear next move</option>
+        <option value="free">Free community access</option>
+        <option value="community">Community · £19/month or £190/year</option>
+        <option value="pro">Pro · £49/month or £490/year</option>
+        <option value="annual_pro_chatbot">Annual Pro + included website chatbot · £490/year</option>
+        <option value="accountability">Accountability founding seat · £149/month</option>
+        <option value="switch">Switch from another community · £1 first month</option>
+        <option value="clone_coach_waitlist">Clone Coach AI beta waitlist</option>
+        <option value="help_choose">Help me choose</option>
+      </select></div>
+      <div class="member-field"><label for="member-ai-stage">Where are you with AI?</label><select id="member-ai-stage" name="aiStage" required>
+        <option value="" selected disabled>Choose the closest answer</option>
+        <option value="new">I have barely started</option><option value="exploring">I am experimenting</option><option value="regular">I use AI most weeks</option><option value="building">I am already building systems</option>
+      </select></div>
+      <div class="member-field"><label for="member-use">What do you want AI to improve?</label><select id="member-use" name="aiUse" required>
+        <option value="" selected disabled>Choose the main result</option>
+        <option value="clarity">Understand AI clearly</option><option value="productivity">Save time or improve my work</option><option value="growth">Grow a business</option><option value="automation">Automate a process</option><option value="assistant">Build an AI assistant</option><option value="governance">Use AI safely and govern it</option>
+      </select></div>
+      <div class="member-field full"><label for="member-goal">What would make this useful for you?</label><textarea id="member-goal" name="goal" maxlength="1500" placeholder="A sentence or two is enough. Tell Joseph what you want to achieve or what is currently getting in the way." required></textarea></div>
+      <label class="member-consent"><input type="checkbox" name="consent" required><span>I agree that Clone Centre may save these details and contact me about this enquiry. I can ask for my information to be removed at any time.</span></label>
+      <div class="member-form-actions"><p>Stored with your conversation session so you do not have to repeat yourself. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" type="submit">SAVE MY PROFILE + CONTINUE &gt;</button></div>
+      <div class="member-status" id="member-form-status" role="status"></div>
+    </form>
   </div>
 
   <div class="switch-offer">
     <div>
       <div class="switch-code">PAY <b>£1</b> TO SWITCH</div>
-      <p class="switch-copy">Already paying for another business, coaching or AI community? Move to Community or Pro for <b style="color:#fff;">£1 for your first month</b>. No long contract. Email the word <b style="color:var(--blue);">SWITCH</b> and I will send your private joining link.</p>
+      <p class="switch-copy">Already paying for another business, coaching or AI community? Move to Community or Pro for <b style="color:#fff;">£1 for your first month</b>. No long contract. Choose Switch in the short form and I will send your private joining link.</p>
     </div>
-    <a class="btn blue" href="mailto:hello@clonecentre.ai?subject=SWITCH&body=SWITCH%0A%0AI%20would%20like%20to%20join%20Clone%20Centre.">SEND SWITCH &gt;</a>
+    <a class="btn blue" href="/community?interest=switch#membership-apply">SWITCH FOR £1 &gt;</a>
   </div>
 </section>
 
@@ -1085,7 +1150,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
         <li>Clear review notes: celebrate, learn, drop and reset</li>
       </ul>
       <div class="coach-actions">
-        <a class="btn blue" href="mailto:hello@clonecentre.ai?subject=Accountability%20Founding%20Seat&body=I%20would%20like%20to%20apply%20for%20one%20of%20the%20five%20founding%20accountability%20places.">APPLY FOR A PLACE &gt;</a>
+        <a class="btn blue" href="/community?interest=accountability#membership-apply">APPLY FOR A PLACE &gt;</a>
         <a class="btn" href="goal-tracker.html">OPEN THE TRACKER &gt;</a>
       </div>
     </article>
@@ -1110,7 +1175,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <p>After the human service proves what people actually need, the same rhythm becomes a HyperChat-powered helper: a short daily check-in, a weekly progress summary and a clear prompt to ask a human when the situation needs one.</p>
       <div class="roadmap-price">PLANNED PRICE · £29 / MONTH</div>
       <p>This is the roadmap, not a pretend finished bot. Founding members help shape the beta and get first access when it is ready.</p>
-      <a class="btn blue" href="mailto:hello@clonecentre.ai?subject=Clone%20Coach%20AI%20Waitlist">JOIN THE BOT WAITLIST &gt;</a>
+      <a class="btn blue" href="/community?interest=clone_coach_waitlist#membership-apply">JOIN THE BOT WAITLIST &gt;</a>
     </div>
     <div class="chat-preview" aria-label="Preview of the planned Clone Coach AI conversation">
       <div class="chat-head">Clone Coach AI · concept preview</div>
@@ -1136,7 +1201,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="cost">£150</div>
       <p>For one clear problem that needs an expert pair of eyes: prompting, workflow design, tool choice or troubleshooting.</p>
       <div class="includes">INCLUDES · PRE-CALL QUESTIONNAIRE · RECORDING · ACTION NOTES</div>
-      <a class="tier-cta" data-booking-key="aiFix" href="mailto:hello@clonecentre.ai?subject=Book%20an%20AI%20Fix%20Session%20-%20%C2%A3150">BOOK £150 &gt;</a>
+      <a class="tier-cta" data-booking-key="aiFix" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Fix%20Session%20-%20%C2%A3150">BOOK £150 &gt;</a>
     </article>
     <article class="coaching-card feature">
       <div class="session">Session 02 · 90 minutes</div>
@@ -1144,7 +1209,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="cost">£250</div>
       <p>A deeper working session for a process, campaign or prototype. We map it, build the core and leave you with the next seven days planned.</p>
       <div class="includes">INCLUDES · PRE-WORK · LIVE BUILD · RECORDING · 7-DAY FOLLOW-UP</div>
-      <a class="tier-cta" data-booking-key="aiPower" href="mailto:hello@clonecentre.ai?subject=Book%20an%20AI%20Power%20Session%20-%20%C2%A3250">BOOK £250 &gt;</a>
+      <a class="tier-cta" data-booking-key="aiPower" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Power%20Session%20-%20%C2%A3250">BOOK £250 &gt;</a>
     </article>
     <article class="coaching-card">
       <div class="session">30-day support</div>
@@ -1152,7 +1217,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="cost">£500<small> / MONTH</small></div>
       <p>Two private 45-minute calls plus weekday async support for a specific AI build that needs architecture, decisions and hands-on momentum.</p>
       <div class="includes">INCLUDES · 2 CALLS · BUILD PLAN · WEEKDAY ASYNC SUPPORT</div>
-      <a class="tier-cta" data-booking-key="buildPartner" href="mailto:hello@clonecentre.ai?subject=AI%20Build%20Partner%20-%20%C2%A3500">APPLY FOR £500 &gt;</a>
+      <a class="tier-cta" data-booking-key="buildPartner" href="mailto:joseph@clonecentre.ai?subject=AI%20Build%20Partner%20-%20%C2%A3500">APPLY FOR £500 &gt;</a>
     </article>
   </div>
 
@@ -1399,16 +1464,16 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <p class="lede">The community is backed by working AI products, not slide decks. Members learn from the same systems Clone Centre is putting into the world.</p>
   <div class="app-grid">
     <a class="app-card" href="https://ansair.up.railway.app" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 01</div><h3>ANSAIR</h3><p>A voice AI assistant for calls, bookings and customer questions, 24/7.</p><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 01</div><h3>ANSAIR</h3><p>A voice AI assistant for calls, bookings and customer questions, 24/7.</p><span class="app-price">BESPOKE QUOTE · PRICE AGREED TO SCOPE</span><span class="open">OPEN SYSTEM &gt;</span>
     </a>
     <a class="app-card" href="https://hyperchat-app-production.up.railway.app/wizard" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 02 · build free</div><h3>HyperChat</h3><p>Turn your website into a trained customer-facing AI assistant in about a minute. Build and test yours free; pay only when you publish it.</p><span class="open">BUILD MY BOT FREE &gt;</span>
+      <div class="app-status">Live system 02 · build free</div><h3>HyperChat</h3><p>Turn your website into a trained customer-facing AI assistant in about a minute. Build and test yours free; pay only when you publish it.</p><span class="app-price">BUILD £0 · LIVE £49/MONTH PER CHATBOT</span><span class="open">BUILD MY BOT FREE &gt;</span>
     </a>
     <a class="app-card" href="https://traice-governance.up.railway.app" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 03</div><h3>TRAICE</h3><p>AI governance, audit trails and controls for organisations deploying AI seriously.</p><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 03</div><h3>TRAICE</h3><p>AI governance, audit trails and controls for organisations deploying AI seriously.</p><span class="app-price">BESPOKE QUOTE · PRICE AGREED TO SCOPE</span><span class="open">OPEN SYSTEM &gt;</span>
     </a>
     <a class="app-card" href="https://pipeline-ma-production.up.railway.app/" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 04</div><h3>Pipeline</h3><p>Acquisition intelligence for finding and qualifying off-market UK companies.</p><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 04</div><h3>Pipeline</h3><p>Acquisition intelligence for finding and qualifying off-market UK companies.</p><span class="app-price">7-DAY TRIAL £0 · STARTER £39/MO · PRO £79/MO</span><span class="open">OPEN SYSTEM &gt;</span>
     </a>
   </div>
 </section>
@@ -1433,7 +1498,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <section class="cc-chat-panel" id="clonecentre-ai" role="dialog" aria-modal="false" aria-labelledby="cc-chat-title" aria-hidden="true">
   <header class="cc-chat-head">
     <span class="cc-chat-head-mark"><img src="assets/clone_centre_robot.png" alt=""></span>
-    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>Online · our HyperChat system</span></span>
+    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>Our HyperChat system · <strong id="cc-chat-time">Guest · 05:00</strong></span></span>
     <button class="cc-chat-close" id="cc-chat-close" type="button" aria-label="Close Clone Centre AI">×</button>
   </header>
   <div class="cc-chat-messages" id="cc-chat-messages" aria-live="polite"></div>
@@ -1443,8 +1508,9 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   </div>
   <div class="cc-chat-convert">
     <span><b>Want this on your website?</b>Included with annual Pro.</span>
-    <a href="mailto:hello@clonecentre.ai?subject=Annual%20Pro%20website%20AI%20chatbot">Get yours &gt;</a>
+    <a href="/community#annual-chatbot">See annual Pro &gt;</a>
   </div>
+  <div class="cc-chat-expired" id="cc-chat-expired">Your guest session is complete. Save a member profile so Joseph can continue from the context you have already shared.<br><a href="/community?interest=help_choose#membership-apply">Save my profile + continue &gt;</a></div>
   <form class="cc-chat-compose" id="cc-chat-compose">
     <input id="cc-chat-input" type="text" maxlength="1200" autocomplete="off" placeholder="Ask anything about Clone Centre…" aria-label="Message Clone Centre AI">
     <button class="cc-chat-send" type="submit" aria-label="Send message">&gt;</button>
@@ -1515,13 +1581,13 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
             <button class="btn blue" type="submit">EMAIL MY GUIDE &gt;</button>
           </div>
         </div>
-        <div class="guide-error" id="guide-error" role="status">That did not go through. Check each answer and try again, or email hello@clonecentre.ai.</div>
+        <div class="guide-error" id="guide-error" role="status">That did not go through. Check each answer and try again, or email joseph@clonecentre.ai.</div>
       </form>
     </div>
     <div class="guide-success" id="guide-success" role="status">
       <div class="success-mark">PROFILE SAVED // GUIDE QUEUED</div>
-      <h2>CHECK YOUR INBOX.</h2>
-      <p>Your Prompt Guidebook is being emailed as an attachment. I have also saved your AI starting point so the next advice is more useful.</p>
+      <h2 id="guide-success-title">CHECK YOUR INBOX.</h2>
+      <p id="guide-success-copy">Your Prompt Guidebook is being emailed as an attachment. I have also saved your AI starting point so the next advice is more useful.</p>
       <p style="margin-top:26px;"><a class="btn blue" href="/library">EXPLORE THE LIBRARY &gt;</a></p>
     </div>
   </div>
@@ -1658,16 +1724,47 @@ guideForm.addEventListener('submit',async function(event){
   if(!guideForm.reportValidity())return;
   const error=document.getElementById('guide-error'),button=guideForm.querySelector('[type="submit"]'),data=new FormData(guideForm);
   button.disabled=true;button.textContent='SENDING...';error.style.display='none';
-  const payload={firstName:data.get('firstName'),email:data.get('email'),role:data.get('role'),aiStage:data.get('aiStage'),goal:data.get('goal'),consent:data.has('consent'),company:data.get('company')};
+  let profileSessionId;
+  try{profileSessionId=localStorage.getItem('clonecentre_hyperchat_session');}catch(_){}
+  if(!profileSessionId)profileSessionId='cc_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+  const payload={sessionId:profileSessionId,firstName:data.get('firstName'),email:data.get('email'),role:data.get('role'),aiStage:data.get('aiStage'),goal:data.get('goal'),consent:data.has('consent'),company:data.get('company')};
   try{
     const response=await fetch(guideForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(!response.ok)throw new Error('profile failed');
+    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error('profile failed');
+    if(!result.emailSent){document.getElementById('guide-success-title').textContent='PROFILE SAVED.';document.getElementById('guide-success-copy').textContent='Your AI starting point is stored securely. Email delivery is temporarily pending while our sending account is reviewed; you will not need to complete this form again.';}
     document.getElementById('guide-form-shell').style.display='none';document.getElementById('guide-success').style.display='block';
   }catch(_){
     error.style.display='block';button.disabled=false;button.textContent='TRY AGAIN >';
   }
 });
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&guideGate.classList.contains('open'))closeGuideGate();});
+
+/* ---- stored membership + enquiry profile ---- */
+const memberForm=document.getElementById('member-interest-form');
+const memberStatus=document.getElementById('member-form-status');
+const requestedInterest=new URLSearchParams(location.search).get('interest');
+if(memberForm&&requestedInterest&&memberForm.elements.interest.querySelector('option[value="'+CSS.escape(requestedInterest)+'"]')){
+  memberForm.elements.interest.value=requestedInterest;
+}
+if(memberForm)memberForm.addEventListener('submit',async event=>{
+  event.preventDefault();
+  if(!memberForm.reportValidity())return;
+  const button=memberForm.querySelector('[type="submit"]'),data=new FormData(memberForm);
+  button.disabled=true;button.textContent='SAVING...';memberStatus.className='member-status';
+  let sessionId;
+  try{sessionId=localStorage.getItem('clonecentre_hyperchat_session');}catch(_){}
+  if(!sessionId)sessionId='cc_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+  const payload={sessionId,name:data.get('name'),email:data.get('email'),company:data.get('company'),interest:data.get('interest'),aiStage:data.get('aiStage'),aiUse:data.get('aiUse'),goal:data.get('goal'),consent:data.has('consent'),fax:data.get('fax'),page:location.href};
+  try{
+    const response=await fetch(memberForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.error||'profile_failed');
+    memberForm.classList.add('is-complete');memberStatus.className='member-status on success';
+    memberStatus.textContent=result.emailSent?'Saved. Check your inbox for confirmation; Joseph now has the context you shared.':'Saved securely. Joseph now has the context you shared and will reply from joseph@clonecentre.ai or clone@clonecentre.ai.';
+  }catch(_){
+    memberStatus.className='member-status on';memberStatus.textContent='That did not save. Please check each field and try again, or contact joseph@clonecentre.ai.';button.disabled=false;button.textContent='TRY AGAIN >';
+  }
+});
 
 /* ---- live Cal.com booking connection ---- */
 const calendarShell=document.getElementById('calendar-shell');
@@ -1838,8 +1935,15 @@ const ccChatMessages=document.getElementById('cc-chat-messages');
 const ccChatCompose=document.getElementById('cc-chat-compose');
 const ccChatInput=document.getElementById('cc-chat-input');
 const ccChatSuggestions=document.getElementById('cc-chat-suggestions');
+const ccChatTime=document.getElementById('cc-chat-time');
+const ccChatExpired=document.getElementById('cc-chat-expired');
+const ccChatSend=ccChatCompose.querySelector('[type="submit"]');
+const CC_CHAT_LIMIT_MS=5*60*1000;
+const CC_CHAT_RESET_MS=24*60*60*1000;
 let ccChatBusy=false;
 let ccChatSession;
+let ccChatStarted=0;
+let ccChatLimitAnnounced=false;
 const ccTranscript=[];
 const ccTranscriptId='ct_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
 let ccTranscriptTimer=0;
@@ -1848,6 +1952,10 @@ try{
   ccChatSession=localStorage.getItem('clonecentre_hyperchat_session');
   if(!ccChatSession){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('clonecentre_hyperchat_session',ccChatSession);}
 }catch(_){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();}
+try{
+  ccChatStarted=Number(localStorage.getItem('clonecentre_chat_guest_started')||0);
+  if(ccChatStarted&&Date.now()-ccChatStarted>CC_CHAT_RESET_MS){localStorage.removeItem('clonecentre_chat_guest_started');ccChatStarted=0;}
+}catch(_){}
 
 function ccFormatAssistant(bubble,text){
   const source=String(text),pattern=/(\*\*[^*\n]+\*\*|\[[^\]\n]+\]\(https?:\/\/[^\s)]+\))/g;
@@ -1889,23 +1997,39 @@ function ccScheduleTranscript(){
   clearTimeout(ccTranscriptTimer);
   ccTranscriptTimer=setTimeout(()=>ccSendTranscript(false),45000);
 }
+function ccExpireGuestChat(){
+  ccChatInput.disabled=true;ccChatSend.disabled=true;ccChatExpired.classList.add('on');ccChatTime.textContent='Guest · complete';
+  if(!ccChatLimitAnnounced){ccChatLimitAnnounced=true;ccAddMessage('Your five-minute guest session is complete. Save a member profile below so Joseph can continue from the context you have already shared.',false);ccSendTranscript(false);}
+}
+function ccUpdateGuestClock(){
+  if(!ccChatStarted){ccChatTime.textContent='Guest · 05:00';return true;}
+  const remaining=CC_CHAT_LIMIT_MS-(Date.now()-ccChatStarted);
+  if(remaining<=0){ccExpireGuestChat();return false;}
+  const seconds=Math.ceil(remaining/1000),minutes=Math.floor(seconds/60);
+  ccChatTime.textContent='Guest · '+String(minutes).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');
+  return true;
+}
+function ccStartGuestClock(){
+  if(!ccChatStarted){ccChatStarted=Date.now();try{localStorage.setItem('clonecentre_chat_guest_started',String(ccChatStarted));}catch(_){};}
+  return ccUpdateGuestClock();
+}
 async function ccAsk(question){
-  const message=String(question||'').trim();if(!message||ccChatBusy)return;
+  const message=String(question||'').trim();if(!message||ccChatBusy||!ccStartGuestClock())return;
   ccChatBusy=true;ccAddMessage(message,true);ccChatInput.value='';ccChatSuggestions.hidden=true;ccAddMessage('•••',false,true);
   try{
     const response=await fetch(CC_CHAT_BASE+'/api/chat/'+CC_CHAT_PROJECT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,session_id:ccChatSession})});
     const data=await response.json();if(!response.ok)throw new Error('Chat unavailable');
     document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage(data.answer||'I could not find a useful answer to that.',false);
-  }catch(_){document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage('I am having trouble connecting right now. You can email Joseph at hello@clonecentre.ai.',false);}
-  finally{ccChatBusy=false;ccScheduleTranscript();ccChatInput.focus();}
+  }catch(_){document.getElementById('cc-chat-thinking')?.parentElement.remove();ccAddMessage('I am having trouble connecting right now. You can contact Joseph at joseph@clonecentre.ai.',false);}
+  finally{ccChatBusy=false;ccScheduleTranscript();ccUpdateGuestClock();if(!ccChatInput.disabled)ccChatInput.focus();}
 }
 
 ccAddMessage("Hi — I'm Clone Centre AI. Ask me what to learn, book or build.",false);
+ccUpdateGuestClock();setInterval(ccUpdateGuestClock,1000);
 ccChatLauncher.addEventListener('click',()=>ccSetChat(!ccChatPanel.classList.contains('open')));
 ccChatClose.addEventListener('click',()=>ccSetChat(false));
 ccChatCompose.addEventListener('submit',event=>{event.preventDefault();ccAsk(ccChatInput.value);});
 document.querySelectorAll('[data-cc-question]').forEach(button=>button.addEventListener('click',()=>ccAsk(button.dataset.ccQuestion)));
-document.querySelectorAll('[data-cc-chat-offer]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();ccSetChat(true);}));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&ccChatPanel.classList.contains('open'))ccSetChat(false);});
 window.addEventListener('pagehide',()=>ccSendTranscript(true));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')ccSendTranscript(true);});

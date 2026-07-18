@@ -18,6 +18,36 @@ const isProduction = process.env.NODE_ENV === 'production';
 const dryRun = !isProduction && process.env.DELIVERY_DRY_RUN === 'true';
 const subscribeAttempts = new Map();
 const chatTranscriptAttempts = new Map();
+const memberInterestAttempts = new Map();
+const hyperChatBaseUrl = (process.env.HYPERCHAT_BASE_URL || 'https://hyperchat-app-production.up.railway.app').replace(/\/$/, '');
+const hyperChatProjectId = process.env.HYPERCHAT_PROJECT_ID || '96991323-4ffc-47a7-99bd-905af714a0d5';
+
+const memberOptions = {
+  interest: {
+    free: 'Free community access',
+    community: 'Community — £19/month or £190/year',
+    pro: 'Pro — £49/month or £490/year',
+    annual_pro_chatbot: 'Annual Pro plus included website chatbot — £490/year',
+    accountability: 'Accountability founding seat — £149/month',
+    switch: 'Switch from another community — £1 first month',
+    clone_coach_waitlist: 'Clone Coach AI beta waitlist',
+    help_choose: 'Help me choose'
+  },
+  aiStage: {
+    new: 'I have barely started',
+    exploring: 'I am experimenting',
+    regular: 'I use AI most weeks',
+    building: 'I am already building systems'
+  },
+  aiUse: {
+    clarity: 'Understand AI clearly',
+    productivity: 'Save time or improve my work',
+    growth: 'Grow a business',
+    automation: 'Automate a process',
+    assistant: 'Build an AI assistant',
+    governance: 'Use AI safely and govern it'
+  }
+};
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -27,6 +57,25 @@ function escapeHtml(value = '') {
 
 function publicSiteUrl() {
   return (process.env.SITE_URL || 'https://clonecentre-site-production.up.railway.app').replace(/\/$/, '');
+}
+
+async function persistHyperChatLead({ sessionId, name, email, company, enquiry, sourceUrl }) {
+  const result = await fetch(`${hyperChatBaseUrl}/api/leads/${hyperChatProjectId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      session_id: sessionId,
+      name,
+      email,
+      company: company || null,
+      enquiry,
+      source_url: sourceUrl,
+      consent: true
+    })
+  });
+  const body = await result.json().catch(() => ({}));
+  if (!result.ok) throw new Error(`HyperChat rejected lead (${result.status}): ${body.detail || body.error || 'unknown error'}`);
+  return body;
 }
 
 async function resendRequest(path, { method = 'POST', body, idempotencyKey } = {}) {
@@ -85,7 +134,7 @@ function emailMarkup(product) {
       <h1 style="font-size:30px;margin:18px 0 12px">Your ${product.title} files are attached.</h1>
       <p style="line-height:1.65;color:#aeb8c2">Thank you for your purchase. This email contains ${count === 1 ? 'your PDF' : `all ${count} included files`} as attachments, ready to save and read.</p>
       <p style="line-height:1.65;color:#aeb8c2">These files are licensed for your personal use. Please do not redistribute them or publish private download copies.</p>
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact <a style="color:#2e9bff" href="mailto:hello@clonecentre.ai">hello@clonecentre.ai</a>.</div>
+      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Questions? Reply to this email or contact <a style="color:#2e9bff" href="mailto:joseph@clonecentre.ai">joseph@clonecentre.ai</a>.</div>
     </div>
   </body></html>`;
 }
@@ -168,6 +217,40 @@ function leadNotificationMarkup(profile) {
   </body></html>`;
 }
 
+function memberNotificationMarkup(profile) {
+  return `<!doctype html>
+  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
+    <div style="max-width:660px;margin:auto;padding:34px 24px">
+      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // MEMBER PROFILE</div>
+      <h1 style="font-size:28px;margin:18px 0 10px">${escapeHtml(profile.name)} chose ${escapeHtml(memberOptions.interest[profile.interest])}.</h1>
+      <div style="margin:22px 0;border:1px solid #26323e;background:#080c10;padding:18px;line-height:1.7;color:#b8c3cc;font-size:14px">
+        <div><b style="color:#fff">Email:</b> ${escapeHtml(profile.email)}</div>
+        <div><b style="color:#fff">Company / website:</b> ${escapeHtml(profile.company || 'Not provided')}</div>
+        <div><b style="color:#fff">AI stage:</b> ${escapeHtml(memberOptions.aiStage[profile.aiStage])}</div>
+        <div><b style="color:#fff">Main AI use:</b> ${escapeHtml(memberOptions.aiUse[profile.aiUse])}</div>
+        <div><b style="color:#fff">Session:</b> ${escapeHtml(profile.sessionId)}</div>
+        <div><b style="color:#fff">Source:</b> ${escapeHtml(profile.page)}</div>
+      </div>
+      <div style="border-left:3px solid #2e9bff;padding:14px 17px;background:#07111a;color:#e0e7ed;white-space:pre-wrap;line-height:1.6">${escapeHtml(profile.goal)}</div>
+      <p style="margin-top:22px;color:#74818c;font-size:12px">The visitor explicitly agreed that Clone Centre may store these details and contact them about this enquiry. The structured record is stored in HyperChat.</p>
+    </div>
+  </body></html>`;
+}
+
+function memberAcknowledgementMarkup(profile) {
+  const siteUrl = publicSiteUrl();
+  return `<!doctype html>
+  <html><body style="margin:0;background:#050505;color:#e8eef4;font-family:Arial,sans-serif">
+    <div style="max-width:620px;margin:auto;padding:34px 24px">
+      <div style="font:12px monospace;letter-spacing:2px;color:#2e9bff">CLONE CENTRE // PROFILE SAVED</div>
+      <h1 style="font-size:30px;margin:18px 0 12px">Thanks, ${escapeHtml(profile.name)}. You will not need to repeat yourself.</h1>
+      <p style="line-height:1.65;color:#aeb8c2">I have your interest in <b style="color:#fff">${escapeHtml(memberOptions.interest[profile.interest])}</b>, where you are with AI and what you want to achieve. I will reply with the right joining or next-step link.</p>
+      <p style="margin:28px 0"><a style="display:inline-block;border:2px solid #2e9bff;color:#2e9bff;padding:11px 16px;text-decoration:none;font-weight:bold" href="${siteUrl}/community">RETURN TO CLONE CENTRE</a></p>
+      <div style="margin-top:26px;padding-top:18px;border-top:1px solid #26323e;color:#7f8b96;font-size:13px">Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</div>
+    </div>
+  </body></html>`;
+}
+
 async function addNewsletterContact(email, firstName) {
   const segmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID;
   const createBody = { email, first_name: firstName, unsubscribed: false };
@@ -205,7 +288,7 @@ async function subscribe(profile) {
   const result = await sendResendEmail({
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [profile.email],
-    reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
+    reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
     subject: 'Your Clone Centre Prompt Guidebook',
     html: welcomeEmailMarkup(profile.firstName),
     attachments: [{
@@ -216,7 +299,7 @@ async function subscribe(profile) {
   }, `clonecentre-guide/${emailKey}`);
   const notification = await sendResendEmail({
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
-    to: [process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai'],
+    to: [process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
     reply_to: profile.email,
     subject: `New AI profile — ${profile.firstName} · ${profileOptions.aiStage[profile.aiStage]}`,
     html: leadNotificationMarkup(profile),
@@ -301,7 +384,7 @@ async function sendBookingAutomation(trigger, payload, rawBody) {
   const result = await sendResendEmail({
     from: process.env.BOOKING_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [details.email],
-    reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
+    reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
     subject: `${subjectPrefix} — ${details.title}`,
     html,
     tags: [{ name: 'automation', value: trigger.toLowerCase() }]
@@ -349,6 +432,21 @@ function chatTranscriptAllowed(ip) {
   return true;
 }
 
+function memberInterestAllowed(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 60 * 1000;
+  const recent = (memberInterestAttempts.get(ip) || []).filter((attempt) => now - attempt < windowMs);
+  if (recent.length >= 8) return false;
+  recent.push(now);
+  memberInterestAttempts.set(ip, recent);
+  if (memberInterestAttempts.size > 1000) {
+    for (const [key, attempts] of memberInterestAttempts) {
+      if (!attempts.some((attempt) => now - attempt < windowMs)) memberInterestAttempts.delete(key);
+    }
+  }
+  return true;
+}
+
 async function sendDelivery(session) {
   if (session.payment_status !== 'paid') return { skipped: 'payment_not_paid' };
   const email = customerEmail(session);
@@ -367,7 +465,7 @@ async function sendDelivery(session) {
   const result = await sendResendEmail({
     from: process.env.DELIVERY_FROM_EMAIL || 'Clone Centre <books@updates.clonecentre.ai>',
     to: [email],
-    reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
+    reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
     subject: `Your Clone Centre files — ${product.title}`,
     html: emailMarkup(product),
     attachments,
@@ -450,6 +548,7 @@ app.post('/api/subscribe', async (request, response) => {
   const role = String(request.body?.role || '');
   const aiStage = String(request.body?.aiStage || '');
   const goal = String(request.body?.goal || '');
+  const requestedSessionId = String(request.body?.sessionId || '').trim();
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return response.status(400).json({ error: 'valid_email_required' });
   }
@@ -458,12 +557,110 @@ app.post('/api/subscribe', async (request, response) => {
   if (!Object.hasOwn(profileOptions.aiStage, aiStage)) return response.status(400).json({ error: 'valid_ai_stage_required' });
   if (!Object.hasOwn(profileOptions.goal, goal)) return response.status(400).json({ error: 'valid_goal_required' });
   if (request.body?.consent !== true) return response.status(400).json({ error: 'consent_required' });
+  const sessionId = /^cc_[a-z0-9]{8,120}$/i.test(requestedSessionId)
+    ? requestedSessionId
+    : `cc_profile_${createHash('sha256').update(email).digest('hex').slice(0, 24)}`;
+  try {
+    await persistHyperChatLead({
+      sessionId,
+      name: firstName,
+      email,
+      enquiry: [
+        'Prompt Guidebook AI profile',
+        `Context: ${profileOptions.role[role]}`,
+        `AI stage: ${profileOptions.aiStage[aiStage]}`,
+        `Main goal: ${profileOptions.goal[goal]}`
+      ].join('\n'),
+      sourceUrl: `${publicSiteUrl()}/library#guide-gate`
+    });
+  } catch (error) {
+    console.error(JSON.stringify({ type: 'newsletter.storage_failed', reason: error.message }));
+    return response.status(502).json({ error: 'profile_storage_unavailable' });
+  }
   try {
     await subscribe({ email, firstName, role, aiStage, goal });
-    return response.status(201).json({ ok: true });
+    return response.status(201).json({ ok: true, stored: true, emailSent: true });
   } catch (error) {
     console.error(JSON.stringify({ type: 'newsletter.failed', reason: error.message }));
-    return response.status(502).json({ error: 'signup_temporarily_unavailable' });
+    return response.status(202).json({ ok: true, stored: true, emailSent: false });
+  }
+});
+
+app.post('/api/member-interest', async (request, response) => {
+  if (request.get('sec-fetch-site') === 'cross-site') return response.status(403).json({ error: 'cross_site_request_rejected' });
+  if (!memberInterestAllowed(request.ip || 'unknown')) return response.status(429).json({ error: 'too_many_requests' });
+  if (request.body?.fax) return response.status(200).json({ ok: true });
+  const profile = {
+    sessionId: String(request.body?.sessionId || '').trim(),
+    name: String(request.body?.name || '').trim(),
+    email: String(request.body?.email || '').trim().toLowerCase(),
+    company: String(request.body?.company || '').trim(),
+    interest: String(request.body?.interest || ''),
+    aiStage: String(request.body?.aiStage || ''),
+    aiUse: String(request.body?.aiUse || ''),
+    goal: String(request.body?.goal || '').trim(),
+    page: String(request.body?.page || '').trim()
+  };
+  if (!/^cc_[a-z0-9]{8,120}$/i.test(profile.sessionId)) return response.status(400).json({ error: 'valid_session_required' });
+  if (profile.name.length < 2 || profile.name.length > 80) return response.status(400).json({ error: 'valid_name_required' });
+  if (profile.email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) return response.status(400).json({ error: 'valid_email_required' });
+  if (profile.company.length > 160) return response.status(400).json({ error: 'valid_company_required' });
+  if (!Object.hasOwn(memberOptions.interest, profile.interest)) return response.status(400).json({ error: 'valid_interest_required' });
+  if (!Object.hasOwn(memberOptions.aiStage, profile.aiStage)) return response.status(400).json({ error: 'valid_ai_stage_required' });
+  if (!Object.hasOwn(memberOptions.aiUse, profile.aiUse)) return response.status(400).json({ error: 'valid_ai_use_required' });
+  if (profile.goal.length < 5 || profile.goal.length > 1500) return response.status(400).json({ error: 'valid_goal_required' });
+  if (request.body?.consent !== true) return response.status(400).json({ error: 'consent_required' });
+  try {
+    const pageUrl = new URL(profile.page);
+    if (!['http:', 'https:'].includes(pageUrl.protocol)) throw new Error('invalid protocol');
+  } catch {
+    return response.status(400).json({ error: 'valid_page_required' });
+  }
+  const enquiry = [
+    `Interest: ${memberOptions.interest[profile.interest]}`,
+    `AI stage: ${memberOptions.aiStage[profile.aiStage]}`,
+    `Main AI use: ${memberOptions.aiUse[profile.aiUse]}`,
+    `Goal: ${profile.goal}`
+  ].join('\n');
+  try {
+    await persistHyperChatLead({
+      sessionId: profile.sessionId,
+      name: profile.name,
+      email: profile.email,
+      company: profile.company,
+      enquiry,
+      sourceUrl: profile.page
+    });
+  } catch (error) {
+    console.error(JSON.stringify({ type: 'member.storage_failed', session: profile.sessionId, reason: error.message }));
+    return response.status(502).json({ error: 'profile_storage_unavailable' });
+  }
+
+  const eventKey = createHash('sha256').update(`${profile.sessionId}:${profile.interest}:${profile.email}`).digest('hex').slice(0, 32);
+  try {
+    const [notification, acknowledgement] = await Promise.all([
+      sendResendEmail({
+        from: process.env.MEMBER_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
+        to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
+        reply_to: profile.email,
+        subject: `Clone Centre enquiry — ${memberOptions.interest[profile.interest]} · ${profile.name}`.slice(0, 190),
+        html: memberNotificationMarkup(profile),
+        tags: [{ name: 'automation', value: 'member_interest' }]
+      }, `clonecentre-member-notify/${eventKey}`),
+      sendResendEmail({
+        from: process.env.MEMBER_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
+        to: [profile.email],
+        reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
+        subject: 'Your Clone Centre profile is saved',
+        html: memberAcknowledgementMarkup(profile),
+        tags: [{ name: 'automation', value: 'member_acknowledgement' }]
+      }, `clonecentre-member-ack/${eventKey}`)
+    ]);
+    console.info(JSON.stringify({ type: 'member.saved', session: profile.sessionId, notification_id: notification.id, acknowledgement_id: acknowledgement.id }));
+    return response.status(201).json({ ok: true, stored: true, emailSent: true });
+  } catch (error) {
+    console.error(JSON.stringify({ type: 'member.email_pending', session: profile.sessionId, reason: error.message }));
+    return response.status(202).json({ ok: true, stored: true, emailSent: false });
   }
 });
 
@@ -512,8 +709,8 @@ app.post('/api/chat-transcript', async (request, response) => {
   try {
     const result = await sendResendEmail({
       from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
-      to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai'],
-      reply_to: process.env.DELIVERY_REPLY_TO || 'hello@clonecentre.ai',
+      to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
+      reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
       subject: `Clone Centre AI chat — ${pageLabel.slice(0, 120)}`,
       html: chatTranscriptEmailMarkup({ conversationId, sessionId, page, title, messages }),
       tags: [{ name: 'automation', value: 'chat_transcript' }]
@@ -549,6 +746,8 @@ app.get('/api/health', (_request, response) => {
     delivery_configured: Boolean(process.env.STRIPE_WEBHOOK_SECRET && process.env.RESEND_API_KEY),
     newsletter_configured: Boolean(process.env.RESEND_API_KEY),
     chat_transcripts_configured: Boolean(process.env.RESEND_API_KEY && (process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO)),
+    member_capture_configured: Boolean(hyperChatBaseUrl && hyperChatProjectId),
+    member_notifications_configured: Boolean(process.env.RESEND_API_KEY && (process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO)),
     booking_links_configured: Boolean(process.env.CAL_PROFILE_URL && process.env.CAL_AI_FIX_URL && process.env.CAL_AI_POWER_URL && process.env.CAL_BUILD_PARTNER_URL),
     booking_automation_configured: Boolean(process.env.CAL_WEBHOOK_SECRET && process.env.RESEND_API_KEY),
     delivery_mode: dryRun ? 'dry_run' : 'live'
@@ -566,6 +765,7 @@ for (const page of ['about', 'community', 'coaching', 'library', 'products']) {
   app.get(`/${page}`, (_request, response) => sendHtml(response, 'index.html'));
 }
 app.get('/order-complete', (_request, response) => sendHtml(response, 'order-complete.html'));
+app.get('/chatbot-knowledge', (_request, response) => sendHtml(response, 'chatbot-knowledge.html'));
 app.use('/books/Clone_Centre_Prompt_Guidebook.pdf', (_request, response) => response.status(404).json({ error: 'guide_request_required' }));
 app.use('/books/paid', (_request, response) => response.status(404).json({ error: 'not_found' }));
 app.use(express.static(publicDir, {

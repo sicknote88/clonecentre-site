@@ -9,7 +9,7 @@ COPY server.js ./server.js
 COPY fulfillment ./fulfillment
 
 RUN mkdir -p /app/public /app/private/books
-COPY index.html goal-tracker.html order-complete.html /app/public/
+COPY index.html goal-tracker.html order-complete.html chatbot-knowledge.html /app/public/
 COPY assets /app/public/assets
 
 # Paid files are intentionally gitignored and are included only by the private
