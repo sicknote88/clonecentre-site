@@ -5,12 +5,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-COPY server.js member-store.js email-templates.js ./
+COPY server.js member-store.js email-templates.js os-worker.js ./
 COPY fulfillment ./fulfillment
+COPY scripts ./scripts
 
 RUN mkdir -p /app/public /app/private/books
-COPY index.html member.html goal-tracker.html order-complete.html chatbot-knowledge.html /app/public/
+COPY index.html member.html goal-tracker.html order-complete.html chatbot-knowledge.html os.html trend-map.html /app/public/
 COPY assets /app/public/assets
+COPY public-data /app/public-data
+COPY os-data /app/os-data
 
 # Paid files are intentionally gitignored and are included only by the private
 # Railway CLI deployment (`railway up --no-gitignore`). They are never served

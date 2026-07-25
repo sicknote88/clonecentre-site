@@ -49,6 +49,12 @@ The dedicated service stores:
 - Resend sending domain: `updates.clonecentre.ai`
 - Railway member database: dedicated `Postgres` service connected through `DATABASE_URL`
 
+## Public trends map
+
+`/trends` serves `trend-map.html`, a Three.js 3D mindmap of real AI search data. The data lives in `public-data/trend-map.json` (mounted at `/data`) and is regenerated locally with `npm run trends` (`scripts/refresh-trends.mjs`), which pulls Google autocomplete, YouTube suggest and Google Trends daily RSS (geo GB) — all unauthenticated.
+
+In production the server refreshes the snapshot itself: every Monday from 06:00 UTC it re-runs the script in-process when the data is more than 6 days old (set `TRENDS_REFRESH_DISABLED=1` to opt out). A manual refresh can be triggered with `POST /api/trends/refresh` and an `Authorization: Bearer <TRENDS_REFRESH_TOKEN>` header. Because container filesystems are replaced on redeploy, the committed JSON in git is the baseline — re-run `npm run trends` locally and commit occasionally to keep the baseline fresh. `CONTENT_SPRINT_PLAN.md` drives the content calendar from the same data.
+
 ## Required Railway variables
 
 See `.env.example` for the complete list. Secrets must only be stored in Railway and their source dashboards; never commit them.

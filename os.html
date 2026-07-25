@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CloneCentre OS — Creative operations</title>
+  <meta name="description" content="Create, publish, measure and improve every campaign from one focused operating system.">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07100e;--bg2:#091613;--panel:#0d1b18;--panel2:#10231f;--line:#20342f;
+      --text:#f5f7f4;--muted:#8da09a;--dim:#5e726c;--acid:#c9ff58;--cyan:#74e8ff;
+      --amber:#ffca68;--red:#ff7a72;--white:#fff;--shadow:0 28px 80px #0008
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;color:var(--text);background:
+      radial-gradient(circle at 82% -10%,#16362f 0,transparent 30%),
+      linear-gradient(180deg,var(--bg2),var(--bg));font:14px Manrope,Arial,sans-serif;min-height:100vh}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #2e9bff;outline-offset:2px}
+    .shell{min-height:100vh;display:grid;grid-template-columns:244px minmax(0,1fr)}
+    .rail{height:100vh;position:sticky;top:0;border-right:1px solid var(--line);padding:25px 18px 20px;background:#081310e8;backdrop-filter:blur(22px);z-index:10;display:flex;flex-direction:column}
+    .logo{display:flex;align-items:center;gap:11px;padding:0 8px}
+    .logo-image{width:40px;height:40px;border-radius:12px;object-fit:cover;box-shadow:0 7px 20px #1c5f921f}
+    .logo-mark{width:35px;height:35px;border:1px solid #5d8479;border-radius:12px;display:grid;place-items:center;position:relative;background:#10211d;box-shadow:inset 0 0 18px #75ffca12}
+    .logo-mark:before{content:"";width:9px;height:9px;border:2px solid var(--acid);border-radius:3px;transform:rotate(45deg);box-shadow:0 0 18px #c9ff5866}
+    .logo b{display:block;font-size:16px;letter-spacing:-.7px}.logo small{display:block;color:var(--dim);font:8px DM Mono;letter-spacing:1.5px;margin-top:2px}
+    .workspace{margin:27px 5px 23px;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#0d1a17;display:flex;align-items:center;gap:9px}
+    .workspace .avatar{width:29px;height:29px;border-radius:9px;background:linear-gradient(135deg,var(--acid),#56c9a6);color:#0b1714;display:grid;place-items:center;font-weight:800}
+    .workspace .avatar-image{width:29px;height:29px;border-radius:9px;object-fit:cover}
+    .workspace b{font-size:11px;display:block}.workspace span{font-size:9px;color:var(--muted)}
+    .nav-label{font:9px DM Mono;color:var(--dim);letter-spacing:1.3px;padding:0 13px;margin:0 0 9px}
+    nav{display:grid;gap:4px}
+    nav button{border:0;background:transparent;color:#81968f;border-radius:12px;padding:11px 12px;text-align:left;font-weight:700;font-size:12px;display:flex;align-items:center;gap:11px;transition:.2s}
+    nav button:hover{color:#dce8e4;background:#10201c}
+    nav button.on{background:#162720;color:var(--white);box-shadow:inset 2px 0 var(--acid)}
+    .nav-icon{width:20px;height:20px;border:1px solid #375149;border-radius:7px;display:grid;place-items:center;font:9px DM Mono;color:#91aaa2}
+    nav button.on .nav-icon{color:var(--acid);border-color:#6b8f66;background:#172b20}
+    .rail-foot{margin-top:auto;border-top:1px solid var(--line);padding:17px 9px 0}
+    .system-line{display:flex;align-items:center;gap:8px;font:9px DM Mono;color:#8da69e;letter-spacing:.4px}
+    .system-line i{width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px var(--acid)}
+    .system-line + p{font-size:9px;color:var(--dim);line-height:1.5;margin:8px 0 0}
+    .main{min-width:0;padding:25px clamp(20px,3.2vw,52px) 60px}
+    .topbar{height:55px;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:30px}
+    .eyebrow{font:9px DM Mono;color:#719187;letter-spacing:1.4px;text-transform:uppercase}
+    h1{font-size:clamp(27px,3vw,40px);letter-spacing:-2px;line-height:1.04;margin:8px 0 0}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .sync{display:flex;align-items:center;gap:8px;color:var(--muted);font:9px DM Mono}
+    .sync:before{content:"";width:6px;height:6px;background:var(--acid);border-radius:50%}
+    .icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#0d1a17;color:#a8bbb5}
+    .icon-btn:hover{border-color:#4b6d63;color:var(--white)}
+    .view{display:none;animation:rise .3s ease}.view.on{display:block}@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:16px}
+    .mission{min-height:278px;border:1px solid #315047;border-radius:24px;padding:27px;background:
+      linear-gradient(125deg,#122820 0,#0d1a17 66%),var(--panel);position:relative;overflow:hidden}
+    .mission:after{content:"";position:absolute;width:330px;height:330px;border:1px solid #2f5147;border-radius:50%;right:-120px;top:-150px;box-shadow:0 0 0 40px #25483f22,0 0 0 80px #25483f12}
+    .mission-label{font:9px DM Mono;color:var(--acid);letter-spacing:1.5px;position:relative;z-index:1}
+    .mission h2{font-size:clamp(28px,3.4vw,48px);line-height:1.02;letter-spacing:-2.8px;max-width:690px;margin:34px 0 17px;position:relative;z-index:1}
+    .mission p{color:#a8bbb5;max-width:600px;line-height:1.6;margin:0;position:relative;z-index:1}
+    .mission-actions{display:flex;gap:10px;margin-top:23px;position:relative;z-index:1}
+    .primary,.secondary,.danger{border-radius:11px;padding:11px 14px;font-weight:800;font-size:11px;border:1px solid transparent}
+    .primary{background:var(--acid);color:#0b160f;box-shadow:0 8px 30px #bfff4522}.primary:hover{background:#d7ff81}
+    .secondary{background:#12231f;color:#dbe6e2;border-color:#2a443c}.secondary:hover{border-color:#57776e}
+    .danger{background:#241816;color:#ffb3ad;border-color:#51312c}
+    .orbit{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#0e1d1a,#0a1613);padding:23px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}
+    .orbit:before{content:"";position:absolute;inset:48px auto auto 50%;width:148px;height:148px;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 34% 30%,#e5ffac,var(--acid) 9%,#327f63 34%,#10251f 58%,transparent 60%);box-shadow:0 0 50px #c9ff5822}
+    .orbit-top{display:flex;justify-content:space-between;font:9px DM Mono;color:var(--dim)}
+    .orbit strong{font-size:50px;letter-spacing:-4px;position:relative;margin-top:118px}.orbit strong small{font-size:14px;letter-spacing:0;color:var(--muted)}
+    .orbit p{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
+    .orbit-logo{width:118px;height:118px;border-radius:26px;object-fit:cover;align-self:center;margin:20px auto 13px;box-shadow:0 20px 42px #1e65902e;border:1px solid #cae3f6}
+    .orbit .brand-count{margin-top:0}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+    .stat{border:1px solid var(--line);border-radius:17px;background:#0c1916;padding:18px;min-height:108px;position:relative;overflow:hidden}
+    .stat:after{content:"";position:absolute;width:55px;height:55px;border:1px solid #1d3830;border-radius:50%;right:-20px;bottom:-23px}
+    .stat span{font:9px DM Mono;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.stat b{display:block;font-size:30px;letter-spacing:-2px;margin-top:11px}.stat em{font-style:normal;font-size:10px;color:var(--dim)}
+    .split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:16px}
+    .panel{border:1px solid var(--line);border-radius:19px;background:#0b1815;overflow:hidden}
+    .panel-head{padding:19px 20px 15px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:1px solid var(--line)}
+    .panel-head h2,.section-title h2{font-size:16px;letter-spacing:-.6px;margin:0}.panel-head p,.section-title p{font-size:10px;color:var(--muted);margin:5px 0 0}
+    .text-btn{border:0;background:none;color:var(--acid);font:9px DM Mono;padding:5px}
+    .decision-list{padding:5px 18px}
+    .decision-row{display:grid;grid-template-columns:45px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #172a25;cursor:pointer}
+    .decision-row:last-child{border:0}.decision-row:hover b{color:var(--acid)}
+    .mini-art{width:45px;height:45px;border-radius:10px;object-fit:cover;background:linear-gradient(135deg,#1d3b32,#13211e)}
+    .decision-row b{font-size:11px;display:block;transition:.15s}.decision-row small{font-size:9px;color:var(--muted);display:block;margin-top:4px}
+    .status{font:8px DM Mono;padding:6px 8px;border-radius:8px;border:1px solid #394943;color:#aab9b4;text-transform:uppercase;white-space:nowrap}
+    .status.approved{color:var(--acid);border-color:#446638;background:#15251a}.status.changes_requested{color:var(--amber);border-color:#594a2d;background:#211d15}.status.discarded{color:#d08b86;border-color:#4b302e;background:#201614}
+    .queue-compact{padding:7px 18px}.queue-tick{display:grid;grid-template-columns:42px 1fr;gap:12px;padding:13px 0;position:relative}
+    .queue-tick:not(:last-child):after{content:"";position:absolute;left:20px;top:44px;bottom:-10px;width:1px;background:#29443b}
+    .date-box{width:42px;height:42px;border-radius:11px;background:#12231f;border:1px solid #284139;text-align:center;padding-top:7px;position:relative;z-index:1}
+    .date-box b{display:block;font-size:13px}.date-box span{font:7px DM Mono;color:var(--acid)}
+    .queue-tick strong{font-size:10px;display:block;margin:2px 0 4px}.queue-tick p{font-size:9px;color:var(--muted);margin:0}
+    .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:0 0 20px}
+    .filters{display:flex;gap:8px}
+    select,.input,textarea{border:1px solid var(--line);background:#0d1b18;color:#dbe6e2;border-radius:11px;padding:10px 12px;outline:none}
+    select:focus,.input:focus,textarea:focus{border-color:#5c7f73;box-shadow:0 0 0 3px #75ffca0d}
+    .studio-layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}
+    .creative-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .creative-card{border:1px solid var(--line);background:#0c1916;border-radius:17px;overflow:hidden;text-align:left;color:var(--text);padding:0;transition:.2s;min-width:0}
+    .creative-card:hover,.creative-card.selected{transform:translateY(-2px);border-color:#527166;box-shadow:0 14px 40px #0005}
+    .creative-card.selected{box-shadow:0 0 0 1px var(--acid),0 14px 40px #0005}
+    .creative-art{aspect-ratio:4/5;width:100%;object-fit:cover;background:linear-gradient(145deg,#203c34,#0b1714);display:block}
+    .creative-copy{padding:13px}.creative-copy .brand-line{display:flex;justify-content:space-between;gap:8px;font:8px DM Mono;color:var(--muted);text-transform:uppercase}
+    .creative-copy h3{font-size:12px;line-height:1.3;margin:10px 0 6px}.creative-copy p{font-size:9px;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .reviewer{position:sticky;top:20px;border:1px solid #2c4840;border-radius:19px;background:#0d1c18;overflow:hidden;min-height:520px}
+    .review-empty{min-height:520px;display:grid;place-items:center;text-align:center;padding:35px;color:var(--muted)}
+    .review-empty i{display:block;width:58px;height:58px;border:1px solid #315046;border-radius:18px;margin:0 auto 15px;transform:rotate(45deg);box-shadow:inset 0 0 30px #c9ff580a}
+    .review-body{padding:20px}.review-kicker{font:8px DM Mono;color:var(--acid);letter-spacing:1px}.review-body h2{font-size:22px;line-height:1.1;letter-spacing:-1px;margin:12px 0 8px}
+    .review-sub{color:var(--muted);font-size:11px;line-height:1.5;margin:0 0 16px}.scoreline{display:flex;gap:8px;margin:14px 0}
+    .score{padding:7px 9px;border:1px solid var(--line);border-radius:9px;font:8px DM Mono;color:#aebeb9}.score b{color:var(--acid)}
+    .caption-box{background:#091512;border:1px solid #1d322c;border-radius:12px;padding:13px;font-size:10px;color:#9fb0aa;line-height:1.55;max-height:145px;overflow:auto;white-space:pre-wrap}
+    textarea{width:100%;min-height:72px;resize:vertical;margin-top:12px;font-size:10px}
+    .review-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.review-actions .danger{grid-column:1/-1}
+    .queue-board{display:grid;gap:9px}
+    .queue-card{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:16px;align-items:center;border:1px solid var(--line);border-radius:16px;background:#0b1815;padding:16px 18px;overflow:hidden}
+    .queue-card.paused{opacity:.55}.queue-time{font:10px DM Mono;color:var(--acid)}.queue-time b{display:block;color:var(--text);font-size:12px;margin-bottom:5px}
+    .queue-card>div:nth-child(2){min-width:0}.queue-card h3{font-size:12px;margin:0 0 5px}.queue-card p{font-size:9px;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .queue-state{display:flex;align-items:center;gap:10px}.switch{width:42px;height:24px;border:1px solid #48645c;border-radius:20px;background:#172a25;padding:3px;transition:.2s}
+    .switch:after{content:"";display:block;width:16px;height:16px;border-radius:50%;background:var(--acid);margin-left:18px;transition:.2s}.paused .switch:after{margin-left:0;background:#73827d}
+    .learning-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .signal-panel{border:1px solid #315047;border-radius:22px;background:linear-gradient(145deg,#11261f,#0a1714);padding:25px;min-height:260px}
+    .signal-panel .tagline{font:9px DM Mono;color:var(--cyan);letter-spacing:1.2px}.signal-panel h2{font-size:29px;letter-spacing:-1.7px;line-height:1.08;margin:35px 0 13px;max-width:600px}
+    .signal-panel p{color:var(--muted);line-height:1.6;max-width:580px}.funnel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:24px}
+    .funnel div{border:1px solid var(--line);background:#0a1714;border-radius:12px;padding:13px}.funnel span{font:8px DM Mono;color:var(--dim)}.funnel b{display:block;font-size:20px;margin-top:8px}
+    .learning-steps{padding:20px}.step{display:grid;grid-template-columns:28px 1fr;gap:11px;padding:11px 0;border-bottom:1px solid #172a25}.step:last-child{border:0}
+    .step i{width:28px;height:28px;border:1px solid #38564e;border-radius:9px;display:grid;place-items:center;font:8px DM Mono;color:var(--acid);font-style:normal}
+    .step b{font-size:10px;display:block}.step p{font-size:9px;color:var(--muted);margin:4px 0 0;line-height:1.5}
+    .connection-groups{display:grid;gap:25px}.group-label{font:9px DM Mono;color:var(--muted);letter-spacing:1.1px;text-transform:uppercase;margin:0 0 10px}
+    .connection-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+    .connection-card{border:1px solid var(--line);border-radius:17px;background:#0b1815;padding:17px;min-height:238px;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s}
+    .connection-card:hover{transform:translateY(-3px);border-color:#4c7166;box-shadow:0 16px 42px #0004}
+    .connection-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.provider-mark{width:37px;height:37px;border-radius:12px;background:#152822;border:1px solid #304b43;display:grid;place-items:center;font-weight:800;color:var(--acid)}
+    .connection-state{font:7px DM Mono;padding:5px 7px;border-radius:7px;border:1px solid #3b504a;color:var(--muted);text-transform:uppercase}.connection-state.connected{color:var(--acid);border-color:#4d713e}.connection-state.ready_to_connect{color:var(--cyan);border-color:#38636c}
+    .connection-card h3{font-size:13px;margin:13px 0 4px}.connection-card>p{font-size:9px;color:var(--muted);margin:0}.caps{display:flex;flex-wrap:wrap;gap:5px;margin:13px 0}.cap{font-size:7px;color:#9cafa9;border:1px solid #203a33;border-radius:6px;padding:4px 6px}
+    .connection-card button{margin-top:auto;width:100%}.connection-next{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:4px 0 10px;font:8px DM Mono;color:var(--muted)}.connection-next b{color:var(--text);font-weight:500}.connection-progress{height:5px;border-radius:10px;background:#1b302a;overflow:hidden;margin:0 0 13px}.connection-progress i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--acid),var(--cyan));transition:width .4s ease}.connection-button{display:flex;align-items:center;justify-content:space-between}.connection-button span:last-child{font-size:15px;transition:transform .2s}.connection-button:hover span:last-child{transform:translateX(3px)}
+    .connection-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.summary-cell{border:1px solid var(--line);border-radius:11px;padding:11px;background:var(--panel2)}.summary-cell span{display:block;font:7px DM Mono;color:var(--dim);text-transform:uppercase}.summary-cell b{display:block;font-size:10px;margin-top:7px}.connection-steps,.unlock-grid{display:grid;gap:7px}.connection-step{display:grid;grid-template-columns:25px 1fr auto;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:9px}.connection-step i{width:25px;height:25px;border-radius:8px;background:var(--panel2);display:grid;place-items:center;font:8px DM Mono;color:var(--acid);font-style:normal}.connection-step b{font-size:9px}.connection-step small{display:block;font-size:8px;color:var(--muted);margin-top:2px}.step-state{font:7px DM Mono;color:var(--muted);text-transform:uppercase}.step-state.done{color:var(--acid)}.modal-subhead{font:8px DM Mono;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin:19px 0 8px}.unlock-grid{grid-template-columns:1fr 1fr}.unlock-item{display:flex;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:9px;line-height:1.4}.unlock-item:before{content:"↗";color:var(--acid);font:9px DM Mono}.connection-modal-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}.connection-modal-actions p{font:8px DM Mono;margin:0;max-width:250px}
+    .lab-overview{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-bottom:14px}
+    .lab-principle{border:1px solid #b9d8f3;border-radius:19px;background:linear-gradient(135deg,#fff,#edf7ff);padding:22px;box-shadow:0 12px 34px #1d5b8910}
+    .lab-principle .eyebrow{color:#087ee9}.lab-principle h2{font-size:25px;letter-spacing:-1.2px;line-height:1.1;margin:24px 0 10px}.lab-principle p{color:#62788d;line-height:1.6;max-width:620px}
+    .test-rules{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:18px}.test-rule{background:#fff;border:1px solid #d6e5ef;border-radius:11px;padding:11px}.test-rule b{display:block;font-size:10px}.test-rule span{font-size:8px;color:#718499}
+    .metric-contract{padding:18px}.metric-contract h3{font-size:13px;margin:0 0 5px}.metric-contract>p{font-size:9px;color:#718499;margin:0 0 15px}.metric-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.metric-pill{border:1px solid #dce7ef;border-radius:10px;padding:9px;background:#fbfdff}.metric-pill b{font:9px DM Mono;color:#087ee9}.metric-pill span{display:block;font-size:8px;color:#75889b;margin-top:4px}
+    .experiment-stack{display:grid;gap:12px}.experiment{border:1px solid #dce7ef;border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 10px 30px #1a4e750d}
+    .experiment-head{padding:17px 19px;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #e6edf3}.experiment-head h3{font-size:14px;margin:0 0 4px}.experiment-head p{font-size:9px;color:#718499;margin:0}
+    .variant-table{overflow:auto}.variant-row{min-width:960px;display:grid;grid-template-columns:50px 115px 1fr 1fr 135px repeat(4,70px) 90px;gap:8px;align-items:center;padding:11px 16px;border-bottom:1px solid #edf2f5}
+    .variant-row.header{background:#f8fbfd;font:8px DM Mono;color:#718499;text-transform:uppercase}.variant-row:last-child{border:0}.variant-key{width:32px;height:32px;border-radius:9px;background:#eaf5ff;border:1px solid #acd5f7;color:#087be3;display:grid;place-items:center;font-weight:800}.variant-row b{font-size:9px}.variant-row span{font-size:8px;color:#6f8396}.metric-empty{font:9px DM Mono;color:#92a1af}
+    .experiment-foot{padding:12px 16px;background:#fbfdff;border-top:1px solid #e7eef3;display:flex;justify-content:space-between;align-items:center}.experiment-foot p{font-size:8px;color:#74889a;margin:0}
+    .empty-lab{border:1px dashed #b8d5ec;border-radius:18px;background:#f9fcff;padding:38px;text-align:center;color:#667d91}.empty-lab h3{color:#10263d;margin:0 0 8px}.empty-lab p{font-size:10px;margin:0 auto 17px;max-width:480px;line-height:1.6}
+    .generation-strip{margin-top:12px;border:1px solid #dce7ef;border-radius:14px;background:#fbfdff;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.generation-strip b{font-size:10px}.generation-strip p{font-size:8px;color:#718499;margin:3px 0 0}.job-list{display:flex;gap:6px;overflow:auto}.job-chip{white-space:nowrap;border:1px solid #cfe1ef;border-radius:8px;background:#fff;padding:6px 8px;font:8px DM Mono;color:#537087;display:inline-flex;align-items:center;gap:7px}
+    .job-thumb{width:26px;height:26px;border-radius:6px;object-fit:cover;border:1px solid #cfe1ef}.job-error{color:var(--red);max-width:180px;overflow:hidden;text-overflow:ellipsis}
+    .job-status{font:7px DM Mono;padding:3px 6px;border-radius:6px;border:1px solid #d5e1ea;color:#6c8093;background:#f8fafc;text-transform:uppercase;letter-spacing:.5px}
+    .job-status.queued{color:#a46a0c;border-color:#ecd7ad;background:#fff8ea}.job-status.processing{color:#006bbd;border-color:#9acdf4;background:#edf7ff}
+    .job-status.completed{color:#0874d6;border-color:#a9d5fb;background:#eaf5ff}.job-status.failed{color:#bd4d46;border-color:#edc9c6;background:#fff6f5}
+    .data-state{font:8px DM Mono;letter-spacing:1px;padding:5px 8px;border-radius:7px;border:1px solid #cfe1ef;color:#537087;background:#fff;text-transform:uppercase}
+    .data-state.live{color:#0874d6;border-color:#a9d5fb;background:#eaf5ff}.data-state.waiting{color:#a46a0c;border-color:#ecd7ad;background:#fff8ea}
+    .variant-detail{border-bottom:1px solid #edf2f5;padding:0 16px 13px}.variant-detail[hidden]{display:none}
+    .metric-chips{display:flex;flex-wrap:wrap;gap:5px}.metric-chip{font:8px DM Mono;color:#537087;border:1px solid #cfe1ef;border-radius:7px;background:#f8fbfd;padding:4px 7px}
+    .metric-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px;border:1px dashed #cfe1ef;border-radius:12px;background:#f8fbfd;padding:12px}
+    .metric-form .form-field label{font:8px DM Mono;color:#667e93;text-transform:uppercase;letter-spacing:.8px}.metric-form input,.metric-form select{padding:7px 9px;font-size:11px}
+    .metric-form .form-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px}
+    .publication-list{margin-top:10px;border:1px solid #dce7ef;border-radius:14px;background:#fbfdff;padding:13px 14px}.publication-list>b{font-size:10px;display:block;margin-bottom:9px}
+    .publication-row{display:flex;align-items:center;gap:9px;padding:6px 0;border-top:1px solid #edf2f5;font:8px DM Mono;color:#537087}.publication-row small{margin-left:auto;color:#92a1af}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-field{display:grid;gap:6px}.form-field[hidden]{display:none}.form-field.full{grid-column:1/-1}.form-field label{font:8px DM Mono;color:#667e93;text-transform:uppercase;letter-spacing:.8px}.form-field textarea{margin:0;min-height:110px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+    .field-hint{font-size:9px;color:var(--amber);margin:2px 0 0}
+    .brand-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .brand-card{border:1px solid #dce7ef;border-radius:14px;background:#fff;padding:16px;box-shadow:0 8px 24px #1a4e750d;display:grid;gap:10px;align-content:start}
+    .brand-card h3{font-size:14px;margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .brand-card p{font-size:10px;color:#718499;margin:0;line-height:1.6}
+    .brand-badge{font:7px DM Mono;color:#0c4d2e;background:var(--acid);border-radius:6px;padding:3px 6px;text-transform:uppercase;letter-spacing:1px}
+    .brand-swatches{display:flex;gap:6px;flex-wrap:wrap}.brand-swatches i{width:22px;height:22px;border-radius:7px;border:1px solid #0002}
+    .brand-card .modal-actions{margin-top:0}
+    .palette-list{display:grid;gap:7px}.palette-row{display:flex;align-items:center;gap:7px}.palette-row input[type="color"]{width:38px;height:32px;padding:2px;border:1px solid var(--line);border-radius:8px;background:transparent}.palette-row button{padding:5px 10px;font-size:9px}
+    .visually-hidden{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+    label.primary{display:inline-block;cursor:pointer}
+    .asset-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .asset-card{border:1px solid #dce7ef;border-radius:14px;background:#fff;overflow:hidden;box-shadow:0 8px 24px #1a4e750d}
+    .asset-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:linear-gradient(145deg,#eaf5ff,#d7ebfb)}
+    .asset-icon{aspect-ratio:4/3;display:grid;place-items:center;font:11px DM Mono;color:#087ee8;background:linear-gradient(145deg,#eaf5ff,#d7ebfb)}
+    .asset-meta{padding:10px 12px}.asset-meta b{display:block;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.asset-meta span{display:block;font:8px DM Mono;color:#718499;margin-top:4px}
+    .job-thumbs{display:inline-flex;gap:4px}
+    .job-video{width:64px;height:36px;border-radius:6px;border:1px solid #cfe1ef;background:#000;object-fit:cover}
+    dialog{color:var(--text);background:#0c1a17;border:1px solid #385a50;border-radius:20px;width:min(500px,calc(100vw - 30px));padding:0;box-shadow:var(--shadow)}
+    #setup-dialog{width:min(680px,calc(100vw - 30px))}
+    dialog::backdrop{background:#020706cc;backdrop-filter:blur(6px)}.modal{padding:23px}.modal-top{display:flex;justify-content:space-between;align-items:flex-start}.modal h2{font-size:22px;margin:5px 0}.modal p{font-size:11px;color:var(--muted);line-height:1.6}.modal ol{padding-left:20px;color:#c2d0cc;font-size:11px;line-height:1.7}.modal .close{border:0;background:transparent;color:var(--muted);font-size:20px}
+    .toast{position:fixed;right:24px;bottom:24px;background:#d8ff82;color:#0b1712;border-radius:12px;padding:12px 15px;font-weight:800;font-size:10px;box-shadow:var(--shadow);z-index:40;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}.toast.on{opacity:1;transform:none}
+    .skeleton{background:linear-gradient(90deg,#11221e,#182d27,#11221e);background-size:200% 100%;animation:shimmer 1.3s infinite}@keyframes shimmer{to{background-position:-200% 0}}
+
+    /* Clone Centre light system: white operating surfaces, electric-blue signal. */
+    :root{
+      --bg:#f3f7fb;--bg2:#fbfdff;--panel:#fff;--panel2:#edf6ff;--line:#dce6f0;
+      --text:#0b1b31;--muted:#62758b;--dim:#8b9bad;--acid:#2e9bff;--cyan:#006fd6;
+      --amber:#d98b16;--red:#d84941;--white:#fff;--shadow:0 24px 70px #1c4d7a1a
+    }
+    html{background:var(--bg)}
+    body{background:
+      radial-gradient(circle at 78% -12%,#d8ecff 0,transparent 32%),
+      linear-gradient(180deg,#fbfdff,var(--bg));color:var(--text)}
+    .rail{background:#fffffff2;border-color:var(--line);box-shadow:8px 0 28px #173c5c08}
+    .logo-mark{border-color:#b8d8f5;background:#edf7ff;box-shadow:inset 0 0 18px #2e9bff12}
+    .logo-mark:before{border-color:var(--acid);box-shadow:0 0 15px #2e9bff44}
+    .logo small,.nav-label{color:#8a9caf}
+    .workspace{background:#f5f9fd;border-color:#dbe6ef}
+    .workspace .avatar{background:linear-gradient(135deg,#127eea,#5ab4ff);color:#fff}
+    .workspace span{color:#7f92a6}
+    nav button{color:#6c7e92}
+    nav button:hover{color:#0b1b31;background:#f1f7fd}
+    nav button.on{background:#e9f4ff;color:#0b1b31;box-shadow:inset 3px 0 var(--acid)}
+    .nav-icon{border-color:#c9d8e6;color:#70869a;background:#fff}
+    nav button.on .nav-icon{color:#067be6;border-color:#8bc6fb;background:#fff}
+    .rail-foot{border-color:#e3ebf2}
+    .system-line{color:#61778d}.system-line i{background:var(--acid);box-shadow:0 0 12px #2e9bff77}
+    .system-line + p{color:#91a0af}
+    .main{max-width:1680px;margin:0 auto}
+    .topbar{height:68px;border-bottom:1px solid #e2eaf1;padding-bottom:18px;margin-bottom:28px}
+    .eyebrow{color:#6c87a0}
+    .sync{color:#667c91}.sync:before{background:var(--acid)}
+    .icon-btn{background:#fff;border-color:#d9e5ef;color:#48708f;box-shadow:0 5px 18px #244b6b0d}
+    .icon-btn:hover{border-color:#86c4fb;color:#0579e3}
+    .mission{border-color:#b9d9f6;background:
+      linear-gradient(125deg,#fff 0,#eef7ff 68%);box-shadow:0 18px 50px #1b679c10}
+    .mission:after{border-color:#b9dbf8;box-shadow:0 0 0 40px #d9edff88,0 0 0 80px #eef7ff}
+    .mission-label{color:#087eea}.mission p{color:#5e7489}
+    .primary{background:var(--acid);color:#fff;box-shadow:0 9px 25px #2e9bff2e}
+    .primary:hover{background:#147fdf}
+    .secondary{background:#fff;color:#15324d;border-color:#cbdbe8}
+    .secondary:hover{border-color:#72b9f7;color:#0879df}
+    .danger{background:#fff7f6;color:#bd3d36;border-color:#f2cbc8}
+    .orbit{border-color:#cbddeb;background:linear-gradient(180deg,#fff,#f4f9fd);box-shadow:0 18px 50px #1b679c0e}
+    .orbit:before{display:none}
+    .orbit-top{color:#71879a}.orbit strong small,.orbit p{color:#6c8194}
+    .stat{background:#fff;border-color:#dde7ef;box-shadow:0 8px 25px #1b4d7510}
+    .stat:after{border-color:#dceeff}.stat span{color:#70849a}.stat em{color:#8a9caf}
+    .panel{background:#fff;border-color:#dce7ef;box-shadow:0 12px 35px #1a4e7510}
+    .panel-head{border-color:#e3ebf2;background:#fbfdff}
+    .panel-head p,.section-title p{color:#718499}
+    .text-btn{color:#087fe9}
+    .decision-row{border-color:#edf1f5}.decision-row:hover b{color:#087fe9}
+    .mini-art{background:linear-gradient(135deg,#e8f4ff,#d8ebfb)}
+    .decision-row small{color:#77899c}
+    .status{border-color:#d5e1ea;color:#6c8093;background:#f8fafc}
+    .status.approved{color:#0874d6;border-color:#a9d5fb;background:#eaf5ff}
+    .status.changes_requested{color:#a46a0c;border-color:#ecd7ad;background:#fff8ea}
+    .status.discarded{color:#bd4d46;border-color:#edc9c6;background:#fff6f5}
+    .queue-tick:not(:last-child):after{background:#d8e7f2}
+    .date-box{background:#eef7ff;border-color:#c7e1f8}.date-box span{color:#087be4}
+    .section-title{padding:17px 19px;border:1px solid #dce7ef;border-radius:17px;background:#fff;box-shadow:0 10px 30px #1a4e750d}
+    select,.input,textarea{border-color:#d6e2eb;background:#fff;color:#16314b}
+    select:focus,.input:focus,textarea:focus{border-color:#69b5f8;box-shadow:0 0 0 3px #2e9bff18}
+    .creative-card{border-color:#dce7ef;background:#fff;color:var(--text)}
+    .creative-card:hover,.creative-card.selected{border-color:#72baf8;box-shadow:0 16px 40px #1d5b8917}
+    .creative-card.selected{box-shadow:0 0 0 2px var(--acid),0 16px 40px #1d5b8917}
+    .creative-art{background:linear-gradient(145deg,#eaf5ff,#d7ebfb)}
+    .creative-copy .brand-line,.creative-copy p{color:#718499}
+    .reviewer{border-color:#c7dceb;background:#fff;box-shadow:0 16px 42px #1d5b8913}
+    .review-empty{color:#708397}.review-empty i{border-color:#b9d7ef;box-shadow:inset 0 0 30px #2e9bff12}
+    .review-kicker{color:#087eea}.review-sub{color:#667c90}
+    .score{border-color:#d7e4ed;color:#667b8f;background:#f9fbfd}.score b{color:#087de7}
+    .caption-box{background:#f6f9fc;border-color:#dce6ee;color:#536c81}
+    .queue-card{border-color:#dce7ef;background:#fff;box-shadow:0 7px 24px #1b4d750d}
+    .queue-time{color:#087be5}.queue-card p{color:#718499}
+    .switch{border-color:#9ccdf5;background:#eaf5ff}.switch:after{background:#2e9bff}
+    .paused .switch:after{background:#9aa8b5}
+    .signal-panel{border-color:#b9d8f3;background:linear-gradient(145deg,#fff,#edf7ff);box-shadow:0 16px 44px #1d5b8911}
+    .signal-panel .tagline{color:#087fe9}.signal-panel p{color:#62788d}
+    .funnel div{border-color:#d5e4ef;background:#fff}.funnel span{color:#7d91a3}
+    .learning-steps{background:#fff}.step{border-color:#e8eef3}
+    .step i{border-color:#b5d7f2;color:#087ee8;background:#f0f8ff}.step p{color:#718499}
+    .group-label{color:#6d8195}
+    .connection-card{border-color:#dce7ef;background:#fff;box-shadow:0 8px 28px #1d5b890c}
+    .connection-card:hover{border-color:#79bdf7;box-shadow:0 16px 42px #1d5b8918}
+    .provider-mark{background:#edf7ff;border-color:#c3def5;color:#087fe9}
+    .connection-state{border-color:#d6e1ea;color:#718499;background:#f9fbfd}
+    .connection-state.connected{color:#0874d6;border-color:#a9d5fb;background:#eaf5ff}
+    .connection-state.ready_to_connect{color:#006bbd;border-color:#9acdf4;background:#edf7ff}
+    .connection-card>p{color:#6e8296}.cap{color:#60778c;border-color:#d9e6ef;background:#f8fbfd}.connection-progress{background:#e8f0f6}.connection-next{color:#718499}.connection-next b{color:#19344e}.summary-cell,.connection-step i{background:#f5f9fd}.connection-step,.unlock-item{border-color:#dce7ef}
+    dialog{color:var(--text);background:#fff;border-color:#bad8ef}.modal p{color:#667d91}.modal ol{color:#3c556d}.modal .close{color:#6e8194}
+    dialog::backdrop{background:#12334d70}
+    .toast{background:#087ee8;color:#fff}
+    .skeleton{background:linear-gradient(90deg,#edf4fa,#dbefff,#edf4fa)}
+    html[data-theme="dark"]{
+      color-scheme:dark;--bg:#071321;--bg2:#091a2a;--panel:#0d2033;--panel2:#112b43;--line:#213c55;
+      --text:#f3f8fc;--muted:#91a8bb;--dim:#6d879d;--acid:#2e9bff;--cyan:#71c7ff;
+      --white:#fff;--shadow:0 28px 80px #02091499
+    }
+    html[data-theme="dark"] body{background:radial-gradient(circle at 78% -12%,#143f64 0,transparent 32%),linear-gradient(180deg,var(--bg2),var(--bg));color:var(--text)}
+    html[data-theme="dark"] .rail{background:#081827f2;border-color:var(--line);box-shadow:8px 0 28px #020a1288}
+    html[data-theme="dark"] .logo small,html[data-theme="dark"] .nav-label,html[data-theme="dark"] .system-line + p{color:var(--dim)}
+    html[data-theme="dark"] .workspace,html[data-theme="dark"] nav button:hover{background:#10263a;border-color:var(--line)}
+    html[data-theme="dark"] .workspace span,html[data-theme="dark"] nav button{color:var(--muted)}
+    html[data-theme="dark"] nav button:hover,html[data-theme="dark"] nav button.on{color:var(--text)}
+    html[data-theme="dark"] nav button.on{background:#112c45;box-shadow:inset 3px 0 var(--acid)}
+    html[data-theme="dark"] .nav-icon,html[data-theme="dark"] nav button.on .nav-icon{background:#0b1d2e;border-color:#31516c;color:#85caff}
+    html[data-theme="dark"] .rail-foot,html[data-theme="dark"] .topbar{border-color:var(--line)}
+    html[data-theme="dark"] .system-line,html[data-theme="dark"] .sync,html[data-theme="dark"] .eyebrow{color:var(--muted)}
+    html[data-theme="dark"] .icon-btn{background:#0c2032;border-color:var(--line);color:#9fc2dc;box-shadow:none}
+    html[data-theme="dark"] .icon-btn:hover{border-color:#4eaaff;color:#fff}
+    html[data-theme="dark"] .mission,html[data-theme="dark"] .signal-panel,html[data-theme="dark"] .lab-principle{border-color:#285176;background:linear-gradient(135deg,#102a42,#0b1c2d);box-shadow:0 18px 50px #02091466}
+    html[data-theme="dark"] .mission:after{border-color:#28567d;box-shadow:0 0 0 40px #1d4b7133,0 0 0 80px #153a5933}
+    html[data-theme="dark"] .mission p,html[data-theme="dark"] .signal-panel p,html[data-theme="dark"] .lab-principle p{color:var(--muted)}
+    html[data-theme="dark"] .secondary{background:#10273b;color:var(--text);border-color:#31516a}
+    html[data-theme="dark"] .secondary:hover{border-color:#58adf4;color:#a8d7ff}
+    html[data-theme="dark"] .orbit,html[data-theme="dark"] .stat,html[data-theme="dark"] .panel,html[data-theme="dark"] .section-title,html[data-theme="dark"] .creative-card,html[data-theme="dark"] .reviewer,html[data-theme="dark"] .queue-card,html[data-theme="dark"] .connection-card,html[data-theme="dark"] .experiment{background:#0c1e30;border-color:var(--line);box-shadow:0 14px 42px #02091455;color:var(--text)}
+    html[data-theme="dark"] .orbit{background:linear-gradient(180deg,#10263a,#091a2a)}
+    html[data-theme="dark"] .stat:after,html[data-theme="dark"] .panel-head,html[data-theme="dark"] .decision-row,html[data-theme="dark"] .step,html[data-theme="dark"] .experiment-head,html[data-theme="dark"] .variant-row,html[data-theme="dark"] .experiment-foot{border-color:var(--line)}
+    html[data-theme="dark"] .panel-head,html[data-theme="dark"] .variant-row.header,html[data-theme="dark"] .experiment-foot,html[data-theme="dark"] .generation-strip{background:#0a1b2b}
+    html[data-theme="dark"] .date-box,html[data-theme="dark"] .caption-box,html[data-theme="dark"] .funnel div,html[data-theme="dark"] .test-rule,html[data-theme="dark"] .metric-pill,html[data-theme="dark"] .job-chip,html[data-theme="dark"] .empty-lab{background:#10263a;border-color:var(--line)}
+    html[data-theme="dark"] select,html[data-theme="dark"] .input,html[data-theme="dark"] textarea{background:#0a1c2d;color:var(--text);border-color:#2d4a63}
+    html[data-theme="dark"] .creative-art,html[data-theme="dark"] .mini-art{background:linear-gradient(145deg,#183d5d,#0b1d2e)}
+    html[data-theme="dark"] .status{background:#10263a;border-color:#31516a;color:#9bb1c3}
+    html[data-theme="dark"] .status.approved,html[data-theme="dark"] .connection-state.connected{background:#102d48;border-color:#2b6ea2;color:#78c4ff}
+    html[data-theme="dark"] .status.changes_requested{background:#302713;border-color:#6f5723;color:#f0bd5d}
+    html[data-theme="dark"] .provider-mark,html[data-theme="dark"] .variant-key,html[data-theme="dark"] .step i{background:#102c45;border-color:#2d638e;color:#75c4ff}
+    html[data-theme="dark"] .cap{background:#0d2236;border-color:#29465e;color:#a2b7c8}
+    html[data-theme="dark"] .connection-progress{background:#172f44}
+    html[data-theme="dark"] .connection-next,html[data-theme="dark"] .modal p,html[data-theme="dark"] .modal ol,html[data-theme="dark"] .experiment-head p,html[data-theme="dark"] .variant-row span,html[data-theme="dark"] .experiment-foot p,html[data-theme="dark"] .generation-strip p,html[data-theme="dark"] .metric-contract>p,html[data-theme="dark"] .test-rule span,html[data-theme="dark"] .metric-pill span{color:var(--muted)}
+    html[data-theme="dark"] .connection-next b,html[data-theme="dark"] .empty-lab h3{color:var(--text)}
+    html[data-theme="dark"] .summary-cell,html[data-theme="dark"] .connection-step i{background:#10283e}
+    html[data-theme="dark"] .connection-step,html[data-theme="dark"] .unlock-item{border-color:var(--line)}
+    html[data-theme="dark"] dialog{color:var(--text);background:#0b1d2e;border-color:#315779}
+    html[data-theme="dark"] .metric-chip,html[data-theme="dark"] .metric-form,html[data-theme="dark"] .job-chip,html[data-theme="dark"] .publication-list,html[data-theme="dark"] .asset-card,html[data-theme="dark"] .brand-card{background:#0a1b2b;border-color:var(--line);color:var(--muted)}
+    html[data-theme="dark"] .asset-thumb,html[data-theme="dark"] .asset-icon{background:linear-gradient(145deg,#183d5d,#0b1d2e);color:#75c4ff}
+    html[data-theme="dark"] .asset-meta b{color:var(--text)}
+    html[data-theme="dark"] .brand-card h3{color:var(--text)}
+    html[data-theme="dark"] .brand-card p{color:var(--muted)}
+    html[data-theme="dark"] .asset-meta span{color:var(--muted)}
+    html[data-theme="dark"] .variant-detail,html[data-theme="dark"] .publication-row{border-color:var(--line)}
+    html[data-theme="dark"] .metric-form .form-field label,html[data-theme="dark"] .publication-row small{color:var(--dim)}
+    html[data-theme="dark"] .job-status{background:#10263a;border-color:#31516c;color:#9bb1c3}
+    html[data-theme="dark"] .job-status.queued{background:#302713;border-color:#6f5723;color:#f0bd5d}
+    html[data-theme="dark"] .job-status.processing,html[data-theme="dark"] .job-status.completed{background:#102d48;border-color:#2b6ea2;color:#78c4ff}
+    html[data-theme="dark"] .job-status.failed{background:#3a1d1c;border-color:#6e2f2b;color:#ff9d97}
+    html[data-theme="dark"] .data-state{background:#10263a;border-color:#31516c;color:#9bb1c3}
+    html[data-theme="dark"] .data-state.live{background:#102d48;border-color:#2b6ea2;color:#78c4ff}
+    html[data-theme="dark"] .data-state.waiting{background:#302713;border-color:#6f5723;color:#f0bd5d}
+    html[data-theme="dark"] dialog::backdrop{background:#020914cc}
+    @media(max-width:1120px){.creative-grid{grid-template-columns:repeat(2,1fr)}.connection-grid{grid-template-columns:repeat(2,1fr)}.brand-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.rail{height:auto;position:sticky;padding:13px 16px;flex-direction:row;align-items:center}.workspace,.nav-label,.rail-foot{display:none}.logo{padding:0}.logo div:last-child{display:none}.logo-image{width:35px;height:35px}nav{display:flex;margin-left:auto;gap:2px}nav button{padding:6px}.nav-icon{width:25px;height:25px}nav button span:last-child{display:none}.main{padding-top:22px}.hero-grid,.split,.studio-layout,.learning-grid,.lab-overview{grid-template-columns:1fr}.orbit{min-height:245px}.reviewer{position:static;min-height:0}.review-empty{min-height:250px}.stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.main{padding:18px 14px 42px}.topbar{margin-bottom:20px}.sync{display:none}.hero-grid{gap:10px}.mission{padding:21px;min-height:320px}.mission h2{margin-top:38px}.mission-actions{flex-direction:column}.mission-actions button{width:100%}.orbit{min-height:225px}.stats{gap:8px}.stat{padding:14px}.creative-grid,.connection-grid{grid-template-columns:1fr 1fr;gap:8px}.creative-copy{padding:10px}.queue-card{grid-template-columns:66px 1fr}.queue-state{grid-column:2}.section-title{align-items:flex-start;flex-direction:column}.filters{width:100%;flex-wrap:wrap}.filters select{flex:1;min-width:0}.filters .primary{width:100%}.funnel{grid-template-columns:repeat(2,1fr)}.connection-card{padding:13px;min-height:210px}.test-rules,.unlock-grid{grid-template-columns:1fr}.connection-summary{grid-template-columns:1fr}.connection-modal-actions{align-items:stretch;flex-direction:column}.connection-modal-actions button{width:100%}.form-grid{grid-template-columns:1fr}.form-field.full{grid-column:1}.metric-contract{padding:15px}.asset-grid{grid-template-columns:repeat(2,1fr)}.brand-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="logo"><img class="logo-image" src="/assets/clone_centre_latest_logo.png" alt="Clone Centre"><div><b>clonecentre OS</b><small>GROWTH INTELLIGENCE</small></div></div>
+      <div class="workspace"><img class="avatar-image" src="/assets/clone_centre_latest_logo.png" alt=""><div><b>Clone Centre</b><span>Operator workspace</span></div></div>
+      <div class="nav-label">WORKSPACES</div>
+      <nav aria-label="OS workspaces">
+        <button class="on" data-view="overview"><span class="nav-icon">01</span><span>Command</span></button>
+        <button data-view="brands"><span class="nav-icon">02</span><span>Brands</span></button>
+        <button data-view="studio"><span class="nav-icon">03</span><span>Creative studio</span></button>
+        <button data-view="assets"><span class="nav-icon">04</span><span>Asset library</span></button>
+        <button data-view="experiments"><span class="nav-icon">05</span><span>Test lab</span></button>
+        <button data-view="queue"><span class="nav-icon">06</span><span>Publishing</span></button>
+        <button data-view="learning"><span class="nav-icon">07</span><span>Learning loop</span></button>
+        <button data-view="connections"><span class="nav-icon">08</span><span>Connections</span></button>
+      </nav>
+      <div class="rail-foot"><div class="system-line"><i></i><span>CONTENT ENGINE ONLINE</span></div><p>One clear decision at a time.<br>Every result becomes context.</p></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">Clone Centre / <span id="crumb">Command</span></div><h1 id="page-title">Your next best move.</h1></div>
+        <div class="top-actions"><div class="sync" id="sync-label">SYNCING PIPELINE</div><button class="icon-btn" id="theme-toggle" aria-label="Switch to night mode" aria-pressed="false"><span id="theme-icon" aria-hidden="true">☾</span></button><button class="icon-btn" id="refresh" aria-label="Refresh data">↻</button></div>
+      </header>
+
+      <section class="view on" id="view-overview">
+        <div class="hero-grid">
+          <article class="mission">
+            <div class="mission-label">OS SIGNAL / PRIORITY 01</div>
+            <h2 id="mission-title">Reading the creative pipeline…</h2>
+            <p id="mission-copy">Finding the smallest decision that will unlock the most useful work.</p>
+            <div class="mission-actions"><button class="primary" data-go="studio">Open creative decision</button><button class="secondary" data-go="queue">Inspect publishing rhythm</button></div>
+          </article>
+          <article class="orbit"><div class="orbit-top"><span>CLONECENTRE OS</span><span>LIVE</span></div><img class="orbit-logo" src="/assets/clone_centre_latest_logo.png" alt="Clone Centre"><strong class="brand-count" id="approval-rate">—<small>%</small></strong><p>Creative approval rate across the current operating set.</p></article>
+        </div>
+        <div class="stats">
+          <article class="stat"><span>Ready</span><b id="stat-ready">—</b><em>approved creative</em></article>
+          <article class="stat"><span>Needs a decision</span><b id="stat-review">—</b><em>operator attention</em></article>
+          <article class="stat"><span>Publishing</span><b id="stat-scheduled">—</b><em>active queue items</em></article>
+          <article class="stat"><span>Brands</span><b id="stat-brands">—</b><em>one operating view</em></article>
+        </div>
+        <div class="split">
+          <article class="panel"><div class="panel-head"><div><h2>Decision stream</h2><p>The work closest to publish-ready.</p></div><button class="text-btn" data-go="studio">OPEN STUDIO →</button></div><div class="decision-list" id="decision-stream"></div></article>
+          <article class="panel"><div class="panel-head"><div><h2>Next drops</h2><p>Your current publishing cadence.</p></div><button class="text-btn" data-go="queue">QUEUE →</button></div><div class="queue-compact" id="queue-compact"></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-brands">
+        <div class="section-title"><div><h2>One brain per brand.</h2><p>Voice, palette and rules are applied to every generation brief automatically.</p></div><button class="primary" id="open-brand">New brand</button></div>
+        <div class="brand-grid" id="brand-grid"></div>
+      </section>
+
+      <section class="view" id="view-studio">
+        <div class="section-title"><div><h2>One piece. One decision.</h2><p>Approve, request a precise change, or remove it from the run.</p></div><div class="filters"><select id="brand-filter" aria-label="Filter by brand"><option value="">All brands</option></select><select id="status-filter" aria-label="Filter by status"><option value="">All states</option><option value="review">Review</option><option value="changes_requested">Changes requested</option><option value="approved">Approved</option><option value="discarded">Discarded</option></select><button class="primary" id="open-generator">Generate image / video</button></div></div>
+        <div class="studio-layout"><div class="creative-grid" id="creative-grid"></div><aside class="reviewer" id="reviewer"><div class="review-empty"><div><i></i><b>Select a creative</b><p>Open one card to make a focused decision.</p></div></div></aside></div>
+        <div class="generation-strip"><div><b>Generation queue</b><p>Provider-neutral jobs can be picked up by API or MCP workers.</p></div><div class="job-list" id="generation-jobs"></div></div>
+        <div id="generation-publications"></div>
+      </section>
+
+      <section class="view" id="view-assets">
+        <div class="section-title"><div><h2>Brand asset library</h2><p>Source images for video jobs, brand references and documents. PNG, JPEG, WebP, GIF, MP4 or PDF up to 15 MB.</p></div><div style="display:flex;gap:8px;align-items:center"><select id="asset-brand" aria-label="Brand for uploaded asset"><option value="">No brand</option></select><label class="primary" for="asset-upload">Upload asset</label><input class="visually-hidden" type="file" id="asset-upload" accept="image/*,video/mp4,application/pdf"></div></div>
+        <div class="asset-grid" id="asset-grid"></div>
+      </section>
+
+      <section class="view" id="view-experiments">
+        <div class="section-title"><div><h2>Test one variable at a time.</h2><p>Run as many A/B/C… variants as the evidence needs, across every connected channel.</p></div><button class="primary" id="open-experiment">New experiment</button></div>
+        <div class="lab-overview">
+          <article class="lab-principle"><div class="eyebrow">EXPERIMENT DESIGN</div><h2>Know whether the asset, format or caption moved the result.</h2><p>Each variant carries its own asset fingerprint, caption fingerprint and channel ad ID. CloneCentre OS can then compare like with like instead of guessing from campaign totals.</p><div class="test-rules"><div class="test-rule"><b>Visual test</b><span>New image, same caption</span></div><div class="test-rule"><b>Copy test</b><span>Same image, new caption</span></div><div class="test-rule"><b>Format test</b><span>Image versus video</span></div></div></article>
+          <article class="panel metric-contract"><h3>Result contract</h3><p>Metrics stay empty until a channel connection returns real data.</p><div class="metric-list"><div class="metric-pill"><b>CTR</b><span>Creative response</span></div><div class="metric-pill"><b>CPC</b><span>Traffic efficiency</span></div><div class="metric-pill"><b>LEADS</b><span>Funnel throughput</span></div><div class="metric-pill"><b>ROAS</b><span>Revenue efficiency</span></div></div></article>
+        </div>
+        <div class="experiment-stack" id="experiment-stack"></div>
+      </section>
+
+      <section class="view" id="view-queue">
+        <div class="section-title"><div><h2>Publishing rhythm</h2><p>See what is leaving the system and pause anything that should not.</p></div><button class="secondary" data-go="connections">Channel connections</button></div>
+        <div class="queue-board" id="queue-board"></div>
+      </section>
+
+      <section class="view" id="view-learning">
+        <div class="learning-grid">
+          <article class="signal-panel"><div class="tagline" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span>LEARNING LOOP / CURRENT SIGNAL</span><span class="data-state waiting" id="insight-data-state">AWAITING CHANNEL CONNECTIONS</span></div><h2 id="insight-headline">Connect channel data to close the loop.</h2><p id="insight-copy">OS will compare creative, audience, spend and conversion signals without pretending that empty dashboards contain insight.</p><div class="funnel" id="funnel"></div></article>
+          <article class="panel learning-steps"><div class="panel-head" style="padding:0 0 14px"><div><h2>How OS improves</h2><p>Controlled, explainable progress.</p></div></div>
+            <div class="step"><i>01</i><div><b>Observe</b><p>Pull spend, reach, clicks, leads and sales from connected accounts.</p></div></div>
+            <div class="step"><i>02</i><div><b>Compare</b><p>Relate results to the exact creative, offer, audience and channel.</p></div></div>
+            <div class="step"><i>03</i><div><b>Recommend</b><p>Propose the next brief or budget move with the reason attached.</p></div></div>
+            <div class="step"><i>04</i><div><b>Act safely</b><p>Keep approval gates until a rule has enough clean evidence to automate.</p></div></div>
+          </article>
+        </div>
+        <div class="generation-strip" id="channel-metrics"><div><b>Channel performance · last 30 days</b><p id="channel-metrics-hint">Automatic sync from connected ad accounts.</p></div><div class="job-list" id="channel-metric-chips"></div></div>
+      </section>
+
+      <section class="view" id="view-connections">
+        <div class="section-title"><div><h2>Give OS reach, not passwords.</h2><p>Provider apps and customer accounts connect securely; credentials stay server-side.</p></div></div>
+        <div class="connection-groups" id="connection-groups"></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="setup-dialog"><div class="modal"><div class="modal-top"><div><div class="eyebrow">CONNECTION CONTROL</div><h2 id="modal-title">Provider setup</h2></div><button class="close" aria-label="Close">×</button></div><p id="modal-copy"></p><div class="connection-summary" id="modal-summary"></div><div class="modal-subhead">Connection path</div><div class="connection-steps" id="modal-steps"></div><div class="modal-subhead">What appears in OS</div><div class="unlock-grid" id="modal-unlocks"></div><div class="connection-modal-actions"><p id="modal-note"></p><div class="modal-actions"><button class="secondary close-action">Back to OS</button><button class="primary" id="modal-primary">Continue</button></div></div></div></dialog>
+  <dialog id="experiment-dialog"><form class="modal" id="experiment-form"><div class="modal-top"><div><div class="eyebrow">TEST LAB</div><h2>Create an experiment</h2></div><button class="close" type="button" aria-label="Close">×</button></div><p>OS will start with four clean variants: control, visual, caption and format. Add E, F, G and beyond only when needed.</p><div class="form-grid"><div class="form-field full"><label for="experiment-name">Experiment name</label><input class="input" id="experiment-name" maxlength="120" placeholder="Summer lead campaign" required></div><div class="form-field full"><label for="experiment-objective">Success measure</label><input class="input" id="experiment-objective" maxlength="500" placeholder="Qualified leads at the lowest sustainable cost"></div><div class="form-field full"><label for="experiment-channels">Channels</label><input class="input" id="experiment-channels" placeholder="Meta, TikTok, Google"></div></div><div class="modal-actions"><button class="secondary close-action" type="button">Cancel</button><button class="primary" type="submit">Create A–D test</button></div></form></dialog>
+  <dialog id="generator-dialog"><form class="modal" id="generator-form"><div class="modal-top"><div><div class="eyebrow">CREATIVE GENERATION</div><h2>Queue an image or video</h2></div><button class="close" type="button" aria-label="Close">×</button></div><p>The OS stores one provider-neutral brief. A connected API or MCP worker renders it and returns the final asset to the library.</p><div class="form-grid"><div class="form-field"><label for="generation-type">Output</label><select id="generation-type"><option value="image">Image</option><option value="video">Video</option></select></div><div class="form-field"><label for="generation-provider">Provider</label><select id="generation-provider"></select></div><div class="form-field" id="generation-model-field" hidden><label for="generation-model">Model</label><select id="generation-model"></select></div><div class="form-field"><label for="generation-ratio">Aspect ratio</label><select id="generation-ratio"><option>4:5</option><option>1:1</option><option>9:16</option><option>16:9</option></select></div><div class="form-field"><label for="generation-brand">Brand</label><select id="generation-brand"></select><p class="field-hint" id="generation-brand-hint" hidden></p></div><div class="form-field" id="generation-count-field"><label for="generation-count">Carousel frames</label><select id="generation-count"><option value="1">1 frame</option><option value="2">2 frames</option><option value="3">3 frames</option><option value="4">4 frames</option></select></div><div class="form-field full" id="generation-source-field" hidden><label for="generation-source">Source image</label><select id="generation-source"></select><p class="field-hint" id="generation-source-hint" hidden>Upload an image in the Asset library before queueing a video.</p></div><div class="form-field full"><label for="generation-prompt">Creative brief</label><textarea id="generation-prompt" maxlength="8000" placeholder="Describe the offer, audience, scene, message and brand constraints…" required></textarea></div></div><div class="modal-actions"><button class="secondary close-action" type="button">Cancel</button><button class="primary" type="submit" id="generation-submit">Queue generation</button></div></form></dialog>
+  <dialog id="brand-dialog"><form class="modal" id="brand-form"><div class="modal-top"><div><div class="eyebrow">BRAND BRAIN</div><h2 id="brand-dialog-title">Create a brand</h2></div><button class="close" type="button" aria-label="Close">×</button></div><p>OS applies the voice, palette and rules to every brief queued for this brand.</p><div class="form-grid"><div class="form-field full"><label for="brand-name">Brand name</label><input class="input" id="brand-name" maxlength="120" placeholder="Clone Centre" required></div><div class="form-field full"><label for="brand-description">Description</label><textarea id="brand-description" maxlength="500" placeholder="What the brand does and stands for…"></textarea></div><div class="form-field full"><label for="brand-audience">Target audience</label><textarea id="brand-audience" maxlength="500" placeholder="Who the creative should speak to…"></textarea></div><div class="form-field full"><label for="brand-voice">Tone of voice</label><textarea id="brand-voice" maxlength="2000" placeholder="Warm, direct, plain English…"></textarea></div><div class="form-field full"><label for="brand-style">Visual style directives</label><textarea id="brand-style" maxlength="2000" placeholder="Clean studio light, bold typography, generous whitespace…"></textarea></div><div class="form-field full"><label>Palette</label><div class="palette-list" id="brand-palette"></div><div><button class="secondary" type="button" id="brand-palette-add">Add colour</button></div></div><div class="form-field full"><label for="brand-banned">Banned words</label><input class="input" id="brand-banned" placeholder="cheap, hack, spammy"><p class="field-hint" style="color:var(--muted)">Comma separated; never included in generated creative.</p></div><div class="form-field"><label for="brand-logo">Logo asset</label><select id="brand-logo"></select></div><div class="form-field"><label for="brand-default">Default brand</label><label style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0"><input type="checkbox" id="brand-default"> Apply when no brand is chosen</label></div></div><div class="modal-actions"><button class="secondary close-action" type="button">Cancel</button><button class="primary" type="submit" id="brand-submit">Save brand</button></div></form></dialog>
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+    const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+    const state={data:null,integrations:[],experiments:[],generators:[],generationJobs:[],publications:[],assets:[],brands:[],metrics:null,activePost:null,view:'overview'};
+    const viewMeta={
+      overview:['Command','Your next best move.'],brands:['Brands','One brain per brand.'],studio:['Creative studio','Decide what deserves to ship.'],
+      assets:['Asset library','Source images and brand files.'],
+      experiments:['Test lab','Know what actually changed the result.'],
+      queue:['Publishing','Protect the publishing rhythm.'],learning:['Learning loop','Turn results into direction.'],
+      connections:['Connections','Connect the system safely.']
+    };
+    function esc(value=''){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]))}
+    function toast(message){const element=$('#toast');element.textContent=message;element.classList.add('on');clearTimeout(toast.timer);toast.timer=setTimeout(()=>element.classList.remove('on'),2600)}
+    function statusLabel(status){return ({approved:'Approved',changes_requested:'Changes',discarded:'Discarded',review:'Review'})[status]||status}
+    function shortDate(value){if(!value)return['—','TBD'];const date=new Date(`${value}T12:00:00`);return Number.isNaN(date.valueOf())?['—',value]:[date.toLocaleDateString('en-GB',{day:'2-digit'}),date.toLocaleDateString('en-GB',{month:'short'}).toUpperCase()]}
+    function go(view){
+      state.view=view;$$('nav button').forEach(button=>button.classList.toggle('on',button.dataset.view===view));
+      $$('.view').forEach(section=>section.classList.toggle('on',section.id===`view-${view}`));
+      $('#crumb').textContent=viewMeta[view][0];$('#page-title').textContent=viewMeta[view][1];
+      if(view==='brands')renderBrands();if(view==='studio')renderStudio();if(view==='assets')renderAssets();if(view==='experiments')renderExperiments();if(view==='queue')renderQueue();if(view==='learning')renderLearning();if(view==='connections')renderConnections();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    async function request(url,options={}){
+      const response=await fetch(url,{cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
+      const payload=await response.json().catch(()=>({}));
+      if(!response.ok)throw Object.assign(new Error(payload.message||payload.error||'Request failed'),{payload,status:response.status});
+      return payload;
+    }
+    async function load(showToast=false){
+      $('#sync-label').textContent='SYNCING PIPELINE';
+      try{
+        const [data,connections,experiments,generation,assets,metrics,brands]=await Promise.all([request('/api/os/snapshot'),request('/api/os/integrations'),request('/api/os/experiments'),request('/api/os/generation'),request('/api/os/assets').catch(()=>null),request('/api/os/metrics').catch(()=>null),request('/api/os/brands').catch(()=>null)]);
+        state.data=data;state.integrations=connections.integrations||[];state.experiments=experiments.experiments||[];state.generators=generation.providers||[];state.generationJobs=generation.jobs||[];state.publications=Array.isArray(generation.publications)?generation.publications:[];
+        state.assets=Array.isArray(assets?.assets)?assets.assets:[];state.metrics=metrics||null;state.brands=Array.isArray(brands?.brands)?brands.brands:[];
+        renderAll();$('#sync-label').textContent=data.workspace.source==='live_pipeline'?'LIVE PIPELINE':'BUNDLED PIPELINE';
+        if(state.generationJobs.some(job=>['queued','processing'].includes(job.status)))startGenerationPolling();
+        if(showToast)toast('Operating view refreshed');
+      }catch(error){$('#sync-label').textContent='PIPELINE UNAVAILABLE';toast('Could not load the operating data')}
+    }
+    function renderAll(){renderOverview();renderBrands();renderStudio();renderAssets();renderExperiments();renderQueue();renderLearning();renderConnections();renderGeneration()}
+    function recomputeSummary(){
+      const summary=state.data.summary,posts=state.data.posts;
+      summary.ready=posts.filter(post=>post.status==='approved').length;
+      summary.needsReview=posts.filter(post=>['review','changes_requested'].includes(post.status)).length;
+      summary.scheduled=state.data.queue.filter(item=>item.state==='scheduled').length;
+      summary.approvalRate=posts.length?Math.round((summary.ready/posts.length)*100):0;
+    }
+    function renderOverview(){
+      const data=state.data,summary=data.summary,review=data.posts.filter(post=>['review','changes_requested'].includes(post.status)).sort((a,b)=>(b.score||0)-(a.score||0));
+      $('#mission-title').textContent=summary.needsReview?`${summary.needsReview} creative decisions are waiting.`:summary.scheduled?`${summary.scheduled} scheduled drops are moving.`:'Build the next CloneCentre campaign.';
+      $('#mission-copy').textContent=summary.needsReview?'Start with the strongest creative, make one clear decision, then move the approved work into a controlled multi-channel test.':summary.scheduled?'The publishing rhythm is active. Connect results to the Test Lab so every outcome improves the next brief.':'Generate the first image or video, pair it with a caption, and create a clean A–D experiment.';
+      $('#approval-rate').innerHTML=`${summary.approvalRate}<small>%</small>`;
+      $('#stat-ready').textContent=summary.ready;$('#stat-review').textContent=summary.needsReview;$('#stat-scheduled').textContent=summary.scheduled;$('#stat-brands').textContent=summary.brands;
+      $('#decision-stream').innerHTML=(review.length?review:data.posts).slice(0,5).map(post=>`<div class="decision-row" data-post="${post.key}"><img class="mini-art" src="${esc(post.image||'/assets/clone_centre_latest_logo.png')}" alt="" onerror="this.onerror=null;this.src='/assets/clone_centre_latest_logo.png'"><div><b>${esc(post.title)}</b><small>${esc(post.brand)} · ${esc(post.pillar)}${post.score?` · ${post.score}/100`:''}</small></div><span class="status ${post.status}">${esc(statusLabel(post.status))}</span></div>`).join('')||'<div class="review-empty" style="min-height:180px"><p>No creative has entered the pipeline yet.</p></div>';
+      $('#queue-compact').innerHTML=data.queue.slice(0,4).map(item=>{const [day,month]=shortDate(item.date);return`<div class="queue-tick"><div class="date-box"><b>${day}</b><span>${month}</span></div><div><strong>${esc(item.brand)}</strong><p>${esc(item.time)} · Post ${esc(item.postOrder)} · ${item.state}</p></div></div>`}).join('')||'<div class="review-empty" style="min-height:180px"><p>The schedule is clear.</p></div>';
+      $$('#decision-stream [data-post]').forEach(row=>row.onclick=()=>{state.activePost=row.dataset.post;go('studio');renderStudio()});
+    }
+    function filteredPosts(){
+      const brand=$('#brand-filter').value,status=$('#status-filter').value;
+      return state.data.posts.filter(post=>(!brand||post.brand===brand)&&(!status||post.status===status));
+    }
+    function renderBrands(){
+      const grid=$('#brand-grid');if(!grid)return;
+      const brands=state.brands||[];
+      grid.innerHTML=brands.length?brands.map(brand=>{
+        const swatches=(brand.palette||[]).map(hex=>`<i style="background:${esc(hex)}" title="${esc(hex)}"></i>`).join('');
+        const voice=String(brand.voice||'').trim();
+        return`<article class="brand-card"><h3>${esc(brand.name)}${brand.isDefault?'<span class="brand-badge">Default</span>':''}</h3><p>${esc(brand.description||'No description yet.')}</p>${swatches?`<div class="brand-swatches">${swatches}</div>`:''}<p>${esc(voice?voice.slice(0,140)+(voice.length>140?'…':''):'No tone of voice defined.')}</p><p>${Number(brand.assetCount||0)} assets · /${esc(brand.slug)}</p><div class="modal-actions"><button class="secondary" data-edit-brand="${esc(brand.id)}">Edit</button></div></article>`;
+      }).join(''):'<div class="empty-lab"><h3>No brands yet</h3><p>Create the first brand brain. Every generation brief will then inherit its voice, palette and rules.</p><button class="primary" data-empty-brand>Create first brand</button></div>';
+      $$('#brand-grid [data-edit-brand]').forEach(button=>button.onclick=()=>openBrandDialog(state.brands.find(brand=>brand.id===button.dataset.editBrand)||null));
+      const empty=$('[data-empty-brand]');if(empty)empty.onclick=()=>openBrandDialog(null);
+    }
+    function paletteRow(value='#c9ff58'){
+      return`<div class="palette-row"><input type="color" value="${esc(value)}" aria-label="Palette colour"><button class="secondary" type="button" data-palette-remove>Remove</button></div>`;
+    }
+    function openBrandDialog(brand){
+      const form=$('#brand-form');form.reset();form.dataset.brandId=brand?.id||'';
+      $('#brand-dialog-title').textContent=brand?'Edit brand':'Create a brand';
+      $('#brand-name').value=brand?.name||'';$('#brand-description').value=brand?.description||'';$('#brand-audience').value=brand?.audience||'';
+      $('#brand-voice').value=brand?.voice||'';$('#brand-style').value=brand?.styleDirectives||'';
+      $('#brand-banned').value=(brand?.bannedWords||[]).join(', ');$('#brand-default').checked=Boolean(brand?.isDefault);
+      const images=(state.assets||[]).filter(asset=>String(asset.mime||'').startsWith('image/'));
+      $('#brand-logo').innerHTML='<option value="">No logo</option>'+images.map(asset=>`<option value="${esc(asset.id)}">${esc(asset.name)}</option>`).join('');
+      $('#brand-logo').value=brand?.logoAssetId||'';
+      const palette=Array.isArray(brand?.palette)&&brand.palette.length?brand.palette:['#c9ff58'];
+      $('#brand-palette').innerHTML=palette.map(paletteRow).join('');
+      $('#brand-dialog').showModal();
+    }
+    async function saveBrand(event){
+      event.preventDefault();
+      const form=$('#brand-form'),id=form.dataset.brandId||'';
+      const palette=$$('#brand-palette input[type="color"]').map(input=>input.value);
+      const bannedWords=$('#brand-banned').value.split(',').map(value=>value.trim()).filter(Boolean);
+      const body={name:$('#brand-name').value,description:$('#brand-description').value,audience:$('#brand-audience').value,voice:$('#brand-voice').value,styleDirectives:$('#brand-style').value,palette,bannedWords,logoAssetId:$('#brand-logo').value||null,isDefault:$('#brand-default').checked};
+      try{
+        await request(id?`/api/os/brands/${id}`:'/api/os/brands',{method:id?'PATCH':'POST',body:JSON.stringify(body)});
+        const payload=await request('/api/os/brands');state.brands=payload.brands||[];
+        $('#brand-dialog').close();renderBrands();updateGeneratorBrands();updateAssetBrandOptions();toast(id?'Brand updated':'Brand created');
+      }catch(error){toast('The brand could not be saved')}
+    }
+    function updateGeneratorBrands(){
+      const select=$('#generation-brand'),hint=$('#generation-brand-hint');if(!select)return;
+      const brands=state.brands||[],current=select.value,defaultBrand=brands.find(brand=>brand.isDefault);
+      select.innerHTML=brands.length?brands.map(brand=>`<option value="${esc(brand.id)}"${brand.id===(current||defaultBrand?.id)?' selected':''}>${esc(brand.name)}${brand.isDefault?' · default':''}</option>`).join(''):'<option value="">No brand</option>';
+      if(hint){
+        hint.hidden=false;
+        if(brands.length){hint.style.color='var(--muted)';hint.textContent='Brand voice, palette and rules will be applied to your brief.';hint.onclick=null;hint.style.cursor=''}
+        else{hint.style.color='';hint.textContent='No brands yet — create one in the Brands workspace to auto-apply voice and palette.';hint.onclick=()=>go('brands');hint.style.cursor='pointer'}
+      }
+    }
+    function updateAssetBrandOptions(){
+      const select=$('#asset-brand');if(!select)return;
+      const current=select.value;
+      select.innerHTML='<option value="">No brand</option>'+(state.brands||[]).map(brand=>`<option value="${esc(brand.id)}"${brand.id===current?' selected':''}>${esc(brand.name)}</option>`).join('');
+    }
+    function renderStudio(){
+      if(!state.data)return;
+      const brandSelect=$('#brand-filter'),current=brandSelect.value,brands=[...new Set(state.data.posts.map(post=>post.brand))].sort();
+      brandSelect.innerHTML='<option value="">All brands</option>'+brands.map(brand=>`<option${brand===current?' selected':''}>${esc(brand)}</option>`).join('');
+      const posts=filteredPosts();
+      $('#creative-grid').innerHTML=posts.map(post=>`<button class="creative-card ${state.activePost===post.key?'selected':''}" data-key="${post.key}"><img class="creative-art" src="${esc(post.image||'/assets/clone_centre_latest_logo.png')}" alt="${esc(post.title)}" onerror="this.onerror=null;this.src='/assets/clone_centre_latest_logo.png'"><div class="creative-copy"><div class="brand-line"><span>${esc(post.brand)}</span><span>${post.score||'—'}</span></div><h3>${esc(post.title)}</h3><p>${esc(post.pillar)}</p></div></button>`).join('')||'<div class="review-empty"><div><b>No creative matches</b><p>Change a filter to reopen the set.</p></div></div>';
+      $$('#creative-grid [data-key]').forEach(card=>card.onclick=()=>{state.activePost=card.dataset.key;renderStudio()});
+      renderReviewer();
+    }
+    function formatBytes(value){
+      const size=Number(value);if(!Number.isFinite(size))return'—';
+      if(size>=1048576)return`${(size/1048576).toFixed(1)} MB`;if(size>=1024)return`${Math.round(size/1024)} KB`;return`${size} B`;
+    }
+    function renderAssets(){
+      const grid=$('#asset-grid');if(!grid)return;
+      const assets=state.assets||[];
+      grid.innerHTML=assets.map(asset=>{
+        const mime=String(asset.mime||''),isImage=mime.startsWith('image/');
+        const thumb=isImage&&asset.url?`<img class="asset-thumb" src="${esc(asset.url)}" alt="${esc(asset.name)}" loading="lazy" onerror="this.remove()">`:`<div class="asset-icon" aria-hidden="true">${mime.includes('mp4')?'▶ VIDEO':'PDF'}</div>`;
+        const date=asset.createdAt?new Date(asset.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):'—';
+        return`<article class="asset-card">${thumb}<div class="asset-meta"><b>${esc(asset.name)}</b><span>${esc(formatBytes(asset.sizeBytes))} · ${esc(date)}</span></div></article>`;
+      }).join('')||'<div class="review-empty" style="min-height:180px"><div><b>No assets yet</b><p>Upload source images, clips or brand documents.</p></div></div>';
+      updateAssetBrandOptions();
+    }
+    async function uploadAsset(event){
+      const file=event.target.files?.[0];event.target.value='';if(!file)return;
+      if(file.size>15*1024*1024){toast('Files must be 15 MB or smaller');return}
+      try{
+        const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(file)});
+        const dataBase64=String(dataUrl).split(',')[1]||'';
+        const brandId=$('#asset-brand')?.value||'';
+        await request('/api/os/assets',{method:'POST',body:JSON.stringify({name:file.name,dataBase64,...(brandId?{brandId}:{})})});
+        toast('Asset uploaded to the library');
+        const payload=await request('/api/os/assets');state.assets=payload.assets||[];renderAssets();
+      }catch(error){toast('The asset could not be uploaded')}
+    }
+    function renderGeneration(){
+      const jobs=$('#generation-jobs');if(!jobs)return;
+      jobs.innerHTML=state.generationJobs.length?state.generationJobs.slice(0,6).map(job=>{
+        const urls=Array.isArray(job.assetUrls)&&job.assetUrls.length?job.assetUrls:(job.assetUrl?[job.assetUrl]:[]);
+        let media='';
+        if(job.status==='completed'&&urls.length){
+          media=urls.map(url=>/\.mp4($|\?)/i.test(String(url))?`<video class="job-video" src="${esc(url)}" controls preload="metadata" muted></video>`:`<img class="job-thumb" src="${esc(url)}" alt="${esc(job.outputType)} output" loading="lazy" onerror="this.remove()">`).join('');
+          if(urls.length>1)media=`<span class="job-thumbs">${media}</span>`;
+        }
+        const model=job.model?` · ${esc(job.model)}`:'';
+        const brand=job.brandId?` · ${esc(state.brands.find(item=>item.id===job.brandId)?.name||'brand')}`:'';
+        const resolved=job.resolvedPrompt?`<span title="${esc(job.resolvedPrompt)}" style="cursor:help;text-decoration:underline dotted">prompt</span>`:'';
+        const error=job.status==='failed'&&job.error?`<span class="job-error" title="${esc(job.error)}">${esc(job.error)}</span>`:'';
+        return`<span class="job-chip">${media}<span>${esc(String(job.outputType||'').toUpperCase())} · ${esc(job.provider)}${model}${brand}</span><span class="job-status ${esc(job.status)}">${esc(job.status)}</span>${resolved}${error}</span>`;
+      }).join(''):'<span class="job-chip">No generation jobs yet</span>';
+      renderPublications();updateGeneratorProviders();updateGeneratorBrands();
+    }
+    function renderPublications(){
+      const target=$('#generation-publications');if(!target)return;
+      const publications=state.publications||[];
+      target.innerHTML=publications.length?`<div class="publication-list"><b>Recent publications</b>${publications.slice(0,5).map(item=>{
+        const status=String(item.status||'pending'),badge=status==='failed'?'failed':['published','completed'].includes(status)?'completed':'queued';
+        const detail=item.publishedAt?new Date(item.publishedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):(item.error||'pending');
+        return`<div class="publication-row"><span class="job-status ${badge}">${esc(status)}</span><span>${esc(item.channel||'channel')}</span><small>${esc(detail)}</small></div>`;
+      }).join('')}</div>`:'';
+    }
+    const generationPoll={timer:null,deadline:0};
+    function startGenerationPolling(){
+      clearTimeout(generationPoll.timer);
+      if(!generationPoll.deadline)generationPoll.deadline=Date.now()+3*60*1000;
+      generationPoll.timer=setTimeout(pollGeneration,5000);
+    }
+    function stopGenerationPolling(){generationPoll.deadline=0;clearTimeout(generationPoll.timer)}
+    async function pollGeneration(){
+      if(Date.now()>generationPoll.deadline){stopGenerationPolling();return}
+      try{
+        const generation=await request('/api/os/generation');
+        state.generationJobs=generation.jobs||[];
+        if(Array.isArray(generation.publications))state.publications=generation.publications;
+        renderGeneration();
+        if(state.generationJobs.some(job=>['queued','processing'].includes(job.status)))startGenerationPolling();else stopGenerationPolling();
+      }catch(error){stopGenerationPolling()}
+    }
+    function updateGeneratorProviders(){
+      const type=$('#generation-type')?.value||'image',select=$('#generation-provider');if(!select)return;
+      const available=state.generators.filter(provider=>Array.isArray(provider.outputs)&&provider.outputs.includes(type));
+      select.innerHTML=available.map(provider=>`<option value="${esc(provider.id)}">${esc(provider.name)} · ${provider.state==='worker_ready'?'ready':'setup needed'}</option>`).join('');
+      updateGeneratorFields();
+    }
+    function providerModels(provider,type){
+      const raw=Array.isArray(provider?.models)?provider.models:[];
+      const models=raw.map(model=>typeof model==='string'?{id:model,label:model}:model).filter(model=>model&&model.id);
+      if(provider?.id==='higgsfield')return models.filter(model=>type==='video'?/^dop-/.test(model.id):/^soul-/.test(model.id));
+      return models;
+    }
+    function updateGeneratorFields(){
+      const type=$('#generation-type')?.value||'image';
+      const provider=state.generators.find(item=>item.id===$('#generation-provider')?.value);
+      const modelField=$('#generation-model-field'),modelSelect=$('#generation-model');
+      if(modelField&&modelSelect){
+        const models=providerModels(provider,type);
+        modelField.hidden=!models.length;
+        modelSelect.innerHTML=models.map(model=>`<option value="${esc(model.id)}">${esc(model.label||model.id)}</option>`).join('');
+      }
+      const countField=$('#generation-count-field');if(countField)countField.hidden=type!=='image';
+      const sourceField=$('#generation-source-field'),sourceSelect=$('#generation-source'),hint=$('#generation-source-hint'),submit=$('#generation-submit');
+      if(sourceField&&sourceSelect){
+        const images=(state.assets||[]).filter(asset=>String(asset.mime||'').startsWith('image/'));
+        sourceField.hidden=type!=='video';
+        sourceSelect.innerHTML=images.length?images.map(asset=>`<option value="${esc(asset.id)}">${esc(asset.name)}</option>`).join(''):'<option value="">No images uploaded</option>';
+        const blocked=type==='video'&&!images.length;
+        if(hint)hint.hidden=!blocked;
+        if(submit)submit.disabled=blocked;
+      }
+    }
+    function metricValue(variant,key){
+      const rows=variant.metrics||[];if(!rows.length)return'—';
+      const sum=name=>rows.reduce((total,row)=>total+Number(row[name]||0),0);
+      if(key==='ctr'){const impressions=sum('impressions'),clicks=sum('clicks');return impressions?`${(clicks/impressions*100).toFixed(1)}%`:'—'}
+      if(key==='cpc'){const clicks=sum('clicks'),spend=sum('spend');return clicks?`£${(spend/clicks).toFixed(2)}`:'—'}
+      if(key==='leads')return String(sum('leads'));
+      if(key==='roas'){const spend=sum('spend'),revenue=sum('revenue');return spend?`${(revenue/spend).toFixed(2)}x`:'—'}
+      return'—';
+    }
+    function compactNumber(value){
+      const number=Number(value);if(!Number.isFinite(number))return'—';
+      if(Math.abs(number)>=1000)return`${(number/1000).toFixed(1).replace(/\.0$/,'')}k`;
+      return String(Math.round(number));
+    }
+    function metricChannelChips(variant){
+      const rows=variant.metrics||[];
+      if(!rows.length)return'<span class="metric-chip">No channel metrics logged yet</span>';
+      return rows.map(row=>`<span class="metric-chip">${esc(row.channel)} · £${Number(row.spend||0).toLocaleString('en-GB',{maximumFractionDigits:0})} · ${compactNumber(row.impressions)} imp · ${compactNumber(row.clicks)} clk · ${compactNumber(row.leads)} leads · ${compactNumber(row.sales)} sales · £${Number(row.revenue||0).toLocaleString('en-GB',{maximumFractionDigits:0})}</span>`).join('');
+    }
+    function metricEntryForm(experiment,variant){
+      const base=`mc-${experiment.id}-${variant.key}`;
+      const fields=[['spend','Spend (£)','0.01'],['impressions','Impressions','1'],['clicks','Clicks','1'],['leads','Leads','1'],['sales','Sales','1'],['revenue','Revenue (£)','0.01']];
+      return`<form class="metric-form" id="${esc(base)}" data-experiment="${esc(experiment.id)}" data-variant="${esc(variant.key)}" hidden><div class="form-field"><label for="${esc(base)}-channel">Channel</label><select id="${esc(base)}-channel" required><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option><option value="google_ads">Google Ads</option></select></div>${fields.map(([key,label,step])=>`<div class="form-field"><label for="${esc(base)}-${key}">${label}</label><input class="input" id="${esc(base)}-${key}" name="${key}" type="number" min="0" step="${step}" value="0" required></div>`).join('')}<div class="form-actions"><button class="secondary" type="button" data-metrics-close="${esc(base)}">Close</button><button class="primary" type="submit">Save metrics</button></div></form>`;
+    }
+    function renderExperiments(){
+      const stack=$('#experiment-stack');if(!stack)return;
+      if(!state.experiments.length){stack.innerHTML='<div class="empty-lab"><h3>No live tests yet</h3><p>Create the first controlled experiment. OS will separate the control, visual, caption and format variants without inventing performance data.</p><button class="primary" data-empty-experiment>Create first A–D test</button></div>';const button=$('[data-empty-experiment]');if(button)button.onclick=()=>$('#experiment-dialog').showModal();return}
+      stack.innerHTML=state.experiments.map(experiment=>`<article class="experiment"><div class="experiment-head"><div><h3>${esc(experiment.name)}</h3><p>${esc(experiment.objective||'Define the success measure before launch.')} · ${(experiment.channels||[]).map(esc).join(' · ')||'Channels not chosen'}</p></div><span class="status">${esc(experiment.status)}</span></div><div class="variant-table"><div class="variant-row header"><span>Variant</span><span>Format</span><span>Asset</span><span>Caption</span><span>Changed</span><span>CTR</span><span>CPC</span><span>Leads</span><span>ROAS</span><span>Log</span></div>${experiment.variants.map(variant=>`<div class="variant-row"><div class="variant-key">${esc(variant.key)}</div><b>${esc(variant.assetType)}</b><span>${esc(variant.assetLabel)}</span><span>${esc(variant.captionLabel)}</span><span>${esc(variant.changedVariable)}</span><span class="metric-empty">${metricValue(variant,'ctr')}</span><span class="metric-empty">${metricValue(variant,'cpc')}</span><span class="metric-empty">${metricValue(variant,'leads')}</span><span class="metric-empty">${metricValue(variant,'roas')}</span><button class="text-btn" data-log-metrics="mc-${esc(experiment.id)}-${esc(variant.key)}" aria-expanded="false" aria-controls="mc-${esc(experiment.id)}-${esc(variant.key)}">Log metrics</button></div><div class="variant-detail"><div class="metric-chips">${metricChannelChips(variant)}</div>${metricEntryForm(experiment,variant)}</div>`).join('')}</div><div class="experiment-foot"><p>Ad IDs, asset hashes and caption hashes attach when the test is launched.</p><button class="secondary" data-add-variant="${experiment.id}">Add variant ${experiment.variants.length<26?String.fromCharCode(65+experiment.variants.length):experiment.variants.length+1}</button></div></article>`).join('');
+      $$('[data-add-variant]').forEach(button=>button.onclick=()=>addExperimentVariant(button.dataset.addVariant));
+      $$('[data-log-metrics]').forEach(button=>button.onclick=()=>{
+        const form=document.getElementById(button.dataset.logMetrics);if(!form)return;
+        const open=form.hidden;form.hidden=!open;button.setAttribute('aria-expanded',String(open));
+        if(open)form.querySelector('select')?.focus();
+      });
+      $$('[data-metrics-close]').forEach(button=>button.onclick=()=>{
+        const form=document.getElementById(button.dataset.metricsClose);if(form)form.hidden=true;
+        const toggle=stack.querySelector(`[data-log-metrics="${button.dataset.metricsClose}"]`);if(toggle)toggle.setAttribute('aria-expanded','false');
+      });
+      $$('.metric-form').forEach(form=>form.onsubmit=saveVariantMetrics);
+    }
+    async function saveVariantMetrics(event){
+      event.preventDefault();
+      const form=event.target,experimentId=form.dataset.experiment,variantKey=form.dataset.variant;
+      const channel=(form.querySelector('select')?.value||'').trim();
+      const keys=['spend','impressions','clicks','leads','sales','revenue'];
+      const values=Object.fromEntries(keys.map(key=>[key,Number(form.elements[key].value)]));
+      if(!experimentId||!variantKey||!channel){toast('Variant and channel are required');return}
+      if(Object.values(values).some(value=>!Number.isFinite(value)||value<0)){toast('Metrics must be zero or positive numbers');return}
+      const submit=form.querySelector('[type="submit"]');if(submit)submit.disabled=true;
+      try{
+        await request(`/api/os/experiments/${experimentId}/metrics`,{method:'POST',body:JSON.stringify({variantKey,channel,...values})});
+        toast(`Metrics logged for variant ${variantKey} · ${channel}`);
+        const payload=await request('/api/os/experiments');state.experiments=payload.experiments||[];renderExperiments();
+      }catch(error){
+        const code=error.payload?.error;
+        toast(code==='invalid_metric_value'?'Metrics must be zero or positive numbers':code==='experiment_variant_not_found'?'That experiment variant no longer exists':'The metrics could not be saved');
+        if(submit)submit.disabled=false;
+      }
+    }
+    async function createExperiment(event){
+      event.preventDefault();const channels=$('#experiment-channels').value.split(',').map(value=>value.trim()).filter(Boolean);
+      try{const result=await request('/api/os/experiments',{method:'POST',body:JSON.stringify({name:$('#experiment-name').value,objective:$('#experiment-objective').value,channels})});state.experiments.unshift(result.experiment);$('#experiment-dialog').close();$('#experiment-form').reset();renderExperiments();toast('A–D experiment created')}catch(error){toast('The experiment could not be created')}
+    }
+    async function addExperimentVariant(id){
+      try{const result=await request(`/api/os/experiments/${id}/variants`,{method:'POST',body:'{}'});state.experiments.find(item=>item.id===id)?.variants.push(result.variant);renderExperiments();toast(`Variant ${result.variant.key} added`)}catch(error){toast('The variant could not be added')}
+    }
+    async function queueGeneration(event){
+      event.preventDefault();
+      const type=$('#generation-type').value,provider=$('#generation-provider').value;
+      if(!provider){toast('Choose a provider first');return}
+      const body={outputType:type,provider,aspectRatio:$('#generation-ratio').value,prompt:$('#generation-prompt').value};
+      const brandId=$('#generation-brand')?.value||'';
+      if(brandId&&state.brands.length)body.brandId=brandId;
+      const modelSelect=$('#generation-model');
+      if(modelSelect&&!$('#generation-model-field').hidden&&modelSelect.value)body.model=modelSelect.value;
+      if(type==='image'){const count=Number($('#generation-count')?.value||1);if(count>1)body.count=count}
+      if(type==='video'){
+        const source=$('#generation-source')?.value;
+        if(!source){toast('Choose a source image for the video');return}
+        body.inputAssetId=source;
+      }
+      try{const result=await request('/api/os/generation/jobs',{method:'POST',body:JSON.stringify(body)});state.generationJobs.unshift(result.job);$('#generator-dialog').close();$('#generator-form').reset();updateGeneratorProviders();renderGeneration();startGenerationPolling();toast(result.workerState==='worker_ready'?'Generation queued for the connected worker':'Brief queued; connect the provider worker to render it')}catch(error){toast('The generation brief could not be queued')}
+    }
+    function renderReviewer(){
+      const post=state.data.posts.find(item=>item.key===state.activePost);
+      if(!post){$('#reviewer').innerHTML='<div class="review-empty"><div><i></i><b>Select a creative</b><p>Open one card to make a focused decision.</p></div></div>';return}
+      $('#reviewer').innerHTML=`<div class="review-body"><div class="review-kicker">${esc(post.brand)} / ${esc(post.pillar)}</div><h2>${esc(post.title)}</h2><p class="review-sub">${esc(post.subheadline||'Review the complete caption and visual as one publishing decision.')}</p><div class="scoreline"><span class="score">CREATIVE <b>${post.score||'—'}</b></span><span class="status ${post.status}">${esc(statusLabel(post.status))}</span></div><div class="caption-box">${esc(post.caption||'No caption supplied.')}</div><textarea id="decision-note" maxlength="1000" placeholder="What should change? Keep the instruction precise.">${esc(post.note||'')}</textarea><div class="review-actions"><button class="primary" data-decision="approved">Approve</button><button class="secondary" data-decision="changes_requested">Request changes</button><button class="danger" data-decision="discarded">Remove from run</button></div></div>`;
+      $$('#reviewer [data-decision]').forEach(button=>button.onclick=()=>saveDecision(post.key,button.dataset.decision));
+    }
+    async function saveDecision(key,decision){
+      const note=$('#decision-note')?.value||'';
+      try{
+        await request(`/api/os/posts/${key}/decision`,{method:'POST',body:JSON.stringify({decision,note})});
+        const post=state.data.posts.find(item=>item.key===key);post.status=decision;post.note=note;
+        toast(decision==='approved'?'Creative approved':decision==='discarded'?'Removed from this run':'Change request saved');
+        recomputeSummary();renderAll();
+      }catch(error){toast('The decision could not be saved')}
+    }
+    function renderQueue(){
+      if(!state.data)return;
+      $('#queue-board').innerHTML=state.data.queue.map(item=>`<article class="queue-card ${item.state==='paused'?'paused':''}"><div class="queue-time"><b>${esc(item.date)}</b>${esc(item.time)}</div><div><h3>${esc(item.brand)} · Post ${esc(item.postOrder)}</h3><p>${esc(item.caption||'Scheduled content')}</p></div><div class="queue-state"><span class="status ${item.state==='paused'?'changes_requested':'approved'}">${esc(item.state)}</span><button class="switch" data-queue="${item.key}" aria-label="${item.state==='paused'?'Resume':'Pause'} queue item"></button></div></article>`).join('')||'<div class="review-empty"><div><b>No scheduled drops</b><p>Approved work will appear here when it enters the schedule.</p></div></div>';
+      $$('#queue-board [data-queue]').forEach(button=>button.onclick=()=>toggleQueue(button.dataset.queue));
+    }
+    async function toggleQueue(key){
+      const item=state.data.queue.find(row=>row.key===key),next=item.state==='paused'?'scheduled':'paused';
+      try{await request(`/api/os/queue/${key}/control`,{method:'POST',body:JSON.stringify({state:next})});item.state=next;recomputeSummary();toast(next==='paused'?'Publishing item paused':'Publishing item resumed');renderOverview();renderQueue()}catch(error){toast('The queue change could not be saved')}
+    }
+    function renderLearning(){
+      if(!state.data)return;const insights=state.data.insights;
+      $('#insight-headline').textContent=insights.headline;$('#insight-copy').textContent=insights.recommendation;
+      const badge=$('#insight-data-state');
+      if(badge){
+        const known={live_data:['LIVE DATA','live'],pipeline_only:['PIPELINE ONLY',''],awaiting_channel_connections:['AWAITING CHANNEL CONNECTIONS','waiting']};
+        const [label,tone]=known[insights.dataState]||[String(insights.dataState||'pipeline only').replaceAll('_',' ').toUpperCase(),''];
+        badge.textContent=label;badge.className=`data-state ${tone}`.trim();
+      }
+      $('#funnel').innerHTML=insights.funnel.map(item=>{
+        const value=item.value==null?'—':item.label==='Spend'?`£${Number(item.value).toLocaleString('en-GB',{maximumFractionDigits:0})}`:compactNumber(item.value);
+        return`<div><span>${esc(item.label)}</span><b>${esc(value)}</b></div>`;
+      }).join('');
+      renderChannelMetrics();
+    }
+    function relativeTime(value){
+      const time=new Date(value).valueOf();if(!Number.isFinite(time))return'—';
+      const minutes=Math.max(0,Math.round((Date.now()-time)/60000));
+      if(minutes<1)return'just now';if(minutes<60)return`${minutes}m ago`;
+      const hours=Math.round(minutes/60);if(hours<24)return`${hours}h ago`;
+      return`${Math.round(hours/24)}d ago`;
+    }
+    function renderChannelMetrics(){
+      const chips=$('#channel-metric-chips'),hint=$('#channel-metrics-hint');if(!chips)return;
+      const metrics=state.metrics,channels=Array.isArray(metrics?.channels)?metrics.channels:[];
+      if(!channels.length){
+        if(hint)hint.textContent=Number(metrics?.totals30d?.rows||0)===0?'Connect Meta, TikTok or Google Ads to sync performance automatically.':'Automatic sync from connected ad accounts.';
+        chips.innerHTML='';return;
+      }
+      if(hint)hint.textContent='Automatic sync from connected ad accounts.';
+      chips.innerHTML=channels.map(channel=>{
+        const totals=channel.totals30d||{};
+        return`<span class="metric-chip">${esc(channel.channel)} · £${Number(totals.spend||0).toLocaleString('en-GB',{maximumFractionDigits:0})} spend · ${compactNumber(totals.impressions)} imp${channel.lastSyncAt?` · synced ${esc(relativeTime(channel.lastSyncAt))}`:''}</span>`;
+      }).join('');
+    }
+    function renderConnections(){
+      if(!state.integrations.length)return;
+      const groups={};state.integrations.forEach(item=>(groups[item.category]??=[]).push(item));
+      const action={connected:'Manage & inspect',ready_to_connect:'Connect account',setup_required:'Finish provider setup'};
+      $('#connection-groups').innerHTML=Object.entries(groups).map(([category,items])=>`<section><div class="group-label">${esc(category)}</div><div class="connection-grid">${items.map(item=>`<article class="connection-card"><div class="connection-top"><div class="provider-mark">${esc(item.name.slice(0,2).toUpperCase())}</div><span class="connection-state ${item.state}">${esc(item.state.replaceAll('_',' '))}</span></div><h3>${esc(item.name)}</h3><p>${esc(item.channels)}</p><div class="caps">${item.capabilities.slice(0,3).map(cap=>`<span class="cap">${esc(cap)}</span>`).join('')}</div><div class="connection-next"><span>NEXT</span><b>${esc(item.nextAction)}</b></div><div class="connection-progress" aria-label="${item.progress}% connected"><i style="width:${item.progress}%"></i></div><button class="${item.state==='connected'?'secondary':'primary'} connection-button" data-connect="${item.id}"><span>${action[item.state]}</span><span aria-hidden="true">→</span></button></article>`).join('')}</div></section>`).join('');
+      $$('#connection-groups [data-connect]').forEach(button=>button.onclick=()=>openConnection(button.dataset.connect));
+    }
+    function openConnection(id){
+      const item=state.integrations.find(connection=>connection.id===id);if(!item)return;
+      const connected=item.state==='connected',ready=item.state==='ready_to_connect';
+      const steps=[
+        {label:'Provider app',detail:item.connectionType==='oauth'?'Credentials and scopes configured':'Server API credential configured',done:ready||connected},
+        {label:'Account access',detail:item.connectionType==='oauth'?'Customer authorises selected accounts':'Credential validated by the worker',done:connected},
+        {label:'First sync',detail:'Accounts, assets and performance enter OS',done:connected&&item.connectionSummary.lastSync}
+      ];
+      const copy=connected?'The credential is ready. Live accounts, assets and usage appear only after the provider worker completes its first sync.':ready?'The provider app is ready. Authorise the exact customer accounts you want CloneCentre OS to read or manage.':'Add the server-side foundation first. No customer passwords are stored in the browser.';
+      $('#modal-title').textContent=item.name;$('#modal-copy').textContent=copy;
+      const lastSync=item.connectionSummary.lastSync?new Date(item.connectionSummary.lastSync).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'Awaiting';
+      $('#modal-summary').innerHTML=`<div class="summary-cell"><span>Setup</span><b>${item.progress}%</b></div><div class="summary-cell"><span>Accounts</span><b>${item.connectionSummary.accounts.length||'—'}</b></div><div class="summary-cell"><span>Last sync</span><b>${esc(lastSync)}</b></div>`;
+      $('#modal-steps').innerHTML=steps.map((step,index)=>`<div class="connection-step"><i>${String(index+1).padStart(2,'0')}</i><div><b>${esc(step.label)}</b><small>${esc(step.detail)}</small></div><span class="step-state ${step.done?'done':''}">${step.done?'Ready':'Next'}</span></div>`).join('');
+      $('#modal-unlocks').innerHTML=item.dataViews.map(view=>`<div class="unlock-item">${esc(view)}</div>`).join('');
+      $('#modal-note').textContent=connected?'Open the provider console in a separate tab; OS remains your combined operating view.':ready?'You will leave OS briefly for the provider’s official consent screen.':item.requirements.join(' · ');
+      const primary=$('#modal-primary');primary.textContent=ready?`Continue with ${item.name}`:item.portalLabel;primary.className='primary';
+      primary.onclick=async()=>{
+        if(!ready){
+          const opened=window.open(item.portalUrl,'_blank','noopener,noreferrer');
+          if(!opened)window.location.assign(item.portalUrl);
+          return;
+        }
+        primary.disabled=true;primary.textContent='Opening secure authorisation…';
+        try{const result=await request(`/api/os/integrations/${id}/connect`,{method:'POST',body:'{}'});window.location.assign(result.redirectUrl)}
+        catch(error){toast(error.payload?.message||'The provider hand-off could not start');primary.disabled=false;primary.textContent=`Continue with ${item.name}`}
+      };
+      $('#setup-dialog').showModal();
+    }
+    $$('nav button').forEach(button=>button.onclick=()=>go(button.dataset.view));
+    $$('[data-go]').forEach(button=>button.onclick=()=>go(button.dataset.go));
+    function applyTheme(theme){
+      const dark=theme==='dark';document.documentElement.dataset.theme=dark?'dark':'light';localStorage.setItem('cc-os-theme',dark?'dark':'light');
+      $('#theme-toggle').setAttribute('aria-pressed',String(dark));$('#theme-toggle').setAttribute('aria-label',dark?'Switch to day mode':'Switch to night mode');$('#theme-icon').textContent=dark?'☀':'☾';
+    }
+    applyTheme(localStorage.getItem('cc-os-theme')||'light');
+    $('#theme-toggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
+    $('#refresh').onclick=()=>load(true);$('#brand-filter').onchange=renderStudio;$('#status-filter').onchange=renderStudio;
+    $('#open-experiment').onclick=()=>$('#experiment-dialog').showModal();$('#open-generator').onclick=()=>{$('#generator-dialog').showModal();updateGeneratorProviders();updateGeneratorBrands()};
+    $('#open-brand').onclick=()=>openBrandDialog(null);
+    $('#experiment-form').onsubmit=createExperiment;$('#generator-form').onsubmit=queueGeneration;$('#generation-type').onchange=updateGeneratorProviders;$('#generation-provider').onchange=updateGeneratorFields;
+    $('#brand-form').onsubmit=saveBrand;
+    $('#brand-palette-add').onclick=()=>$('#brand-palette').insertAdjacentHTML('beforeend',paletteRow());
+    $('#brand-palette').onclick=event=>{const button=event.target.closest('[data-palette-remove]');if(button)button.closest('.palette-row').remove()};
+    $('#asset-upload').onchange=uploadAsset;
+    $$('dialog .close,dialog .close-action').forEach(button=>button.onclick=()=>button.closest('dialog').close());
+    $$('dialog').forEach(dialog=>dialog.onclick=event=>{if(event.target===dialog)dialog.close()});
+    async function initialise(){
+      await load();
+      const query=new URLSearchParams(window.location.search),provider=query.get('connection'),result=query.get('result');
+      if(!provider||!result)return;
+      go('connections');
+      const name=state.integrations.find(item=>item.id===provider)?.name||provider;
+      if(result==='connected')toast(`${name} connected securely`);
+      else if(result==='cancelled')toast(`${name} authorisation was cancelled`);
+      else toast(query.get('detail')||`${name} could not be connected`);
+      history.replaceState({},'',window.location.pathname);
+    }
+    initialise();
+  </script>
+</body>
+</html>

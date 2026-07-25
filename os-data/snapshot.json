@@ -1,0 +1,199 @@
+{
+  "generatedAt": "2026-07-25T20:45:31.874Z",
+  "posts": [
+    {
+      "key": "90ebb0b5bec8f4a6ffe2",
+      "brand": "TRAICE",
+      "brand_slug": "traice",
+      "title": "Can You Reconstruct the Decision?",
+      "subheadline": "Governance begins with a trace you can actually follow.",
+      "pillar": "AI audit trails",
+      "status": "accepted",
+      "score": 86,
+      "image": "/assets/os/content/90ebb0b5bec8f4a6ffe2.jpg",
+      "caption": "An AI audit trail is useful only if someone can follow it after the moment has passed. Which prompt ran? What did the model return? What changed? Who reviewed it, and what happened next?\n\nTRAICE records prompts, tokens, edits and agent actions alongside human oversight events, giving governance teams a clearer evidence chain to inspect. That does not make every output compliant by default; it makes the activity visible enough to review.\n\nExplore TRAICE audit trails.\n\n#TRAICE #AIGovernance #AIAuditTrail #ResponsibleAI #EUAIAct #RegTech",
+      "createdAt": "2026-07-18T10:48:01+00:00"
+    },
+    {
+      "key": "d6716739d253408059ce",
+      "brand": "TRAICE",
+      "brand_slug": "traice",
+      "title": "A Policy Is Not an Audit Trail.",
+      "subheadline": "Operational evidence shows what the AI actually did.",
+      "pillar": "Governance evidence",
+      "status": "crashed",
+      "score": null,
+      "image": "/assets/os/content/d6716739d253408059ce.jpg",
+      "caption": "An AI governance platform cannot turn a policy document into evidence. A policy says what should happen. An audit trail shows which prompt ran, what the model returned, what changed, who reviewed it and when approval happened.\n\nRegulated teams need both: the rule and the record. If your current process can only produce the first, you still have a visibility gap.\n\nSave this distinction.\n\n#TRAICE #AIGovernance #AIAuditTrail #ResponsibleAI #EUAIAct #RegTech",
+      "createdAt": "2026-07-18T10:48:01+00:00"
+    },
+    {
+      "key": "3f978537e0789f985308",
+      "brand": "Joseph Conlan · Clone Centre",
+      "brand_slug": "clone_centre_personal",
+      "title": "Practical AI. Built With You.",
+      "subheadline": "Joseph Conlan · live builds, plain English, useful systems.",
+      "pillar": "Plain-English AI education",
+      "status": "crashed",
+      "score": null,
+      "image": "/assets/os/content/3f978537e0789f985308.jpg",
+      "caption": "Practical AI training only matters if you can use it on Monday morning.\n\nI’m Joseph Conlan. I teach AI in plain English, build live with people each week, and focus on small systems that remove real friction. No endless tool round-ups. No pretending one prompt changes a business. Just a task, a working version, and an honest next step.\n\nFollow Joseph for the builds, not the hype.\n\n#JosephConlan #CloneCentre #PracticalAI #AIForSmallBusiness #AICoaching #AICommunity",
+      "createdAt": "2026-07-18T10:48:01+00:00"
+    },
+    {
+      "key": "de578ff6e63713b66dd9",
+      "brand": "Joseph Conlan · Clone Centre",
+      "brand_slug": "clone_centre_personal",
+      "title": "Stop Collecting AI Tips.",
+      "subheadline": "Choose one real task. Build the useful version.",
+      "pillar": "Plain-English AI education",
+      "status": "failed",
+      "score": null,
+      "image": "/assets/os/content/de578ff6e63713b66dd9.jpg",
+      "caption": "AI for small business does not need another folder full of saved tips. Pick one task that repeats, costs time or regularly gets postponed. Write down what a useful result looks like, then build the smallest version that reaches it.\n\nYou will learn more from one imperfect working system than from fifty screenshots of tools you might try later. Keep the scope small enough to finish this week.\n\nSave this and pick your one task.\n\n#JosephConlan #CloneCentre #PracticalAI #AIForSmallBusiness #AICoaching #AICommunity",
+      "createdAt": "2026-07-18T10:48:01+00:00"
+    },
+    {
+      "key": "32b7b556955bc970e810",
+      "brand": "Clone Centre · Company",
+      "brand_slug": "clone_centre",
+      "title": "Build AI Around People.",
+      "subheadline": "Useful systems. Human control. Clear accountability.",
+      "pillar": "Human-first AI principles",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/32b7b556955bc970e810.jpg",
+      "caption": "Human-first AI is decided in the boring details: who can stop a workflow, who reviews an output, and what evidence remains afterwards.\n\nThat is why Clone Centre starts with the job people are trying to do—not with a model demo. Useful systems keep human control visible and accountability clear. If the result looks impressive but nobody can explain or challenge it, the design is unfinished.\n\nFollow @CloneCentre for practical human-first AI.\n\n#CloneCentre #HumanFirstAI #ResponsibleAI #AIGovernance #AIProductDevelopment #UKTech",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "fa396e3147baaebd34e2",
+      "brand": "Clone Centre · Company",
+      "brand_slug": "clone_centre",
+      "title": "Compliance Starts at Design.",
+      "subheadline": "Governance works better before deployment, not after it.",
+      "pillar": "AI governance for real organisations",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/fa396e3147baaebd34e2.jpg",
+      "caption": "Responsible AI development starts before the first production prompt. It starts when the team decides what data enters the system, where review happens, who can intervene, and what gets recorded.\n\nAdding governance after launch usually means rebuilding choices that were treated as ‘just technical’. Put those questions into the design brief while they are still cheap to answer.\n\nSave this principle for your next AI project.\n\n#CloneCentre #HumanFirstAI #ResponsibleAI #AIGovernance #AIProductDevelopment #UKTech",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "4c89ad058d169eb232d3",
+      "brand": "ANSAIR",
+      "brand_slug": "ansair",
+      "title": "Your Phone. Still Answered.",
+      "subheadline": "ANSAIR handles the call while you handle the work.",
+      "pillar": "Real workday scenarios",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/4c89ad058d169eb232d3.jpg",
+      "caption": "An AI receptionist for UK small businesses earns its place when the phone rings while both hands are busy. ANSAIR can answer the caller, handle the enquiry and move suitable work towards a booking or quote while you stay focused on the job in front of you.\n\nIt is practical cover for the moments when voicemail is the only alternative—not a replacement for the people who run the business.\n\nTry ANSAIR free for 7 days.\n\n#ANSAIR #AIReceptionist #NeverMissACall #SmallBusinessUK #TradesUK #AppointmentBooking",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "11f89f8639b84ac046e3",
+      "brand": "ANSAIR",
+      "brand_slug": "ansair",
+      "title": "Missed Calls Become Missed Work.",
+      "subheadline": "Give every new enquiry a professional answer.",
+      "pillar": "Missed-call reality",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/11f89f8639b84ac046e3.jpg",
+      "caption": "24/7 call answering is less about being permanently online and more about what happens during the ten minutes nobody can pick up. A new customer rarely knows you are with a client, under a sink or halfway through a treatment; they only know the call went unanswered.\n\nANSAIR gives that enquiry a professional first response and keeps the next step moving.\n\nSee how ANSAIR answers when you cannot.\n\n#ANSAIR #AIReceptionist #NeverMissACall #SmallBusinessUK #TradesUK #AppointmentBooking",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "80c22dcbcd94cf077e61",
+      "brand": "HyperChat",
+      "brand_slug": "hyperchat",
+      "title": "Website In. AI Assistant Out.",
+      "subheadline": "Paste your URL. Meet your trained assistant in about 60 seconds.",
+      "pillar": "60-second build",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/80c22dcbcd94cf077e61.jpg",
+      "caption": "An AI chatbot for websites has one simple job: help a visitor get a useful answer before they leave. HyperChat reads the site you already have and creates a trained assistant in about 60 seconds.\n\nYou can build it, ask it awkward questions and see where the source content needs work before paying to put it live. The current £49/month plan covers the website assistant; additional channels are a separate roadmap.\n\nBuild your bot free.\n\n#HyperChat #AIChatbot #WebsiteChatbot #LeadCapture #SmallBusinessMarketing #CustomerSupport",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "99e1c055422fef8c7b94",
+      "brand": "HyperChat",
+      "brand_slug": "hyperchat",
+      "title": "Build Free in 60 Seconds.",
+      "subheadline": "No card. Test the assistant before you put it on your site.",
+      "pillar": "60-second build",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/99e1c055422fef8c7b94.jpg",
+      "caption": "Website lead capture does not need a six-week setup project. Paste your URL into HyperChat and it builds a trained assistant in about 60 seconds. No card is needed to create it, so the sensible next step is to test the hard questions your customers actually ask.\n\nIf the answers are useful, you can refine the assistant and decide whether to put it live on your website for £49/month.\n\nPaste your website URL.\n\n#HyperChat #AIChatbot #WebsiteChatbot #LeadCapture #SmallBusinessMarketing #CustomerSupport",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "b3e967c30e20373df7bb",
+      "brand": "Pipeline MA",
+      "brand_slug": "pipeline_ma",
+      "title": "The Next Target Is Already Filing.",
+      "subheadline": "Find early signals in public UK company data.",
+      "pillar": "Companies House research",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/b3e967c30e20373df7bb.jpg",
+      "caption": "UK deal sourcing starts long before a broker pack lands in the inbox. Ownership changes, filing patterns and other public company signals can show where a closer look is worthwhile—but only if the research is organised well enough to act on.\n\nPipeline MA screens those clues and keeps the target work in one dossier. It does not replace judgement or diligence; it helps an operator decide where both deserve time.\n\nExplore Pipeline MA.\n\n#PipelineMA #MandA #DealSourcing #Acquisition #BuyAndBuild #UKBusiness",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    },
+    {
+      "key": "55cfea641f858d58bb2d",
+      "brand": "Pipeline MA",
+      "brand_slug": "pipeline_ma",
+      "title": "Seven Signals. One Shortlist.",
+      "subheadline": "Turn scattered company clues into a focused research queue.",
+      "pillar": "Early acquisition signals",
+      "status": "review",
+      "score": null,
+      "image": "/assets/os/content/55cfea641f858d58bb2d.jpg",
+      "caption": "Off-market acquisitions are rarely found by staring harder at one company. The useful work is deciding which signals deserve a closer look across the whole sector.\n\nPipeline MA brings seven acquisition-relevant clues into one research queue, so an operator can spend time on the shortlist rather than every filing. Signals do not replace judgement or diligence; they tell you where to apply both.\n\nSave the sourcing framework.\n\n#PipelineMA #MandA #DealSourcing #Acquisition #BuyAndBuild #UKBusiness",
+      "createdAt": "2026-07-17T20:41:08+00:00"
+    }
+  ],
+  "schedule": [
+    {
+      "key": "0de48517c176b5996672",
+      "brand": "Joseph Conlan · Clone Centre",
+      "postOrder": "1",
+      "date": "2026-07-27",
+      "time": "07:30",
+      "caption": "Practical AI training only matters if you can use it on Monday morning.\n\nI’m Joseph Conlan. I teach AI in plain English, build live with people each week, and focus on small systems that remove real friction. No endless tool round-ups. No pretending one prompt changes a business. Just a task, a working version, and an honest next step.\n\nFollow Joseph for the builds, not the hype.\n\n#JosephConlan #CloneCentre #PracticalAI #AIForSmallBusiness #AICoaching #AICommunity",
+      "state": "scheduled"
+    },
+    {
+      "key": "c10a8d6284407d8cc79f",
+      "brand": "Joseph Conlan · Clone Centre",
+      "postOrder": "2",
+      "date": "2026-07-22",
+      "time": "12:30",
+      "caption": "AI for small business does not need another folder full of saved tips. Pick one task that repeats, costs time or regularly gets postponed. Write down what a useful result looks like, then build the smallest version that reaches it.\n\nYou will learn more from one imperfect working system than from fifty screenshots of tools you might try later. Keep the scope small enough to finish this week.\n\nSave this and pick your one task.\n\n#JosephConlan #CloneCentre #PracticalAI #AIForSmallBusiness #AICoaching #AICommunity",
+      "state": "scheduled"
+    },
+    {
+      "key": "1497852ca1232b1ddeb8",
+      "brand": "TRAICE",
+      "postOrder": "1",
+      "date": "2026-07-20",
+      "time": "08:00",
+      "caption": "An AI audit trail is useful only if someone can follow it after the moment has passed. Which prompt ran? What did the model return? What changed? Who reviewed it, and what happened next?\n\nTRAICE records prompts, tokens, edits and agent actions alongside human oversight events, giving governance teams a clearer evidence chain to inspect. That does not make every output compliant by default; it makes the activity visible enough to review.\n\nExplore TRAICE audit trails.\n\n#TRAICE #AIGovernance #AIAuditTrail #ResponsibleAI #EUAIAct #RegTech",
+      "state": "scheduled"
+    },
+    {
+      "key": "353678e843e978f29711",
+      "brand": "TRAICE",
+      "postOrder": "2",
+      "date": "2026-07-22",
+      "time": "12:00",
+      "caption": "An AI governance platform cannot turn a policy document into evidence. A policy says what should happen. An audit trail shows which prompt ran, what the model returned, what changed, who reviewed it and when approval happened.\n\nRegulated teams need both: the rule and the record. If your current process can only produce the first, you still have a visibility gap.\n\nSave this distinction.\n\n#TRAICE #AIGovernance #AIAuditTrail #ResponsibleAI #EUAIAct #RegTech",
+      "state": "scheduled"
+    }
+  ]
+}

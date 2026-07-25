@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Trends Map · What People Actually Search · Clone Centre</title>
+<meta name="description" content="A live 3D map of what people really search about AI — built from real Google and YouTube search data by Clone Centre in Liverpool. Explore the clusters, steal the content hooks, learn it live in the weekly group call.">
+<link rel="canonical" href="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Clone Centre">
+<meta property="og:title" content="AI Trends Map · Clone Centre">
+<meta property="og:description" content="What people actually search about AI, mapped in 3D from real search data. Liverpool's AI map.">
+<meta property="og:url" content="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:image" content="https://joseph.clonecentre.ai/assets/clone_centre_latest_logo.png">
+<meta name="release" content="phase-6">
+<link rel="icon" type="image/png" href="/assets/clone_centre_latest_logo.png?v=2">
+<link rel="apple-touch-icon" href="/assets/clone_centre_latest_logo.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Silkscreen:wght@400;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--panel:#050505;--ink:#ededed;--dim:#8a8a8a;--blue:#2e9bff;--line:#202020;--px:'VT323',monospace;--mono:'IBM Plex Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{min-height:100vh;background:radial-gradient(1000px 650px at 85% -10%,rgba(46,155,255,.13),transparent 58%),#000;color:var(--ink);font-family:var(--mono);font-size:14px;line-height:1.65;}
+.scanlines{position:fixed;inset:0;z-index:40;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);}
+.vignette{position:fixed;inset:0;z-index:39;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5) 100%);}
+::selection{background:var(--blue);color:#000;}
+a{color:inherit;}
+.topbar{position:sticky;top:0;z-index:30;min-height:66px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px max(22px,calc((100vw - 1120px)/2));}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.brand img{width:32px;height:32px;border-radius:6px;object-fit:cover;mix-blend-mode:screen;}
+.brand span{font-family:var(--px);font-size:24px;color:#fff;}
+.brand b{color:var(--blue);font-weight:400;}
+.navlinks{display:flex;gap:18px;align-items:center;}
+.navlinks a{font-family:var(--px);font-size:19px;text-decoration:none;color:var(--blue);border:1px solid #204b70;padding:5px 12px;}
+.navlinks a:hover,.navlinks a:focus-visible{background:var(--blue);color:#000;outline:none;}
+.navlinks a.plain{border-color:#363636;color:#aaa;}
+.navlinks a.plain:hover{border-color:#fff;background:#fff;color:#000;}
+main{width:min(1120px,calc(100% - 44px));margin:0 auto;padding:56px 0 90px;}
+.kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);}
+.kicker::before{content:"// ";}
+h1{font-family:var(--px);font-weight:400;font-size:clamp(48px,7.5vw,84px);line-height:.9;color:#fff;text-shadow:3px 3px 0 rgba(46,155,255,.35);margin-top:17px;}
+.intro{max-width:68ch;margin-top:22px;color:var(--dim);}
+.updated{margin-top:14px;display:inline-block;border-left:2px solid var(--blue);padding:5px 0 5px 13px;color:#768493;font-size:10px;letter-spacing:.5px;}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px;max-width:760px;}
+.stat-strip .stat{border:1px solid var(--line);background:rgba(5,5,5,.9);padding:14px 16px;}
+.stat-strip .stat b{display:block;font-family:var(--px);font-weight:400;font-size:clamp(28px,3.4vw,40px);color:var(--blue);line-height:1;}
+.stat-strip .stat span{font-size:8px;letter-spacing:1.4px;color:#66717c;text-transform:uppercase;}
+@media(max-width:760px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
+.map-shell{position:relative;margin-top:34px;border:1px solid var(--line);background:#020202;height:min(72vh,720px);min-height:420px;overflow:hidden;}
+#map-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;}
+#map-canvas:active{cursor:grabbing;}
+.map-hud{position:absolute;left:14px;bottom:12px;z-index:5;font-size:9px;letter-spacing:1.4px;color:#5d6873;text-transform:uppercase;pointer-events:none;}
+#tooltip{position:absolute;z-index:6;pointer-events:none;background:rgba(0,0,0,.92);border:1px solid var(--blue);color:#fff;font-family:var(--mono);font-size:11px;padding:6px 10px;max-width:260px;display:none;}
+#tooltip b{color:var(--blue);font-weight:400;display:block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+#panel{position:absolute;top:0;right:0;bottom:0;z-index:7;width:min(380px,92%);background:rgba(3,3,3,.97);border-left:1px solid var(--blue);padding:24px 22px;overflow-y:auto;transform:translateX(105%);transition:transform .28s ease;}
+#panel.open{transform:translateX(0);}
+#panel .close{position:absolute;top:14px;right:14px;background:none;border:1px solid #363636;color:#aaa;font-family:var(--px);font-size:18px;padding:2px 9px;cursor:pointer;}
+#panel .close:hover{border-color:#fff;color:#fff;}
+#panel h2{font-family:var(--px);font-size:34px;font-weight:400;color:#fff;line-height:1;margin:26px 0 4px;}
+#panel .hot-badge{display:none;font-size:9px;letter-spacing:2px;color:#000;background:var(--blue);padding:3px 8px;text-transform:uppercase;margin-left:8px;vertical-align:middle;}
+#panel.is-hot .hot-badge{display:inline-block;}
+#panel .sub{font-size:10px;letter-spacing:1.6px;color:var(--blue);text-transform:uppercase;margin:18px 0 8px;}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
+.metric{border:1px solid #1d2a37;background:#030608;padding:9px 10px;}
+.metric b{display:block;font-family:var(--px);font-size:24px;font-weight:400;color:#fff;line-height:1;}
+.metric span{font-size:8px;letter-spacing:1.2px;color:#66717c;text-transform:uppercase;}
+.metric .up{color:#3ddc84;}
+.metric .down{color:#ff5d5d;}
+.spark{margin-top:10px;border:1px solid #1d2a37;background:#030608;padding:8px;}
+.spark svg{display:block;width:100%;height:44px;}
+.spark .cap{font-size:8px;letter-spacing:1.2px;color:#66717c;text-transform:uppercase;margin-top:4px;}
+#panel ul{list-style:none;}
+#panel li{border-top:1px solid #191919;padding:7px 0 7px 14px;position:relative;color:var(--ink);font-size:12px;cursor:pointer;transition:background .15s;}
+#panel li:hover{background:rgba(46,155,255,.06);}
+#panel li::before{content:"›";position:absolute;left:0;color:var(--blue);transition:transform .15s;}
+#panel li.expanded::before{transform:rotate(90deg);}
+#panel li.picked{color:var(--blue);}
+#panel li .rank{color:#5d6873;font-size:9px;margin-right:6px;}
+#panel li .detail{display:none;margin:9px 0 5px;font-size:10px;color:#8a97a3;cursor:default;}
+#panel li.expanded .detail{display:block;}
+#panel li .detail .row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px;}
+#panel li .detail .chip{border:1px solid #1d2a37;padding:2px 7px;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#9fb4c6;}
+#panel li .detail .chip.hot{color:#000;background:var(--blue);border-color:var(--blue);}
+#panel li .detail .hookq{border-left:2px solid var(--blue);padding:6px 0 6px 11px;color:#c8d2dc;font-style:italic;font-size:11px;}
+#panel li .detail .fmt{margin-top:9px;}
+#panel li .detail .fmt .chip{border-color:var(--blue);color:var(--blue);}
+#panel li .detail .fmt-title{color:#fff;font-size:11px;margin-top:5px;}
+#panel li .detail .rel-head,#panel li .detail .offer-head{font-size:8px;letter-spacing:1.4px;color:#66717c;text-transform:uppercase;margin:10px 0 4px;}
+#panel li .detail .rel{list-style:none;}
+#panel li .detail .rel li{border:0;padding:2px 0 2px 12px;font-size:10px;color:#8a97a3;cursor:default;}
+#panel li .detail .rel li::before{content:"↳";color:#3a5a78;}
+#panel li .detail .rel li .src{color:#4a5865;font-size:8px;}
+#panel li .detail .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+#panel li .detail .mini{font-family:var(--px);font-size:15px;padding:3px 10px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer;text-decoration:none;}
+#panel li .detail .mini:hover{background:var(--blue);color:#000;}
+#panel li .detail .mini.alt{border-color:#363636;color:#aaa;}
+#panel li .detail .mini.alt:hover{border-color:#fff;background:#fff;color:#000;}
+#panel li .detail .offer{color:#9fb4c6;font-size:10px;}
+#panel li .detail .offer a{color:var(--blue);}
+#panel li .detail .script{margin-top:8px;border:1px solid #1d2a37;background:#02070c;padding:10px 12px;}
+#panel li .detail .beat{padding:6px 0;border-top:1px solid #12202e;font-size:10px;color:#aeb9c4;line-height:1.55;}
+#panel li .detail .beat:first-child{border-top:0;padding-top:0;}
+#panel li .detail .beat span{display:block;font-size:8px;letter-spacing:1.4px;color:var(--blue);text-transform:uppercase;margin-bottom:2px;}
+#panel .hook{border-left:2px solid var(--blue);padding:8px 0 8px 13px;color:#c8d2dc;font-size:12px;margin-top:9px;font-style:italic;}
+.cta-row{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
+.cta{font-family:var(--px);font-size:20px;letter-spacing:.5px;padding:9px 17px;border:2px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer;text-decoration:none;text-align:center;}
+.cta:hover,.cta:focus-visible{background:var(--blue);color:#000;outline:none;}
+.cta.secondary{border-color:#363636;color:#aaa;}
+.cta.secondary:hover{border-color:#fff;background:#fff;color:#000;}
+.trends-list{margin-top:44px;border:1px solid var(--line);background:rgba(5,5,5,.94);padding:30px;}
+.trends-list h2{font-family:var(--px);font-size:36px;font-weight:400;color:#fff;line-height:1;margin-bottom:6px;}
+.trends-list .hint{font-size:10px;color:#66717c;max-width:62ch;margin-bottom:20px;}
+.cluster-block{border-top:1px solid #191919;padding:14px 0;}
+.cluster-block h3{font-family:var(--px);font-size:24px;font-weight:400;color:var(--blue);}
+.cluster-block p{color:var(--dim);font-size:12px;margin-top:4px;}
+.cluster-block .hint-click{font-size:8px;letter-spacing:1.4px;color:#4a5865;text-transform:uppercase;margin-left:10px;}
+.cluster-block .q{display:inline-block;border:1px solid #1d2a37;background:#02070c;color:#9fb4c6;font-size:11px;padding:4px 10px;margin:7px 6px 0 0;cursor:pointer;transition:border-color .15s,color .15s;}
+.cluster-block .q:hover{border-color:var(--blue);color:#fff;}
+.cluster-block .q .rk{color:var(--blue);font-size:9px;margin-right:5px;}
+footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:#59636d;font-size:10px;letter-spacing:.6px;}
+@media(max-width:760px){
+  .topbar{padding:11px 18px;}.brand span{font-size:21px;}main{width:min(100% - 34px,1120px);padding-top:40px;}
+  .map-shell{height:64vh;}.trends-list{padding:22px 18px;}
+  .navlinks a{font-size:16px;padding:4px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<header class="topbar">
+  <a class="brand" href="/"><img src="/assets/clone_centre_latest_logo.png" alt="Clone Centre logo"><span>Clone<b>Centre</b></span></a>
+  <nav class="navlinks">
+    <a class="plain" href="/">&lt; HOME</a>
+    <a href="/community">JOIN THE GROUP CALL</a>
+  </nav>
+</header>
+
+<main>
+  <div class="kicker">Live search intelligence · geo UK</div>
+  <h1>WHAT PEOPLE<br>ACTUALLY SEARCH.</h1>
+  <p class="intro">Every node on this map is a real thing people typed into Google or YouTube about AI — not a guess, not a guru's opinion. Drag to orbit, scroll to zoom, click any cluster to see the exact searches and ready-to-film content hooks. This is the map Clone Centre uses to plan content in Liverpool.</p>
+  <div class="updated" id="updated">LOADING TREND DATA…</div>
+  <div class="stat-strip" id="stat-strip" hidden>
+    <div class="stat"><b id="stat-queries">0</b><span>Real searches analysed</span></div>
+    <div class="stat"><b id="stat-clusters">0</b><span>Topic clusters</span></div>
+    <div class="stat"><b id="stat-sources">0</b><span>Live data sources</span></div>
+    <div class="stat"><b id="stat-rising">0</b><span>Clusters rising</span></div>
+  </div>
+
+  <div class="map-shell">
+    <canvas id="map-canvas"></canvas>
+    <div id="tooltip"></div>
+    <aside id="panel" aria-live="polite">
+      <button type="button" class="close" id="panel-close">✕</button>
+      <h2><span id="panel-title">Cluster</span><span class="hot-badge">Trending now</span></h2>
+      <div class="metrics" id="panel-metrics"></div>
+      <div class="spark" id="panel-spark" hidden><svg id="spark-svg" viewBox="0 0 320 44" preserveAspectRatio="none"></svg><div class="cap" id="spark-cap"></div></div>
+      <div class="sub">People are searching · click one</div>
+      <ul id="panel-queries"></ul>
+      <div class="sub">Ready-to-film hooks</div>
+      <div id="panel-hooks"></div>
+      <div class="cta-row">
+        <a class="cta" href="/community">LEARN THIS LIVE IN THE GROUP CALL</a>
+        <a class="cta secondary" href="/coaching">WORK 1-TO-1 WITH JOSEPH</a>
+      </div>
+    </aside>
+    <div class="map-hud">Drag to orbit · Scroll to zoom · Click a node</div>
+  </div>
+
+  <section class="trends-list" id="trends-list" aria-label="Full trend list">
+    <h2>THE FULL PICTURE, IN TEXT</h2>
+    <p class="hint">The same data as the map, in plain text — the top real searches in each AI topic cluster right now.</p>
+    <div id="clusters"></div>
+  </section>
+
+  <section class="trends-list" aria-label="Where this data comes from">
+    <h2>WHERE THIS DATA COMES FROM</h2>
+    <p class="hint">No guesses, no guru opinions, no made-up numbers. Here's exactly how the map is built.</p>
+    <div class="cluster-block">
+      <h3>1 · GOOGLE AUTOCOMPLETE</h3>
+      <p>The real suggestions Google shows when people type — generated from actual searches. We pull them for 42 AI seed phrases and keep the 671 unique queries people genuinely search.</p>
+    </div>
+    <div class="cluster-block">
+      <h3>2 · YOUTUBE SUGGEST</h3>
+      <p>The same mechanism on YouTube — what viewers search before they watch. If a query shows up on both Google and YouTube, it ranks higher on the map.</p>
+    </div>
+    <div class="cluster-block">
+      <h3>3 · GOOGLE TRENDS (UK)</h3>
+      <p>Daily trending searches for the UK flag which topics are in the news right now — those nodes pulse. 12-month interest timelines power the momentum score and sparkline on each cluster.</p>
+    </div>
+    <div class="cluster-block">
+      <h3>REFRESHED, NOT STREAMED</h3>
+      <p>The map re-pulls everything from live sources on a weekly schedule and shows you the exact date it was last updated. Search behaviour moves weekly, not hourly — so what you see is current reality, not a stale blog post from 2023.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>CLONE CENTRE · LIVERPOOL</span>
+    <span>DATA: GOOGLE AUTOCOMPLETE · YOUTUBE SUGGEST · GOOGLE TRENDS (GB)</span>
+  </footer>
+</main>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const BLUE = 0x2e9bff;
+const isMobile = matchMedia('(max-width: 768px)').matches;
+
+const shell = document.querySelector('.map-shell');
+const canvas = document.getElementById('map-canvas');
+const tooltip = document.getElementById('tooltip');
+const panel = document.getElementById('panel');
+
+let data;
+try {
+  const response = await fetch('/data/trend-map.json', { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  data = await response.json();
+} catch (error) {
+  document.getElementById('updated').textContent = 'TREND DATA UNAVAILABLE RIGHT NOW — THE MAP WILL BE BACK SOON';
+  document.getElementById('clusters').innerHTML = '<p class="hint">Could not load the trend data. Try again later.</p>';
+  throw error;
+}
+
+const date = new Date(data.generatedAt);
+document.getElementById('updated').textContent =
+  `UPDATED ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()} · ${data.clusters.length} TOPIC CLUSTERS · REFRESHED WEEKLY`;
+
+/* ---------- headline numbers ---------- */
+const rising = data.clusters.filter((cluster) => cluster.trends && cluster.trends.growthPct > 0).length;
+document.getElementById('stat-queries').textContent = (data.totalAnalyzed || data.clusters.reduce((sum, c) => sum + (c.analyzed || c.queries.length), 0)).toLocaleString('en-GB');
+document.getElementById('stat-clusters').textContent = data.clusters.length;
+document.getElementById('stat-sources').textContent = data.sources.length;
+document.getElementById('stat-rising').textContent = data.clusters.some((c) => c.trends) ? `${rising}/${data.clusters.length}` : '—';
+document.getElementById('stat-strip').hidden = false;
+
+/* ---------- static text list (also the no-WebGL fallback content) ---------- */
+document.getElementById('clusters').innerHTML = data.clusters.map((cluster, index) => `
+  <div class="cluster-block" data-cluster="${index}">
+    <h3>#${index + 1} ${escapeHtml(cluster.name)}${growthBadge(cluster)}<span class="hint-click">most searched ${index === 0 ? '· top topic' : `of ${data.clusters.length}`} · click to explore</span></h3>
+    <div>${cluster.queries.map((query) => `<span class="q" data-query="${escapeHtml(query.label)}"><span class="rk">#${query.rank}</span>${escapeHtml(query.label)}</span>`).join('')}</div>
+  </div>`).join('');
+
+document.getElementById('clusters').addEventListener('click', (event) => {
+  const block = event.target.closest('.cluster-block');
+  if (!block) return;
+  const clusterId = Number(block.dataset.cluster);
+  const queryChip = event.target.closest('.q');
+  openPanel(clusterId, queryChip ? queryChip.dataset.query : null);
+  document.querySelector('.map-shell').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+function growthBadge(cluster) {
+  if (!cluster.trends || cluster.trends.growthPct === null) return '';
+  const pct = cluster.trends.growthPct;
+  const color = pct >= 0 ? '#3ddc84' : '#ff5d5d';
+  const arrow = pct >= 0 ? '▲' : '▼';
+  return ` <span style="font-family:var(--mono);font-size:10px;color:${color};letter-spacing:1px;">${arrow} ${Math.abs(pct)}%</span>`;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+}
+
+/* ---------- three.js scene ---------- */
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.012);
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 500);
+camera.position.set(0, 18, 62);
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.55;
+controls.minDistance = 18;
+controls.maxDistance = 140;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const key = new THREE.PointLight(BLUE, 120, 200);
+key.position.set(30, 40, 30);
+scene.add(key);
+
+/* centre core */
+const core = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(3.4, 1),
+  new THREE.MeshBasicMaterial({ color: BLUE, wireframe: true })
+);
+scene.add(core);
+const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: glowTexture('rgba(46,155,255,1)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+}));
+coreGlow.scale.setScalar(16);
+scene.add(coreGlow);
+scene.add(textSprite('LIVERPOOL\'S AI MAP', 4.6, '#ffffff').translateY(-6.4));
+
+function glowTexture(color) {
+  const size = 128;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  gradient.addColorStop(0, color);
+  gradient.addColorStop(0.35, color.replace(',1)', ',.35)'));
+  gradient.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  return new THREE.CanvasTexture(c);
+}
+
+function textSprite(text, scale, color) {
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 160;
+  const ctx = c.getContext('2d');
+  ctx.font = '700 72px Silkscreen, monospace';
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 22;
+  ctx.fillText(text.toUpperCase(), 512, 80);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+  sprite.scale.set(scale * 6.4, scale, 1);
+  return sprite;
+}
+
+/* layout: hubs on a sphere shell, queries orbit their hub */
+const hubRadius = 30;
+const pickables = [];
+const animated = [];
+const clusterById = new Map();
+
+const hubMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const queryMaterial = new THREE.MeshBasicMaterial({ color: BLUE });
+const hotMaterial = new THREE.MeshBasicMaterial({ color: 0x9fd2ff });
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x14314d, transparent: true, opacity: 0.6 });
+
+data.clusters.forEach((cluster, ci) => {
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  const y = 1 - (ci / Math.max(data.clusters.length - 1, 1)) * 2;
+  const ring = Math.sqrt(1 - y * y);
+  const theta = golden * ci;
+  const hubPos = new THREE.Vector3(Math.cos(theta) * ring, y * 0.8, Math.sin(theta) * ring).multiplyScalar(hubRadius);
+
+  const hubSize = 1.1 + (cluster.score / data.clusters[0].score) * 1.6;
+  const hub = new THREE.Mesh(new THREE.OctahedronGeometry(hubSize, 0), hubMaterial.clone());
+  hub.position.copy(hubPos);
+  hub.userData = { type: 'cluster', clusterId: ci, label: cluster.name };
+  scene.add(hub);
+  pickables.push(hub);
+  animated.push({ mesh: hub, spin: 0.15 + Math.random() * 0.2 });
+
+  const label = textSprite(cluster.name, 1.7, '#2e9bff');
+  label.position.copy(hubPos).y += hubSize + 2.2;
+  scene.add(label);
+
+  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), hubPos]), lineMaterial));
+
+  const queries = isMobile ? cluster.queries.slice(0, 5) : cluster.queries;
+  queries.forEach((query, qi) => {
+    const angle = (qi / queries.length) * Math.PI * 2 + ci;
+    const orbit = 4.5 + (qi % 3) * 2.1;
+    const anchor = hubPos.clone().add(new THREE.Vector3(Math.cos(angle) * orbit, ((qi % 5) - 2) * 1.6, Math.sin(angle) * orbit));
+    const size = 0.34 + (query.score / queries[0].score) * 0.75;
+    const node = new THREE.Mesh(new THREE.SphereGeometry(size, 12, 12), (query.hot ? hotMaterial : queryMaterial).clone());
+    if (query.hot) node.material.transparent = true;
+    node.position.copy(anchor).add(new THREE.Vector3((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3));
+    node.userData = { type: 'query', clusterId: ci, label: query.label, rank: query.rank, anchor, orbit, angle, speed: 0.08 + Math.random() * 0.12, hot: query.hot, phase: Math.random() * Math.PI * 2 };
+    scene.add(node);
+    pickables.push(node);
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([hubPos, node.position]), lineMaterial));
+  });
+
+  clusterById.set(ci, cluster);
+});
+
+/* panel */
+let pickedQuery = null;
+function openPanel(clusterId, queryLabel) {
+  const cluster = clusterById.get(clusterId);
+  if (!cluster) return;
+  pickedQuery = queryLabel || null;
+  document.getElementById('panel-title').textContent = cluster.name;
+  panel.classList.toggle('is-hot', cluster.queries.some((query) => query.hot));
+
+  const rank = data.clusters.indexOf(cluster) + 1;
+  const growth = cluster.trends?.growthPct;
+  document.getElementById('panel-metrics').innerHTML = `
+    <div class="metric"><b>#${rank}</b><span>of ${data.clusters.length} clusters</span></div>
+    <div class="metric"><b>${cluster.analyzed || cluster.queries.length}</b><span>searches analysed</span></div>
+    <div class="metric"><b class="${growth === null || growth === undefined ? '' : growth >= 0 ? 'up' : 'down'}">${growth === null || growth === undefined ? '—' : `${growth >= 0 ? '+' : ''}${growth}%`}</b><span>8-week momentum</span></div>`;
+
+  const spark = document.getElementById('panel-spark');
+  if (cluster.trends?.timeline?.length > 4) {
+    document.getElementById('spark-svg').innerHTML = sparkline(cluster.trends.timeline.map((point) => point.value));
+    document.getElementById('spark-cap').textContent =
+      `"${cluster.trends.keyword}" · UK interest 0–100 · now ${cluster.trends.current} · 12 months, Google Trends`;
+    spark.hidden = false;
+  } else {
+    spark.hidden = true;
+  }
+
+  document.getElementById('panel-queries').innerHTML = cluster.queries.slice(0, 6).map((query, index) => `
+    <li data-index="${index}" class="${query.label === pickedQuery ? 'picked' : ''}">
+      <span class="rank">#${query.rank}</span>${escapeHtml(query.label)}
+      <div class="detail">
+        <div class="row">
+          <span class="chip">${query.appearances} suggestion lists</span>
+          ${query.sources.map((source) => `<span class="chip">${source === 'youtube' ? 'YouTube' : 'Google'}</span>`).join('')}
+          ${query.hot ? '<span class="chip hot">Trending in UK news</span>' : ''}
+          <span class="chip">score ${query.score}</span>
+        </div>
+        <div class="hookq">${escapeHtml(query.hook)}</div>
+        <div class="fmt">
+          <span class="chip">${escapeHtml(query.format)}</span>
+          <div class="fmt-title">TITLE: ${escapeHtml(query.title)}</div>
+        </div>
+        ${scriptBlock(query)}
+        ${query.related?.length ? `
+        <div class="rel-head">People search next — your follow-up videos</div>
+        <ul class="rel">${query.related.map((item) => `<li>${escapeHtml(item.label)} <span class="src">${item.source === 'youtube' ? 'YT' : 'G'}</span></li>`).join('')}</ul>` : ''}
+        <div class="actions">
+          <button type="button" class="mini" data-copy="${escapeHtml(query.hook)}">COPY HOOK</button>
+          ${query.script ? `<button type="button" class="mini" data-copy="${escapeHtml(scriptTextOf(query))}">COPY SCRIPT</button>` : ''}
+          <a class="mini alt" href="https://www.google.com/search?q=${encodeURIComponent(query.label)}" target="_blank" rel="noopener">GOOGLE IT ↗</a>
+          <a class="mini alt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(query.label)}" target="_blank" rel="noopener">YOUTUBE IT ↗</a>
+        </div>
+        <div class="offer-head">How this one makes money</div>
+        <div class="offer"><a href="${escapeHtml(cluster.offer.href)}">${escapeHtml(cluster.offer.label)}</a></div>
+      </div>
+    </li>`).join('');
+  document.getElementById('panel-hooks').innerHTML = cluster.hooks.map((hook) =>
+    `<div class="hook">${escapeHtml(hook)}</div>`).join('');
+  panel.classList.add('open');
+
+  if (pickedQuery) {
+    const items = panel.querySelectorAll('#panel-queries li[data-index]');
+    const match = [...items].find((item) => item.textContent.includes(pickedQuery));
+    if (match) {
+      match.classList.add('expanded');
+      setTimeout(() => match.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 320);
+    }
+  }
+}
+
+document.getElementById('panel-queries').addEventListener('click', (event) => {
+  const copyButton = event.target.closest('[data-copy]');
+  if (copyButton) {
+    const text = copyButton.dataset.copy;
+    const original = copyButton.textContent;
+    navigator.clipboard?.writeText(text).then(() => {
+      copyButton.textContent = 'COPIED ✓';
+      setTimeout(() => { copyButton.textContent = original; }, 1400);
+    });
+    return;
+  }
+  if (event.target.closest('a')) return; // let the Google/YouTube/offer links through
+  const item = event.target.closest('li[data-index]');
+  if (!item) return;
+  const wasOpen = item.classList.contains('expanded');
+  for (const other of item.parentElement.children) other.classList.remove('expanded');
+  if (!wasOpen) item.classList.add('expanded');
+});
+
+function scriptTextOf(query) {
+  return `${query.title}\n\n` + query.script.map((beat) => `${beat.beat}\n${beat.line}`).join('\n\n');
+}
+
+function scriptBlock(query) {
+  if (!query.script) return '';
+  return `<div class="rel-head">60-second script</div>
+  <div class="script">${query.script.map((beat) => `<div class="beat"><span>${escapeHtml(beat.beat)}</span>${escapeHtml(beat.line)}</div>`).join('')}</div>`;
+}
+
+function sparkline(values) {
+  const width = 320, height = 44, pad = 2;
+  const max = Math.max(...values, 1);
+  const step = (width - pad * 2) / (values.length - 1);
+  const points = values.map((value, index) =>
+    `${(pad + index * step).toFixed(1)},${(height - pad - (value / max) * (height - pad * 2)).toFixed(1)}`);
+  const area = `${pad},${height - pad} ${points.join(' ')} ${width - pad},${height - pad}`;
+  return `<polygon points="${area}" fill="rgba(46,155,255,.14)"/><polyline points="${points.join(' ')}" fill="none" stroke="#2e9bff" stroke-width="1.5"/>`;
+}
+
+document.getElementById('panel-close').addEventListener('click', () => panel.classList.remove('open'));
+
+// allows /trends?cluster=AI%20Video deep links and simple automated checks
+window.__openCluster = openPanel;
+const wanted = new URLSearchParams(location.search).get('cluster');
+if (wanted) {
+  const entry = [...clusterById].find(([, cluster]) => cluster.name.toLowerCase() === wanted.toLowerCase());
+  if (entry) openPanel(entry[0]);
+}
+
+/* picking */
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let hovered = null;
+let downAt = 0;
+
+function setPointer(event) {
+  const rect = canvas.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  return rect;
+}
+
+canvas.addEventListener('pointermove', (event) => {
+  const rect = setPointer(event);
+  raycaster.setFromCamera(pointer, camera);
+  const hit = raycaster.intersectObjects(pickables, false)[0];
+  hovered = hit ? hit.object : null;
+  if (hovered) {
+    tooltip.style.display = 'block';
+    tooltip.style.left = `${event.clientX - rect.left + 14}px`;
+    tooltip.style.top = `${event.clientY - rect.top + 12}px`;
+    tooltip.innerHTML = `<b>${hovered.userData.type === 'cluster' ? 'Topic cluster' : `Real search · rank #${hovered.userData.rank || '—'}`}</b>${escapeHtml(hovered.userData.label)}`;
+    canvas.style.cursor = 'pointer';
+  } else {
+    tooltip.style.display = 'none';
+    canvas.style.cursor = 'grab';
+  }
+});
+
+canvas.addEventListener('pointerdown', () => { downAt = performance.now(); });
+canvas.addEventListener('pointerup', (event) => {
+  if (performance.now() - downAt > 250) return; // it was a drag
+  setPointer(event);
+  raycaster.setFromCamera(pointer, camera);
+  const hit = raycaster.intersectObjects(pickables, false)[0];
+  if (hit) openPanel(hit.object.userData.clusterId, hit.object.userData.type === 'query' ? hit.object.userData.label : null);
+});
+
+/* resize */
+function resize() {
+  const { clientWidth: w, clientHeight: h } = shell;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(shell);
+resize();
+
+/* animate: gentle orbit of query anchors + hub spin + core pulse */
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  core.rotation.y = t * 0.25;
+  core.rotation.x = t * 0.12;
+  coreGlow.material.opacity = 0.75 + Math.sin(t * 1.6) * 0.25;
+  for (const { mesh, spin } of animated) mesh.rotation.y += spin * 0.01;
+  for (const node of pickables) {
+    const u = node.userData;
+    if (u.type !== 'query') continue;
+    u.angle += u.speed * 0.004;
+    const anchor = u.anchor;
+    node.position.x += (anchor.x + Math.cos(u.angle + u.phase) * 0.8 - node.position.x) * 0.03;
+    node.position.y += (anchor.y + Math.sin(t * 0.9 + u.phase) * 0.6 - node.position.y) * 0.03;
+    node.position.z += (anchor.z + Math.sin(u.angle + u.phase) * 0.8 - node.position.z) * 0.03;
+    if (u.hot) node.material.opacity = 0.6 + Math.sin(t * 3 + u.phase) * 0.4;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

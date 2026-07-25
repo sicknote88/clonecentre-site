@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check member-store.js && node --check email-templates.js"
+    "check": "node --check server.js && node --check member-store.js && node --check email-templates.js && node --check os-worker.js && node --check scripts/sync-os-snapshot.mjs && node --check scripts/refresh-trends.mjs",
+    "sync:os": "node scripts/sync-os-snapshot.mjs",
+    "trends": "node scripts/refresh-trends.mjs"
   },
   "engines": {
     "node": ">=20"
