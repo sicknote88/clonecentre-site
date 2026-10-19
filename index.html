@@ -718,6 +718,38 @@ html[data-page="build"] .home-hub,html[data-page="build"] #about,html[data-page=
 .build-proof p{font-size:13px;color:#B7B7B7;line-height:1.7;}
 .build-fine{margin-top:22px;font-size:11px;color:var(--dim);max-width:80ch;line-height:1.7;}
 .build-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;}
+/* Build page: a little more play, same pixel language as the rest of the site */
+.build-term{margin-top:34px;max-width:760px;border:1px solid var(--line);background:#020202;font-family:var(--mono);font-size:13px;box-shadow:6px 6px 0 rgba(46,155,255,.25);}
+.build-term .bar{display:flex;gap:6px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line);color:var(--dim);font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+.build-term .bar i{width:9px;height:9px;display:inline-block;background:#ff5f56;}
+.build-term .bar i:nth-child(2){background:#ffbd2e;}
+.build-term .bar i:nth-child(3){background:#27c93f;}
+.build-term .bar span{margin-left:auto;}
+.build-term ol{list-style:none;padding:18px 20px;display:grid;gap:9px;}
+.build-term li{color:#B7B7B7;opacity:0;}
+.build-term li em{font-style:normal;color:#fff;}
+.build-term .ok{color:var(--blue);margin-right:6px;}
+.build-term .cursor{display:inline-block;width:.6em;height:1em;background:var(--blue);margin-left:6px;vertical-align:-.15em;animation:blink 1s steps(1) infinite;}
+#build.on .build-term li{animation:termIn .01s forwards;}
+#build.on .build-term li:nth-child(1){animation-delay:.3s;}
+#build.on .build-term li:nth-child(2){animation-delay:1.1s;}
+#build.on .build-term li:nth-child(3){animation-delay:1.9s;}
+#build.on .build-term li:nth-child(4){animation-delay:2.9s;}
+#build.on .build-term li:nth-child(5){animation-delay:3.7s;}
+@keyframes termIn{to{opacity:1;}}
+.build-pick{margin-top:40px;}
+.build-pick .chips{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 20px;}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.5px;padding:9px 14px;border:1px solid var(--line);background:#050505;color:var(--ink);cursor:pointer;transition:transform .12s,border-color .12s,background .12s;}
+.chip:hover{border-color:var(--blue);transform:translateY(-2px);}
+.chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#000;}
+.chip:focus-visible,#build .btn:focus-visible,#build .tier-cta:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+#build .coaching-card{position:relative;transition:transform .15s,box-shadow .15s,border-color .15s;}
+#build .coaching-card:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--blue);border-color:var(--blue);}
+#build .pick-tag{position:absolute;top:-11px;right:18px;background:var(--blue);color:#000;font-family:var(--px);font-size:18px;letter-spacing:1px;padding:1px 10px;}
+#build .step-card span{font-family:var(--px);font-size:46px;line-height:1;color:var(--blue);letter-spacing:0;}
+#build .step-card{transition:transform .15s,border-color .15s;}
+#build .step-card:hover{transform:translateY(-3px);border-color:var(--blue);}
+@media(prefers-reduced-motion:reduce){.build-term li{opacity:1;animation:none!important;}#build .coaching-card,#build .step-card,.chip{transition:none;}#build .coaching-card:hover,#build .step-card:hover,.chip:hover{transform:none;}}
 html[data-page="about"] .home-hub,html[data-page="about"] #community,html[data-page="about"] #live,html[data-page="about"] #accountability,html[data-page="about"] #coaching,html[data-page="about"] #signup,html[data-page="about"] #library,html[data-page="about"] #ecosystem{display:none;}
 html[data-page="community"] .home-hub,html[data-page="community"] #about,html[data-page="community"] #numbers,html[data-page="community"] #accountability,html[data-page="community"] #coaching,html[data-page="community"] #library,html[data-page="community"] #ecosystem{display:none;}
 html[data-page="coaching"] .home-hub,html[data-page="coaching"] #about,html[data-page="coaching"] #numbers,html[data-page="coaching"] #community,html[data-page="coaching"] #live,html[data-page="coaching"] #signup,html[data-page="coaching"] #library,html[data-page="coaching"] #ecosystem{display:none;}
@@ -1106,11 +1138,36 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <p class="lede">Sessions and coaching teach you to use AI. This is the other route: I design and build the system, test it on your real work, and hand it over to run.</p>
 
   <div class="build-proof">
-    <p><b>Recent work.</b> I have just come back from Beverly Hills, where I was consulting for the owner of a multi-billion-dollar venture capital fund. My work spans SMEs through to funds, with a background in Oxford AI. The method is the same at every size: start with one workflow, build working software, and hand it over.</p>
+    <p><b>Who builds it.</b> Me, personally. My work spans SMEs through to multi-billion-dollar venture capital funds, with a background in Oxford AI. The method is the same at every size: start with one workflow, build working software, and hand it over.</p>
+  </div>
+
+  <div class="build-term" role="img" aria-label="How a build goes: scoping call, written scope and fixed price, weekly demos, handover">
+    <div class="bar"><i></i><i></i><i></i><span>build.log</span></div>
+    <ol>
+      <li><span class="ok">&gt;</span> 20-minute scoping call <em>...... done</em></li>
+      <li><span class="ok">&gt;</span> one-page scope and fixed price <em>...... done</em></li>
+      <li><span class="ok">&gt;</span> build, with a working demo every week <em>...... ▮▮▮▮▮▯</em></li>
+      <li><span class="ok">&gt;</span> handover to your team <em>...... shipped</em></li>
+      <li><span class="ok">&gt;</span> slide decks used: <em>0</em><span class="cursor"></span></li>
+    </ol>
+  </div>
+
+  <div class="build-pick">
+    <div class="sec-kicker">What do you want off your plate?</div>
+    <div class="chips" id="build-chips" role="group" aria-label="Pick what you want help with">
+      <button type="button" class="chip" aria-pressed="false">Client intake</button>
+      <button type="button" class="chip" aria-pressed="false">Answering calls</button>
+      <button type="button" class="chip" aria-pressed="false">Website questions</button>
+      <button type="button" class="chip" aria-pressed="false">Documents and knowledge</button>
+      <button type="button" class="chip" aria-pressed="false">Reporting</button>
+      <button type="button" class="chip" aria-pressed="false">Something else</button>
+    </div>
+    <a class="btn blue" id="build-pick-cta" href="mailto:joseph@clonecentre.ai?subject=Build%20enquiry">TELL ME ABOUT IT &gt;</a>
   </div>
 
   <div class="coaching-grid">
-    <article class="coaching-card">
+    <article class="coaching-card feature">
+      <span class="pick-tag">Start here</span>
       <div class="session">Fixed scope · 2 to 6 weeks</div>
       <h3>Systems Build</h3>
       <div class="cost">From £4,500</div>
@@ -1123,7 +1180,7 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       </ul>
       <a class="tier-cta" data-booking-key="profile" href="mailto:joseph@clonecentre.ai?subject=Scope%20a%20Systems%20Build">SCOPE A BUILD &gt;</a>
     </article>
-    <article class="coaching-card feature">
+    <article class="coaching-card">
       <div class="session">Monthly · rolling</div>
       <h3>Embedded AI Lead</h3>
       <div class="cost">From £3,000<small> / MONTH</small></div>
@@ -1155,10 +1212,10 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <div class="sec-kicker">How a build runs</div>
     <h2>FOUR STEPS. NO SURPRISES.</h2>
     <div class="band-grid four">
-      <article class="band-card"><span>Step 1</span><h3>SCOPE.</h3><p>A 20-minute call about the one workflow that costs you the most time.</p></article>
-      <article class="band-card"><span>Step 2</span><h3>WRITE IT DOWN.</h3><p>A one-page scope with the price, what is included and what is not.</p></article>
-      <article class="band-card"><span>Step 3</span><h3>BUILD IN VIEW.</h3><p>Working demos as it is built, so you see progress and can change direction.</p></article>
-      <article class="band-card"><span>Step 4</span><h3>HAND OVER.</h3><p>It runs in your accounts, with notes your team can follow.</p></article>
+      <article class="band-card step-card"><span>01</span><h3>SCOPE.</h3><p>A 20-minute call about the one workflow that costs you the most time.</p></article>
+      <article class="band-card step-card"><span>02</span><h3>WRITE IT DOWN.</h3><p>A one-page scope with the price, what is included and what is not.</p></article>
+      <article class="band-card step-card"><span>03</span><h3>BUILD IN VIEW.</h3><p>Working demos as it is built, so you see progress and can change direction.</p></article>
+      <article class="band-card step-card"><span>04</span><h3>HAND OVER.</h3><p>It runs in your accounts, with notes your team can follow.</p></article>
     </div>
   </div>
 
@@ -1379,6 +1436,19 @@ if(pageCopy[currentPage]){
   document.getElementById('page-lede').textContent=copy.lede;
   document.getElementById('page-jump').innerHTML=copy.jump;
 }
+/* ---- build page: topic chips fill in the enquiry email ---- */
+(function(){
+  const chips=document.getElementById('build-chips'),cta=document.getElementById('build-pick-cta');
+  if(!chips||!cta)return;
+  chips.addEventListener('click',e=>{
+    const chip=e.target.closest('.chip');if(!chip)return;
+    chip.setAttribute('aria-pressed',String(chip.getAttribute('aria-pressed')!=='true'));
+    const picked=[...chips.querySelectorAll('.chip[aria-pressed="true"]')].map(c=>c.textContent.trim());
+    const body=picked.length?'Hi Joseph,\n\nI would like help with: '+picked.join(', ')+'.\n\nA bit about us:\n':'';
+    cta.href='mailto:joseph@clonecentre.ai?subject='+encodeURIComponent(picked.length?'Build enquiry: '+picked.join(', '):'Build enquiry')+(body?'&body='+encodeURIComponent(body):'');
+  });
+})();
+
 const activeNav=document.querySelector('[data-nav-page="'+currentPage+'"]');
 if(activeNav)activeNav.setAttribute('aria-current','page');
 
