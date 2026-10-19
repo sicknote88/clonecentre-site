@@ -10,15 +10,13 @@ COPY fulfillment ./fulfillment
 COPY scripts ./scripts
 
 RUN mkdir -p /app/public /app/private/books
-COPY index.html member.html goal-tracker.html order-complete.html chatbot-knowledge.html os.html trend-map.html /app/public/
+COPY index.html member.html goal-tracker.html order-complete.html chatbot-knowledge.html os.html trend-map.html for-business.html demo.html privacy.html /app/public/
 COPY assets /app/public/assets
 COPY public-data /app/public-data
 COPY os-data /app/os-data
 
-# Paid files are intentionally gitignored and are included only by the private
-# Railway CLI deployment (`railway up --no-gitignore`). They are never served
-# by Express as static assets.
-COPY books/paid /app/private/books
+# Paid library files stay on the /data volume (copied there from the running
+# service). The free guidebook is the only book baked into the image.
 COPY books/Clone_Centre_Prompt_Guidebook.pdf /app/private/books/Clone_Centre_Prompt_Guidebook.pdf
 
 ENV NODE_ENV=production

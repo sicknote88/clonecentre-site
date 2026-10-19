@@ -345,8 +345,8 @@
 <body>
   <div class="shell">
     <aside class="rail">
-      <div class="logo"><img class="logo-image" src="/assets/clone_centre_latest_logo.png" alt="Clone Centre"><div><b>clonecentre OS</b><small>GROWTH INTELLIGENCE</small></div></div>
-      <div class="workspace"><img class="avatar-image" src="/assets/clone_centre_latest_logo.png" alt=""><div><b>Clone Centre</b><span>Operator workspace</span></div></div>
+      <div class="logo"><img class="logo-image" src="/assets/clone_centre_logo_192.png" alt="Clone Centre"><div><b>clonecentre OS</b><small>GROWTH INTELLIGENCE</small></div></div>
+      <div class="workspace"><img class="avatar-image" src="/assets/clone_centre_logo_192.png" alt=""><div><b>Clone Centre</b><span>Operator workspace</span></div></div>
       <div class="nav-label">WORKSPACES</div>
       <nav aria-label="OS workspaces">
         <button class="on" data-view="overview"><span class="nav-icon">01</span><span>Command</span></button>
@@ -374,7 +374,7 @@
             <p id="mission-copy">Finding the smallest decision that will unlock the most useful work.</p>
             <div class="mission-actions"><button class="primary" data-go="studio">Open creative decision</button><button class="secondary" data-go="queue">Inspect publishing rhythm</button></div>
           </article>
-          <article class="orbit"><div class="orbit-top"><span>CLONECENTRE OS</span><span>LIVE</span></div><img class="orbit-logo" src="/assets/clone_centre_latest_logo.png" alt="Clone Centre"><strong class="brand-count" id="approval-rate">—<small>%</small></strong><p>Creative approval rate across the current operating set.</p></article>
+          <article class="orbit"><div class="orbit-top"><span>CLONECENTRE OS</span><span>LIVE</span></div><img class="orbit-logo" src="/assets/clone_centre_logo_192.png" alt="Clone Centre"><strong class="brand-count" id="approval-rate">—<small>%</small></strong><p>Creative approval rate across the current operating set.</p></article>
         </div>
         <div class="stats">
           <article class="stat"><span>Ready</span><b id="stat-ready">—</b><em>approved creative</em></article>
@@ -495,7 +495,7 @@
       $('#mission-copy').textContent=summary.needsReview?'Start with the strongest creative, make one clear decision, then move the approved work into a controlled multi-channel test.':summary.scheduled?'The publishing rhythm is active. Connect results to the Test Lab so every outcome improves the next brief.':'Generate the first image or video, pair it with a caption, and create a clean A–D experiment.';
       $('#approval-rate').innerHTML=`${summary.approvalRate}<small>%</small>`;
       $('#stat-ready').textContent=summary.ready;$('#stat-review').textContent=summary.needsReview;$('#stat-scheduled').textContent=summary.scheduled;$('#stat-brands').textContent=summary.brands;
-      $('#decision-stream').innerHTML=(review.length?review:data.posts).slice(0,5).map(post=>`<div class="decision-row" data-post="${post.key}"><img class="mini-art" src="${esc(post.image||'/assets/clone_centre_latest_logo.png')}" alt="" onerror="this.onerror=null;this.src='/assets/clone_centre_latest_logo.png'"><div><b>${esc(post.title)}</b><small>${esc(post.brand)} · ${esc(post.pillar)}${post.score?` · ${post.score}/100`:''}</small></div><span class="status ${post.status}">${esc(statusLabel(post.status))}</span></div>`).join('')||'<div class="review-empty" style="min-height:180px"><p>No creative has entered the pipeline yet.</p></div>';
+      $('#decision-stream').innerHTML=(review.length?review:data.posts).slice(0,5).map(post=>`<div class="decision-row" data-post="${post.key}"><img class="mini-art" src="${esc(post.image||'/assets/clone_centre_logo_192.png')}" alt="" onerror="this.onerror=null;this.src='/assets/clone_centre_logo_192.png'"><div><b>${esc(post.title)}</b><small>${esc(post.brand)} · ${esc(post.pillar)}${post.score?` · ${post.score}/100`:''}</small></div><span class="status ${post.status}">${esc(statusLabel(post.status))}</span></div>`).join('')||'<div class="review-empty" style="min-height:180px"><p>No creative has entered the pipeline yet.</p></div>';
       $('#queue-compact').innerHTML=data.queue.slice(0,4).map(item=>{const [day,month]=shortDate(item.date);return`<div class="queue-tick"><div class="date-box"><b>${day}</b><span>${month}</span></div><div><strong>${esc(item.brand)}</strong><p>${esc(item.time)} · Post ${esc(item.postOrder)} · ${item.state}</p></div></div>`}).join('')||'<div class="review-empty" style="min-height:180px"><p>The schedule is clear.</p></div>';
       $$('#decision-stream [data-post]').forEach(row=>row.onclick=()=>{state.activePost=row.dataset.post;go('studio');renderStudio()});
     }
@@ -562,7 +562,7 @@
       const brandSelect=$('#brand-filter'),current=brandSelect.value,brands=[...new Set(state.data.posts.map(post=>post.brand))].sort();
       brandSelect.innerHTML='<option value="">All brands</option>'+brands.map(brand=>`<option${brand===current?' selected':''}>${esc(brand)}</option>`).join('');
       const posts=filteredPosts();
-      $('#creative-grid').innerHTML=posts.map(post=>`<button class="creative-card ${state.activePost===post.key?'selected':''}" data-key="${post.key}"><img class="creative-art" src="${esc(post.image||'/assets/clone_centre_latest_logo.png')}" alt="${esc(post.title)}" onerror="this.onerror=null;this.src='/assets/clone_centre_latest_logo.png'"><div class="creative-copy"><div class="brand-line"><span>${esc(post.brand)}</span><span>${post.score||'—'}</span></div><h3>${esc(post.title)}</h3><p>${esc(post.pillar)}</p></div></button>`).join('')||'<div class="review-empty"><div><b>No creative matches</b><p>Change a filter to reopen the set.</p></div></div>';
+      $('#creative-grid').innerHTML=posts.map(post=>`<button class="creative-card ${state.activePost===post.key?'selected':''}" data-key="${post.key}"><img class="creative-art" src="${esc(post.image||'/assets/clone_centre_logo_192.png')}" alt="${esc(post.title)}" onerror="this.onerror=null;this.src='/assets/clone_centre_logo_192.png'"><div class="creative-copy"><div class="brand-line"><span>${esc(post.brand)}</span><span>${post.score||'—'}</span></div><h3>${esc(post.title)}</h3><p>${esc(post.pillar)}</p></div></button>`).join('')||'<div class="review-empty"><div><b>No creative matches</b><p>Change a filter to reopen the set.</p></div></div>';
       $$('#creative-grid [data-key]').forEach(card=>card.onclick=()=>{state.activePost=card.dataset.key;renderStudio()});
       renderReviewer();
     }

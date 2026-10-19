@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>90-second example · Clone Centre</title>
+<meta name="description" content="A scripted 90-second example of how a routine enquiry is taken, and how anything sensitive is handed to a person.">
+<link rel="canonical" href="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:title" content="90-second example · Clone Centre">
+<meta property="og:description" content="A scripted illustration of routine enquiry handling and human handoff. Not a live recording.">
+<meta property="og:url" content="__CLONE_CENTRE_CANONICAL__">
+<meta property="og:image" content="https://joseph.clonecentre.ai/assets/clone_centre_logo_640.png">
+<link rel="icon" type="image/png" href="/assets/clone_centre_logo_192.png?v=3">
+<link rel="stylesheet" href="/assets/fonts/site.css">
+<style>
+:root{--bg:#000;--ink:#EDEDED;--dim:#8A8A8A;--blue:#2E9BFF;--line:#1C1C1C;--px:'VT323',monospace;--mono:'IBM Plex Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:radial-gradient(900px 500px at 100% 0,rgba(46,155,255,.12),transparent 50%),var(--bg);color:var(--ink);font-family:var(--mono);font-size:14px;line-height:1.55;}
+a{color:var(--blue);}
+nav{height:70px;padding:0 28px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.9);}
+.nav-inner{max-width:880px;height:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;font-family:var(--px);font-size:24px;}
+.brand img{height:42px;width:42px;border-radius:8px;object-fit:cover;}
+.brand b{color:var(--blue);font-weight:400;}
+.links{display:flex;gap:18px;}
+.links a{color:#A5A5A5;text-decoration:none;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;}
+.links a:hover,.links a[aria-current="page"]{color:#fff;}
+main{max-width:880px;margin:0 auto;padding:42px 28px 72px;}
+.kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);}
+h1{font-family:var(--px);font-weight:400;font-size:clamp(40px,6vw,64px);line-height:.95;margin:12px 0 14px;}
+.lede{color:var(--dim);max-width:68ch;}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:26px 0 14px;}
+button{font-family:var(--px);font-size:22px;letter-spacing:1px;background:transparent;color:var(--ink);border:2px solid #333;padding:8px 14px;cursor:pointer;}
+button[aria-pressed="true"],button.primary{border-color:var(--blue);color:var(--blue);}
+button.primary{background:var(--blue);color:#000;border-color:var(--blue);}
+button:hover{border-color:#fff;}
+.clock{margin-left:auto;font-family:var(--px);font-size:28px;color:var(--blue);}
+.bar{height:8px;background:#111;border:1px solid var(--line);margin-bottom:18px;}
+.bar span{display:block;height:100%;width:0;background:var(--blue);}
+.stage{border:1px solid var(--line);background:#05070b;min-height:340px;padding:8px 0 16px;}
+.line{display:grid;grid-template-columns:92px 1fr;gap:12px;padding:12px 18px;opacity:.28;}
+.line.on{opacity:1;}
+.who{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue);padding-top:3px;}
+.line.caller .who{color:#9aa;}
+.line.note{background:rgba(46,155,255,.08);}
+.line p{color:#ddd;}
+.result{margin-top:16px;border:1px solid var(--line);padding:16px 18px;color:var(--dim);display:none;}
+.result.show{display:block;}
+.result strong{color:#fff;}
+@media(max-width:720px){.links,.clock{display:none;}main{padding:28px 18px 48px;}.line{grid-template-columns:1fr;gap:4px;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="/"><img src="assets/clone_centre_logo_192.png" alt="" width="42" height="42">Clone<b>Centre</b></a>
+    <div class="links">
+      <a href="/for-business">For business</a>
+      <a href="/demo" aria-current="page">90-second example</a>
+      <a href="mailto:joseph@clonecentre.ai?subject=15-minute%20demonstration">Book 15 minutes</a>
+    </div>
+  </div>
+</nav>
+<main>
+  <p class="kicker">Scripted illustration · not a live recording</p>
+  <h1>NINETY SECONDS.</h1>
+  <p class="lede">Two example enquiries. The assistant takes the routine detail and passes anything that needs a person. Diary booking is not promised here, because that connection has to be checked on the real system first.</p>
+  <div class="controls">
+    <button type="button" id="play" class="primary">PLAY</button>
+    <button type="button" id="scene-property" aria-pressed="true">PROPERTY CALL</button>
+    <button type="button" id="scene-clinic" aria-pressed="false">CLINIC CALL</button>
+    <div class="clock" id="clock">0:00</div>
+  </div>
+  <div class="bar" aria-hidden="true"><span id="fill"></span></div>
+  <div class="stage" id="stage" aria-live="polite"></div>
+  <div class="result" id="result"></div>
+</main>
+<footer style="border-top:1px solid #1c1c1c;padding:22px 28px 40px;color:#6d6d6d;font-size:12px;">This example is a script, not a live AI call. The assistant on the main site is labelled as AI. <a href="/privacy">Privacy notice</a>.</footer>
+<script>
+const scenes = {
+  property: {
+    result: 'The team receives a transcript: sales valuation, Crosby, three bedrooms, spring, caller Sarah on 07700 900123. A person confirms the diary. Nothing is booked by the assistant in this example.',
+    lines: [
+      [0,'caller','Caller','Hi, I wanted a valuation on a three-bed in Crosby. Is anyone free?'],
+      [8,'ai','Assistant','Hello, you are through to the assistant. I can take the details and make sure the right person calls you back. Is the property in Crosby?'],
+      [20,'caller','Caller','Yes. Three bedrooms. We are hoping to sell this spring.'],
+      [30,'ai','Assistant','Thank you. I have a sales valuation in Crosby, three bedrooms, timing this spring. What name and number should the valuer use?'],
+      [44,'caller','Caller','Sarah. 07700 900123.'],
+      [52,'ai','Assistant','Thank you, Sarah. A person on the team will confirm whether they can visit. I will not book a time until they have checked the diary.'],
+      [68,'caller','Caller','That is fine.'],
+      [74,'ai','Assistant','I have sent the note to the team. Goodbye.'],
+      [82,'note','Handed over','Transcript saved. Qualified as a valuation enquiry. A person owns the next step.']
+    ]
+  },
+  clinic: {
+    result: 'The clinic receives the caller’s name, number and the question. The assistant does not say whether a treatment is suitable, and it does not offer clinical advice.',
+    lines: [
+      [0,'caller','Caller','Can I book a lip treatment tonight, and is it safe if I am on antibiotics?'],
+      [10,'ai','Assistant','Hello, you are through to the clinic assistant. I can take booking enquiries. I cannot give clinical advice. A practitioner needs to answer anything about whether a treatment is suitable.'],
+      [28,'caller','Caller','All right. Can someone call me tomorrow?'],
+      [36,'ai','Assistant','Yes. I will pass your name, number and the question to the clinic. I will not suggest a treatment. What number should they use?'],
+      [50,'caller','Caller','07700 900456. My name is Priya.'],
+      [58,'ai','Assistant','Thank you, Priya. I have asked the clinic to call you about the appointment and your question. I have not booked a time, and I have not advised you.'],
+      [76,'note','Handed over','Clinical question escalated. No advice given. A person calls back.']
+    ]
+  }
+};
+let scene = 'property';
+let timer = null;
+let started = 0;
+const stage = document.getElementById('stage');
+const fill = document.getElementById('fill');
+const clock = document.getElementById('clock');
+const result = document.getElementById('result');
+const play = document.getElementById('play');
+function render(activeUntil = -1){
+  const data = scenes[scene];
+  stage.innerHTML = data.lines.map((line, index) => {
+    const on = line[0] <= activeUntil ? ' on' : '';
+    return `<article class="line ${line[1]}${on}"><div class="who">${line[2]}</div><p>${line[3]}</p></article>`;
+  }).join('');
+  result.className = 'result' + (activeUntil >= 82 ? ' show' : '');
+  result.innerHTML = '<strong>What the team sees. </strong>' + data.result;
+}
+function stop(){
+  if(timer){ cancelAnimationFrame(timer); timer = null; }
+  play.textContent = 'PLAY';
+}
+function frame(now){
+  const elapsed = Math.min(90, (now - started) / 1000);
+  clock.textContent = `0:${String(Math.floor(elapsed)).padStart(2,'0')}`;
+  fill.style.width = `${(elapsed / 90) * 100}%`;
+  [...stage.children].forEach((node, index) => {
+    node.classList.toggle('on', scenes[scene].lines[index][0] <= elapsed);
+  });
+  result.classList.toggle('show', elapsed >= 82);
+  if(elapsed >= 90){ stop(); return; }
+  timer = requestAnimationFrame(frame);
+}
+play.addEventListener('click', () => {
+  if(timer){ stop(); return; }
+  render(-1);
+  result.classList.remove('show');
+  started = performance.now();
+  play.textContent = 'PAUSE';
+  timer = requestAnimationFrame(frame);
+});
+function choose(next){
+  stop();
+  scene = next;
+  document.getElementById('scene-property').setAttribute('aria-pressed', String(next === 'property'));
+  document.getElementById('scene-clinic').setAttribute('aria-pressed', String(next === 'clinic'));
+  clock.textContent = '0:00';
+  fill.style.width = '0';
+  render(90);
+  result.classList.add('show');
+}
+document.getElementById('scene-property').addEventListener('click', () => choose('property'));
+document.getElementById('scene-clinic').addEventListener('click', () => choose('clinic'));
+render(90);
+result.classList.add('show');
+</script>
+</body>
+</html>

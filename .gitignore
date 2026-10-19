@@ -17,3 +17,6 @@ tmp/
 
 # Internal launch strategy is kept in the local workspace, not the public repository.
 COMMUNITY_LAUNCH_PLAN.md
+
+# Cold-email lead lists (contact data): never commit or bake into the image.
+os-data/segments/

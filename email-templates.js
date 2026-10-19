@@ -76,7 +76,7 @@ export function brandEmail({
   const safeSite = String(siteUrl || 'https://joseph.clonecentre.ai').replace(/\/$/, '');
   const logoUrl = `${safeSite}/assets/clonecentre_logo.png`;
   const memberUrl = `${safeSite}/member`;
-  const libraryUrl = `${safeSite}/library`;
+  const communityUrl = `${safeSite}/community`;
   const maxWidth = wide ? 700 : 640;
   const footerCopy = footer || (internal
     ? 'Private operational email. The master record remains securely stored in Railway.'
@@ -131,7 +131,7 @@ export function brandEmail({
           <p style="margin:0;color:#6f879a;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.8;letter-spacing:.5px">
             <a class="footer-link" href="${safeUrl(safeSite)}" style="color:${BLUE};text-decoration:none">WEBSITE</a>&nbsp;&nbsp; // &nbsp;&nbsp;
             <a class="footer-link" href="${safeUrl(memberUrl)}" style="color:${BLUE};text-decoration:none">MEMBER CENTRE</a>&nbsp;&nbsp; // &nbsp;&nbsp;
-            <a class="footer-link" href="${safeUrl(libraryUrl)}" style="color:${BLUE};text-decoration:none">LIBRARY</a>
+            <a class="footer-link" href="${safeUrl(communityUrl)}" style="color:${BLUE};text-decoration:none">COMMUNITY</a>
           </p>
           <p style="margin:15px 0 0;color:#4f606e;font-family:Arial,Helvetica,sans-serif;font-size:10px;line-height:1.6">Clone Centre · Practical AI for people and businesses · United Kingdom</p>
         </td></tr>

@@ -1,6 +1,5 @@
 import express from 'express';
 import Stripe from 'stripe';
-import { spawn } from 'node:child_process';
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -15,7 +14,12 @@ const workspaceDir = resolve(here, '..');
 const packagedPublicDir = join(here, 'public');
 const packagedBooksDir = join(here, 'private', 'books');
 const publicDir = existsSync(packagedPublicDir) ? packagedPublicDir : here;
-const privateBooksDir = existsSync(packagedBooksDir) ? packagedBooksDir : join(here, 'books', 'paid');
+const volumeBooksDir = join('/data', 'books');
+const privateBooksDir = existsSync(join(volumeBooksDir, 'How_to_Ask.pdf'))
+  ? volumeBooksDir
+  : existsSync(join(packagedBooksDir, 'How_to_Ask.pdf'))
+    ? packagedBooksDir
+    : join(here, 'books', 'paid');
 const catalog = JSON.parse(readFileSync(join(here, 'fulfillment', 'catalog.json'), 'utf8'));
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_webhook_verification_only');
 const app = express();
@@ -60,14 +64,14 @@ async function ensureMemberStore() {
 
 const memberOptions = {
   interest: {
-    community_monthly: 'Community monthly — £19/month',
-    community_annual: 'Community annual — £190/year',
-    pro_monthly: 'Pro monthly — £49/month',
-    pro_annual: 'Pro annual plus included website chatbot setup — £490/year',
-    accountability_monthly: 'Accountability monthly — £149/month',
-    accountability_annual: 'Accountability annual — £1,490/year',
-    switch_community: 'Switch to Community — £1 first month, then £19/month',
-    switch_pro: 'Switch to Pro — £1 first month, then £49/month',
+    community_monthly: 'Community monthly: £19/month',
+    community_annual: 'Community annual: £190/year',
+    pro_monthly: 'Pro monthly: £49/month',
+    pro_annual: 'Pro annual plus included website chatbot setup: £490/year',
+    accountability_monthly: 'Accountability monthly: £149/month',
+    accountability_annual: 'Accountability annual: £1,490/year',
+    switch_community: 'Switch to Community: £1 first month, then £19/month',
+    switch_pro: 'Switch to Pro: £1 first month, then £49/month',
     clone_coach_waitlist: 'Clone Coach AI beta waitlist',
     custom_coach_bot: 'A custom AI coach built for my needs',
     help_choose: 'Help me choose'
@@ -686,17 +690,17 @@ function emailMarkup(product) {
     siteUrl: publicSiteUrl(),
     preheader: `${product.title} is attached and ready to use.`,
     eyebrow: 'PURCHASE COMPLETE // FILES DELIVERED',
-    heading: 'Your Clone Centre library just landed.',
+    heading: 'Your files are attached.',
     lead: `Your ${product.title} purchase is complete. Everything included is attached to this email and ready to save.`,
     content: `${emailCallout('DELIVERY STATUS', attachmentLabel, 'Keep this email somewhere safe so your files are easy to find.')}
       ${emailSteps([
         'Download the attached files to a folder you will remember.',
-        'Open the guide that solves the problem in front of you today.',
+        'Open the file that matches the job in front of you today.',
         'Reply to this email if you want Joseph to point you to the right starting page.'
       ])}
       <p style="margin:12px 0 0;color:#7f91a1;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6">Your purchase is licensed for your personal use. Please do not redistribute the files or publish private download copies.</p>`,
-    action: `${publicSiteUrl()}/library`,
-    actionLabel: 'EXPLORE THE LIBRARY',
+    action: `${publicSiteUrl()}/`,
+    actionLabel: 'BACK TO CLONE CENTRE',
     secondaryAction: `${publicSiteUrl()}/member`,
     secondaryActionLabel: 'OPEN MEMBER CENTRE',
     footer: 'Purchase receipt and private file delivery from Clone Centre. Questions? Reply directly to this email.'
@@ -706,7 +710,7 @@ function emailMarkup(product) {
 function membershipPaymentMarkup(name, tier) {
   const label = tier === 'accountability' ? 'Accountability' : tier === 'pro' ? 'Pro' : 'Community';
   const access = {
-    Community: 'Member chat, the Plain English AI library, weekly prompts and accountability drops.',
+    Community: 'Member chat, weekly prompts and accountability drops.',
     Pro: 'Everything in Community plus Joseph’s live AI Lab, build sessions, office hours and the recordings vault.',
     Accountability: 'Everything in Pro plus personal check-ins, private reviews and your 90-day goal tracker.'
   }[label];
@@ -767,8 +771,8 @@ function welcomeEmailMarkup(firstName) {
       ['Avoid', 'The 10 mistakes that make AI harder than it needs to be']
     ])}
       ${emailCallout('YOUR PROFILE IS SAVED', 'You will not need to start from zero.', 'The answers you shared help Clone Centre make future guidance relevant to how you actually use AI.')}`,
-    action: `${siteUrl}/library`,
-    actionLabel: 'EXPLORE THE AI LIBRARY',
+    action: `${siteUrl}/community`,
+    actionLabel: 'SEE THE COMMUNITY',
     secondaryAction: `${siteUrl}/member`,
     secondaryActionLabel: 'CREATE MY MEMBER PROFILE',
     footer: 'You requested the Prompt Guidebook and practical Clone Centre updates. Reply with “unsubscribe” at any time and you will be removed.'
@@ -940,7 +944,7 @@ async function subscribe(profile) {
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [profile.email],
     reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-    subject: 'Your Prompt Guidebook is here — start with CLEAR',
+    subject: 'Your Prompt Guidebook is here: start with CLEAR',
     html: welcomeEmailMarkup(profile.firstName),
     headers: { 'List-Unsubscribe': '<mailto:joseph@clonecentre.ai?subject=Unsubscribe%20from%20Clone%20Centre>' },
     attachments: [{
@@ -953,7 +957,7 @@ async function subscribe(profile) {
     from: process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
     reply_to: profile.email,
-    subject: `New AI profile — ${profile.firstName} · ${profileOptions.aiStage[profile.aiStage]}`,
+    subject: `New AI profile: ${profile.firstName} · ${profileOptions.aiStage[profile.aiStage]}`,
     html: leadNotificationMarkup(profile),
     tags: [{ name: 'automation', value: 'lead_profile' }]
   }, `clonecentre-lead/${emailKey}`);
@@ -1049,7 +1053,7 @@ async function sendBookingAutomation(trigger, payload, rawBody) {
     from: process.env.BOOKING_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
     to: [details.email],
     reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-    subject: `${subjectPrefix} — ${details.title}`,
+    subject: `${subjectPrefix}: ${details.title}`,
     html,
     tags: [{ name: 'automation', value: trigger.toLowerCase() }]
   }, `clonecentre-cal/${eventKey}`);
@@ -1122,7 +1126,7 @@ async function sendDelivery(session) {
       from: process.env.MEMBER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
       to: [email],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: `You’re in — welcome to Clone Centre ${membershipTier === 'accountability' ? 'Accountability' : membershipTier === 'pro' ? 'Pro' : 'Community'}`,
+      subject: `You’re in: welcome to Clone Centre ${membershipTier === 'accountability' ? 'Accountability' : membershipTier === 'pro' ? 'Pro' : 'Community'}`,
       html: membershipPaymentMarkup(session.customer_details?.name, membershipTier),
       tags: [{ name: 'automation', value: 'membership_welcome' }]
     }, `clonecentre-membership/${session.id}`);
@@ -1195,7 +1199,7 @@ async function deliverOutboxItem(item) {
       from,
       to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: payload.email,
-      subject: `Clone Centre enquiry — ${memberOptions.interest[payload.interest] || payload.interest} · ${payload.name}`.slice(0, 190),
+      subject: `Clone Centre enquiry: ${memberOptions.interest[payload.interest] || payload.interest} · ${payload.name}`.slice(0, 190),
       html: memberNotificationMarkup(payload),
       attachments,
       tags: [{ name: 'automation', value: 'member_interest' }]
@@ -1218,7 +1222,7 @@ async function deliverOutboxItem(item) {
       from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
       to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: `Clone Centre AI chat — ${pageLabel.slice(0, 120)}`,
+      subject: `Clone Centre AI chat: ${pageLabel.slice(0, 120)}`,
       html: chatTranscriptEmailMarkup(payload),
       tags: [{ name: 'automation', value: 'chat_transcript' }]
     }, item.idempotency_key);
@@ -1230,7 +1234,7 @@ async function deliverOutboxItem(item) {
       from,
       to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: payload.email,
-      subject: `Account deletion request — ${payload.email}`,
+      subject: `Account deletion request: ${payload.email}`,
       html: accountActionEmailMarkup({ name: 'Joseph', heading: 'A member requested account deletion.', body: `Review deletion request ${payload.requestId} for ${payload.email}. The request and audit event are stored in Railway.`, footer: 'Complete the request from the Railway-backed member administration workflow.', internal: true }),
       tags: [{ name: 'automation', value: 'deletion_request' }]
     }, item.idempotency_key);
@@ -1579,7 +1583,7 @@ app.post('/api/subscribe', async (request, response) => {
     goal,
     sessionId,
     consentText: 'Email my guide and send practical Clone Centre updates based on these answers.',
-    sourceUrl: `${publicSiteUrl()}/library#guide-gate`
+    sourceUrl: `${publicSiteUrl()}/`
   };
   if (memberStore.ready) {
     try {
@@ -1601,7 +1605,7 @@ app.post('/api/subscribe', async (request, response) => {
         `AI stage: ${profileOptions.aiStage[aiStage]}`,
         `Main goal: ${profileOptions.goal[goal]}`
       ].join('\n'),
-      sourceUrl: `${publicSiteUrl()}/library#guide-gate`
+      sourceUrl: `${publicSiteUrl()}/`
     });
   } catch (error) {
     console.error(JSON.stringify({ type: 'newsletter.hyperchat_storage_failed', reason: error.message }));
@@ -1712,7 +1716,7 @@ app.post('/api/member-interest', async (request, response) => {
         from: process.env.MEMBER_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL || 'Joseph at Clone Centre <hello@updates.clonecentre.ai>',
         to: [process.env.MEMBER_NOTIFICATIONS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
         reply_to: profile.email,
-        subject: `Clone Centre enquiry — ${memberOptions.interest[profile.interest]} · ${profile.name}`.slice(0, 190),
+        subject: `Clone Centre enquiry: ${memberOptions.interest[profile.interest]} · ${profile.name}`.slice(0, 190),
         html: memberNotificationMarkup(profile),
         tags: [{ name: 'automation', value: 'member_interest' }]
       }, `clonecentre-member-notify/${eventKey}`),
@@ -1798,7 +1802,7 @@ app.post('/api/chat-transcript', async (request, response) => {
       from: process.env.CHAT_TRANSCRIPTS_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || 'Clone Centre AI <hello@updates.clonecentre.ai>',
       to: [process.env.CHAT_TRANSCRIPTS_EMAIL || process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai'],
       reply_to: process.env.DELIVERY_REPLY_TO || 'joseph@clonecentre.ai',
-      subject: `Clone Centre AI chat — ${pageLabel.slice(0, 120)}`,
+      subject: `Clone Centre AI chat: ${pageLabel.slice(0, 120)}`,
       html: chatTranscriptEmailMarkup({ conversationId, sessionId, page, title, messages }),
       tags: [{ name: 'automation', value: 'chat_transcript' }]
     }, `clonecentre-chat/${eventKey}`);
@@ -1820,44 +1824,6 @@ app.get('/api/site-config', (_request, response) => {
       buildPartner: process.env.CAL_BUILD_PARTNER_URL || null
     }
   });
-});
-
-// --- weekly AI trends refresh: re-pulls /data/trend-map.json from live sources ---
-const trendsDataFile = join(here, 'public-data', 'trend-map.json');
-const trendsScript = join(here, 'scripts', 'refresh-trends.mjs');
-let trendsRefreshRunning = false;
-function refreshTrendsData(reason) {
-  if (trendsRefreshRunning || !existsSync(trendsScript)) return false;
-  trendsRefreshRunning = true;
-  console.info(JSON.stringify({ type: 'trends.refresh_started', reason }));
-  const child = spawn(process.execPath, [trendsScript], { cwd: here });
-  let log = '';
-  child.stdout.on('data', (chunk) => { log += chunk; });
-  child.stderr.on('data', (chunk) => { log += chunk; });
-  child.on('close', (code) => {
-    trendsRefreshRunning = false;
-    console.info(JSON.stringify({ type: 'trends.refresh_finished', code, tail: log.trim().split('\n').slice(-3) }));
-  });
-  return true;
-}
-function trendsDataAgeDays() {
-  try { return (Date.now() - statSync(trendsDataFile).mtimeMs) / 86400000; } catch { return Infinity; }
-}
-// Mondays from 06:00 UTC: refresh when the snapshot is more than 6 days old.
-if (process.env.TRENDS_REFRESH_DISABLED !== '1') {
-  const scheduledTrendsCheck = () => {
-    const now = new Date();
-    if (now.getUTCDay() === 1 && now.getUTCHours() >= 6 && trendsDataAgeDays() > 6) refreshTrendsData('weekly-schedule');
-  };
-  setInterval(scheduledTrendsCheck, 60 * 60 * 1000).unref();
-  scheduledTrendsCheck();
-}
-
-app.post('/api/trends/refresh', (request, response) => {
-  const token = process.env.TRENDS_REFRESH_TOKEN;
-  if (!token || request.get('authorization') !== `Bearer ${token}`) return response.status(401).json({ error: 'unauthorised' });
-  if (!refreshTrendsData('manual')) return response.status(409).json({ error: 'refresh_already_running' });
-  return response.status(202).json({ ok: true });
 });
 
 app.get('/api/health', async (_request, response) => {  let memberDatabaseReady = false;
@@ -1899,7 +1865,8 @@ const canonicalPublicRoutes = new Map([
   ['/about', '/about'],
   ['/community', '/community'],
   ['/coaching', '/coaching'],
-  ['/library', '/library'],
+  ['/build', '/build'],
+  ['/library', '/'],
   ['/products', '/products'],
   ['/member', '/member'],
   ['/member.html', '/member'],
@@ -1909,8 +1876,15 @@ const canonicalPublicRoutes = new Map([
   ['/chatbot-knowledge.html', '/chatbot-knowledge'],
   ['/goal-tracker', '/goal-tracker'],
   ['/goal-tracker.html', '/goal-tracker'],
-  ['/trends', '/trends'],
-  ['/trends.html', '/trends']
+  ['/for-business', '/for-business'],
+  ['/for-business.html', '/for-business'],
+  ['/demo', '/demo'],
+  ['/demo.html', '/demo'],
+  ['/privacy', '/privacy'],
+  ['/privacy.html', '/privacy'],
+  ['/trends', '/'],
+  ['/trends.html', '/'],
+  ['/trend-map.html', '/']
 ]);
 
 function canonicalUrl(request, filename) {
@@ -1969,17 +1943,23 @@ if (!isProduction) {
 }
 
 app.get('/', (request, response) => sendHtml(request, response, 'index.html'));
-for (const page of ['about', 'community', 'coaching', 'library', 'products']) {
+for (const page of ['about', 'community', 'coaching', 'build', 'products']) {
   app.get(`/${page}/`, (_request, response) => response.redirect(308, `/${page}`));
   app.get(`/${page}`, (request, response) => sendHtml(request, response, 'index.html'));
 }
-for (const [filePath, cleanPath] of [['/index.html', '/'], ['/member.html', '/member'], ['/order-complete.html', '/order-complete'], ['/chatbot-knowledge.html', '/chatbot-knowledge'], ['/goal-tracker.html', '/goal-tracker'], ['/trend-map.html', '/trends']]) {
+for (const [filePath, cleanPath] of [['/index.html', '/'], ['/member.html', '/member'], ['/order-complete.html', '/order-complete'], ['/chatbot-knowledge.html', '/chatbot-knowledge'], ['/goal-tracker.html', '/goal-tracker'], ['/for-business.html', '/for-business'], ['/demo.html', '/demo'], ['/privacy.html', '/privacy'], ['/trend-map.html', '/'], ['/trends.html', '/']]) {
   app.get(filePath, (_request, response) => response.redirect(308, cleanPath));
 }
 app.get('/order-complete', (request, response) => sendHtml(request, response, 'order-complete.html'));
 app.get('/chatbot-knowledge', (request, response) => sendHtml(request, response, 'chatbot-knowledge.html'));
 app.get('/goal-tracker', (request, response) => sendHtml(request, response, 'goal-tracker.html'));
-app.get('/trends', (request, response) => sendHtml(request, response, 'trend-map.html'));
+app.get('/for-business/', (_request, response) => response.redirect(308, '/for-business'));
+app.get('/for-business', (request, response) => sendHtml(request, response, 'for-business.html'));
+app.get('/demo/', (_request, response) => response.redirect(308, '/demo'));
+app.get('/demo', (request, response) => sendHtml(request, response, 'demo.html'));
+app.get('/privacy/', (_request, response) => response.redirect(308, '/privacy'));
+app.get('/privacy', (request, response) => sendHtml(request, response, 'privacy.html'));
+app.get(['/trends', '/trends/', '/library', '/library/'], (_request, response) => response.redirect(308, '/'));
 app.get('/member/', (_request, response) => response.redirect(308, '/member'));
 app.get('/member', (request, response) => sendHtml(request, response, 'member.html'));
 app.get('/api/os/snapshot', requireOsAccess, async (request, response) => {

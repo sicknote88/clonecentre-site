@@ -4,24 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joseph Conlan · Clone Centre</title>
-<meta name="description" content="Practical AI training, weekly live calls, 1-to-1 coaching and a community for people who want to put AI to work, from Joseph Conlan at Clone Centre.">
+<meta name="description" content="AI systems built for you by Joseph Conlan, plus practical AI training, weekly live calls, 1-to-1 coaching and a community, from Clone Centre.">
 <link rel="canonical" href="__CLONE_CENTRE_CANONICAL__">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Clone Centre">
 <meta property="og:title" content="Joseph Conlan · Clone Centre">
 <meta property="og:description" content="Practical AI systems, coaching, community and products from Joseph Conlan at Clone Centre.">
 <meta property="og:url" content="__CLONE_CENTRE_CANONICAL__">
-<meta property="og:image" content="https://joseph.clonecentre.ai/assets/clone_centre_latest_logo.png">
+<meta property="og:image" content="https://joseph.clonecentre.ai/assets/clone_centre_logo_640.png">
 <meta name="release" content="phase-5">
-<link rel="icon" type="image/png" href="/assets/clone_centre_latest_logo.png?v=2">
-<link rel="apple-touch-icon" href="/assets/clone_centre_latest_logo.png?v=2">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Silkscreen:wght@400;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/assets/clone_centre_logo_192.png?v=3">
+<link rel="apple-touch-icon" href="/assets/clone_centre_logo_192.png?v=3">
+<link rel="stylesheet" href="/assets/fonts/site.css">
 <script>
 (function(){
   var path=location.pathname.replace(/\/+$/,'')||'/';
-  var pages={'/':'home','/about':'about','/community':'community','/coaching':'coaching','/library':'library','/products':'products'};
+  var pages={'/':'home','/about':'about','/community':'community','/coaching':'coaching','/build':'build','/products':'products'};
   document.documentElement.dataset.page=pages[path]||'home';
 }());
 </script>
@@ -92,8 +90,11 @@ nav .links a:hover::after,nav .links a:focus-visible::after{right:0;}
 }
 
 /* ---------- Mobile ---------- */
+@media(max-width:1100px){
+  .route-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
 @media(max-width:860px){
-  section.block{padding:64px 22px;}
+  section.block{padding:92px 22px 64px;}
   .hero-inner{padding:110px 22px 70px;gap:28px;}
   h1{font-size:clamp(52px,15vw,84px);}
   h2{font-size:clamp(34px,10vw,48px);}
@@ -109,7 +110,7 @@ nav .links a:hover::after,nav .links a:focus-visible::after{right:0;}
 }
 
 /* ---------- Hero ---------- */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
+.hero{position:relative;min-height:auto;display:flex;align-items:center;overflow:hidden;}
 #rain{position:absolute;inset:0;opacity:.16;z-index:0;}
 .grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
   background:
@@ -119,7 +120,7 @@ nav .links a:hover::after,nav .links a:focus-visible::after{right:0;}
   -webkit-mask-image:radial-gradient(ellipse at 50% 35%,#000 0%,transparent 72%);
   mask-image:radial-gradient(ellipse at 50% 35%,#000 0%,transparent 72%);}
 .hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;
-  width:100%;max-width:1200px;margin:0 auto;padding:120px 40px 80px;}
+  width:100%;max-width:1200px;margin:0 auto;padding:120px 40px 24px;}
 @media(max-width:860px){.hero-inner{grid-template-columns:1fr;}}
 .kicker{font-family:var(--mono);font-size:12px;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:22px;}
 .kicker::before{content:"> ";}
@@ -159,6 +160,8 @@ section.block{max-width:1200px;margin:0 auto;padding:110px 40px;}
 h2{font-family:var(--px);font-weight:400;font-size:clamp(40px,5.5vw,64px);line-height:1;color:#fff;margin-bottom:28px;}
 .lede{color:var(--dim);max-width:62ch;}
 .lede b{color:var(--ink);font-weight:600;}
+.lede a{color:var(--ink);}
+.lede a:hover,.lede a:focus-visible{color:var(--blue);}
 
 /* reveal on scroll */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
@@ -358,7 +361,9 @@ body.cc-chat-open{overflow:hidden;}
 .tier h3{font-family:var(--px);font-weight:400;font-size:32px;color:#fff;margin-top:10px;}
 .tier .tier-price{font-family:var(--px);font-size:48px;line-height:1;color:#fff;margin:18px 0 4px;}
 .tier .tier-price small{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:1px;}
-.tier .annual{font-size:11px;color:var(--blue);min-height:24px;}
+.tier .annual,.tier .annual-link{font-size:12px;color:var(--blue);text-decoration:none;}
+.tier .annual-link{display:inline-block;margin-top:8px;}
+.tier .annual-link:hover{text-decoration:underline;}
 .tier ul{list-style:none;margin:24px 0;display:flex;flex-direction:column;gap:11px;flex:1;}
 .tier li{position:relative;padding-left:18px;font-size:12px;color:#B6B6B6;line-height:1.5;}
 .tier li::before{content:"+";position:absolute;left:0;color:var(--blue);font-family:var(--px);font-size:18px;line-height:1;}
@@ -497,7 +502,7 @@ body.cc-chat-open{overflow:hidden;}
 .coaching-card h3{font-family:var(--px);font-size:31px;font-weight:400;line-height:1.05;color:#fff;margin-top:12px;}
 .coaching-card .cost{font-family:'Silkscreen',monospace;font-size:34px;line-height:1;color:#fff;margin:20px 0 14px;}
 .coaching-card .cost small{font-family:var(--mono);font-size:10px;color:var(--dim);}
-.coaching-card p{font-size:12px;color:var(--dim);flex:1;}
+.coaching-card p{font-size:12px;color:var(--dim);}
 .coaching-card .includes{margin:20px 0;font-size:10px;letter-spacing:.4px;color:#9A9A9A;}
 .coaching-card .tier-cta{display:block;font-family:var(--px);font-size:20px;text-decoration:none;text-align:center;padding:9px;border:2px solid var(--line);color:var(--ink);}
 .coaching-card .tier-cta:hover{border-color:var(--blue);color:var(--blue);}
@@ -508,16 +513,29 @@ body.cc-chat-open{overflow:hidden;}
 .calendar-fallback b{display:block;font-family:var(--px);font-size:25px;color:#fff;margin-bottom:6px;font-weight:400;}
 
 /* ---------- Product family ---------- */
-.app-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:42px;}
-.app-card{border:1px solid var(--line);background:#050505;padding:24px 20px;text-decoration:none;transition:border-color .2s,transform .2s;}
+.app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:42px;}
+.app-card{border:1px solid var(--line);background:#050505;padding:32px 28px;min-height:280px;text-decoration:none;display:flex;flex-direction:column;transition:border-color .2s,transform .2s;}
 .app-card:hover{border-color:var(--blue);transform:translateY(-3px);}
 .app-card .app-status{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
-.app-card h3{font-family:var(--px);font-size:28px;font-weight:400;color:#fff;margin-top:12px;}
-.app-card p{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.55;}
-.app-card .app-price{display:block;margin-top:14px;color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.7px;}
-.app-card .open{display:block;margin-top:18px;font-family:var(--px);font-size:18px;color:var(--blue);}
-@media(max-width:900px){.app-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:520px){.app-grid{grid-template-columns:1fr;}}
+.app-card h3{font-family:var(--px);font-size:36px;font-weight:400;color:#fff;margin-top:14px;}
+.app-card p{font-size:13px;color:var(--dim);margin-top:12px;line-height:1.6;}
+.app-card ul{list-style:none;margin:18px 0 0;display:grid;gap:8px;}
+.app-card li{position:relative;padding-left:16px;color:#B7B7B7;font-size:12px;}
+.app-card li::before{content:"+";position:absolute;left:0;color:var(--blue);font-family:var(--px);font-size:16px;line-height:1.2;}
+.app-card .app-price{display:block;margin-top:auto;padding-top:18px;color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.7px;}
+.app-card .open{display:block;margin-top:14px;font-family:var(--px);font-size:22px;color:var(--blue);}
+.page-band{margin-top:64px;}
+.band-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px;}
+.band-grid.four{grid-template-columns:repeat(4,minmax(0,1fr));}
+.band-card{border:1px solid var(--line);background:#050505;padding:22px 18px;min-height:180px;}
+.band-card span{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
+.band-card h3{font-family:var(--px);font-size:26px;font-weight:400;color:#fff;margin:12px 0;}
+.band-card p{font-size:12px;color:var(--dim);line-height:1.55;}
+.coaching-card ul{list-style:none;margin:8px 0 22px;display:grid;gap:8px;}
+.coaching-card li{position:relative;padding-left:16px;color:#B7B7B7;font-size:12px;}
+.coaching-card li::before{content:"+";position:absolute;left:0;color:var(--blue);font-family:var(--px);font-size:16px;line-height:1.2;}
+@media(max-width:900px){.app-grid,.band-grid,.band-grid.four{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.app-grid,.band-grid,.band-grid.four{grid-template-columns:1fr;}}
 
 /* ---------- Footer ---------- */
 footer{border-top:1px solid var(--line);padding:48px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
@@ -570,7 +588,11 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 }
 
 /* ---------- Multi-page route shell ---------- */
-.subpage-hero{max-width:1200px;margin:0 auto;padding:150px 40px 66px;border-bottom:1px solid var(--line);position:relative;z-index:2;}
+.subpage-hero,#signup,#numbers,#accountability,.calendar-shell{display:none;}
+.member-capture summary{cursor:pointer;color:var(--blue);font-size:14px;letter-spacing:.2px;}
+.member-capture summary::-webkit-details-marker{display:none;}
+.member-capture:not([open]){margin-top:40px;padding:0;border:0;background:none;}
+.coaching-card .tier-cta{margin-top:auto;}
 .subpage-hero .eyebrow{font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:18px;}
 .subpage-hero h1{max-width:900px;font-size:clamp(54px,8vw,94px);}
 .subpage-hero p{max-width:68ch;margin-top:24px;color:#A5A5A5;font-size:15px;}
@@ -591,8 +613,8 @@ footer .r{font-size:12px;color:var(--dim);letter-spacing:1px;}
 .value-card .value-no{font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
 .value-card h3{font-family:var(--px);font-size:36px;font-weight:400;line-height:1;color:#fff;margin:18px 0 12px;}
 .value-card p{position:relative;z-index:1;color:#9DA6AE;font-size:12px;max-width:42ch;}
-.route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:42px;}
-.route-card{position:relative;min-height:290px;border:1px solid #26313c;background:linear-gradient(145deg,rgba(46,155,255,.08),rgba(5,5,5,.95) 44%);padding:30px;text-decoration:none;color:inherit;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s,border-color .2s,background .2s;}
+.route-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:42px;}
+.route-card{position:relative;min-height:0;border:1px solid #26313c;background:linear-gradient(145deg,rgba(46,155,255,.08),rgba(5,5,5,.95) 44%);padding:30px;text-decoration:none;color:inherit;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s,border-color .2s,background .2s;}
 .route-card::after{content:attr(data-step);position:absolute;right:-8px;bottom:-36px;font-family:'Silkscreen',monospace;font-size:112px;color:rgba(46,155,255,.055);}
 .route-card:hover,.route-card:focus-visible{transform:translateY(-4px);border-color:var(--blue);background:linear-gradient(145deg,rgba(46,155,255,.15),rgba(5,5,5,.98) 52%);outline:none;}
 .route-card .route-kicker{font-size:9px;letter-spacing:2.2px;color:var(--blue);text-transform:uppercase;}
@@ -688,6 +710,14 @@ html:not([data-page="home"]) .hero,
 html:not([data-page="home"]) .marquee,
 html[data-page="home"] .subpage-hero{display:none;}
 html[data-page="home"] #about,html[data-page="home"] #numbers,html[data-page="home"] #community,html[data-page="home"] #live,html[data-page="home"] #accountability,html[data-page="home"] #coaching,html[data-page="home"] #library,html[data-page="home"] #ecosystem{display:none;}
+html:not([data-page="build"]) #build{display:none;}
+html[data-page="build"] .home-hub,html[data-page="build"] #about,html[data-page="build"] #numbers,html[data-page="build"] #community,html[data-page="build"] #live,html[data-page="build"] #accountability,html[data-page="build"] #coaching,html[data-page="build"] #signup,html[data-page="build"] #library,html[data-page="build"] #ecosystem{display:none;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;}
+.build-proof{margin-top:34px;border:1px solid var(--blue);background:#050505;padding:24px 26px;max-width:880px;}
+.build-proof b{color:#fff;}
+.build-proof p{font-size:13px;color:#B7B7B7;line-height:1.7;}
+.build-fine{margin-top:22px;font-size:11px;color:var(--dim);max-width:80ch;line-height:1.7;}
+.build-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;}
 html[data-page="about"] .home-hub,html[data-page="about"] #community,html[data-page="about"] #live,html[data-page="about"] #accountability,html[data-page="about"] #coaching,html[data-page="about"] #signup,html[data-page="about"] #library,html[data-page="about"] #ecosystem{display:none;}
 html[data-page="community"] .home-hub,html[data-page="community"] #about,html[data-page="community"] #numbers,html[data-page="community"] #accountability,html[data-page="community"] #coaching,html[data-page="community"] #library,html[data-page="community"] #ecosystem{display:none;}
 html[data-page="coaching"] .home-hub,html[data-page="coaching"] #about,html[data-page="coaching"] #numbers,html[data-page="coaching"] #community,html[data-page="coaching"] #live,html[data-page="coaching"] #signup,html[data-page="coaching"] #library,html[data-page="coaching"] #ecosystem{display:none;}
@@ -770,26 +800,20 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 </head>
 <body>
 
-<div class="scanlines"></div>
-<div class="vignette"></div>
-<div class="grid-overlay"></div>
-
 <nav aria-label="Primary navigation" id="site-nav">
   <div class="nav-inner">
     <a class="brand" href="/" aria-label="Clone Centre home">
-      <img src="assets/clone_centre_latest_logo.png" alt="">
+      <img src="assets/clone_centre_logo_192.png" alt="" width="42" height="42">
       <span>Clone<b>Centre</b></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
       <span></span><span></span><span></span>
     </button>
     <div class="links" id="site-menu">
-      <a href="/" data-nav-page="home">Home</a>
       <a href="/about" data-nav-page="about">About</a>
+      <a href="/build" data-nav-page="build">Build with me</a>
       <a href="/community" data-nav-page="community">Community</a>
-      <a href="/trends">Trends</a>
       <a href="/coaching" data-nav-page="coaching">Coaching</a>
-      <a href="/library" data-nav-page="library">Library</a>
       <a href="/products" data-nav-page="products">Products</a>
       <a href="/member">Member</a>
     </div>
@@ -798,28 +822,21 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <canvas id="rain"></canvas>
   <div class="hero-inner">
     <div class="hero-copy">
-      <div class="kicker">Joseph Conlan · Founder, Clone Centre</div>
+      <div class="kicker">Joseph Conlan · Clone Centre</div>
       <h1>I MAKE AI<br>USEFUL<span class="cursor"></span></h1>
       <p class="sub">I am <b>Joseph Conlan</b>. I build practical AI systems, teach people how to use them without the jargon, and help good ideas become working tools. My work spans <b>SMEs through to multi-billion-dollar venture capital funds</b>, and I have a background in Oxford AI. This is my place to show you <b>what AI can do and how we make it useful</b>.</p>
       <div class="hero-cta">
-        <a class="btn blue" href="#start">SEE HOW I CAN HELP</a>
-        <a class="btn" href="#guide-gate" data-guide-gate>GET THE PROMPT GUIDE</a>
+        <a class="btn blue" href="/build">HAVE ME BUILD IT &gt;</a>
+        <a class="btn" href="/coaching">BOOK A SESSION &gt;</a>
       </div>
-      <p class="ai-line-note">PREFER TO TALK? CLONE CENTRE AI · <strong><a href="tel:+447888865560">07888 865560</a></strong></p>
     </div>
     <div class="hero-img">
       <img src="assets/joseph_code_dither.png" alt="Pixel portrait of Joseph Conlan">
-      <div class="tag">JOSEPH.EXE · ONLINE</div>
     </div>
   </div>
-  <div class="scrollcue">SCROLL</div>
 </header>
-
-<!-- ============ MARQUEE ============ -->
-<div class="marquee"><div id="mq"></div></div>
 
 <!-- ============ FOCUSED PAGE INTRO ============ -->
 <header class="subpage-hero" id="page-top">
@@ -833,144 +850,52 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <section class="block reveal home-hub" id="start">
   <div class="hub-head">
     <div>
-      <div class="sec-kicker">The value we provide</div>
-      <h2>LESS CONFUSION. MORE USEFUL WORK.</h2>
+      <div class="sec-kicker">Start here</div>
+      <h2>PICK ONE.</h2>
     </div>
-    <p class="lede">Clone Centre turns AI from an interesting idea into something you can understand, use and build into the way you actually work.</p>
+    <p class="lede">Have me build it, learn to do it yourself, or open a live product.</p>
   </div>
-
-  <div class="value-grid">
-    <article class="value-card" data-mark="01">
-      <div class="value-no">Clarity</div>
-      <h3>UNDERSTAND IT</h3>
-      <p>Plain-English guidance that explains what matters, removes the jargon and gives you the exact words to try next.</p>
-    </article>
-    <article class="value-card" data-mark="02">
-      <div class="value-no">Capability</div>
-      <h3>USE IT</h3>
-      <p>Prompts, books, live builds and working examples that turn learning into useful output you can see and repeat.</p>
-    </article>
-    <article class="value-card" data-mark="03">
-      <div class="value-no">Systems</div>
-      <h3>BUILD WITH IT</h3>
-      <p>Private help and real AI products for the moments when you need architecture, automation and momentum—not another slide deck.</p>
-    </article>
-  </div>
-
-  <div class="hub-head">
-    <div>
-      <div class="sec-kicker">How we do it</div>
-      <h2>CHOOSE THE KIND OF HELP THAT FITS.</h2>
-    </div>
-    <p class="lede">Learn at your own pace, build live with the community, or work directly with me on the problem in front of you.</p>
-  </div>
-
   <div class="route-grid">
-    <a class="route-card primary" href="/library#library-picker" data-step="01">
-      <span class="route-flag">Recommended if unsure</span>
-      <div class="route-kicker">Plain English · self-paced</div>
-      <h3>I WANT TO UNDERSTAND AI</h3>
-      <p>Get one recommended first book, then browse the complete Plain English and Pro Series only if you want more.</p>
-      <span class="route-action">FIND MY FIRST BOOK &gt;</span>
+    <a class="route-card" href="/build">
+      <div class="route-kicker">Done for you</div>
+      <h3>BUILD WITH ME</h3>
+      <p>Joseph builds the system. Fixed scope, working software, handover.</p>
+      <span class="route-action">OPEN &gt;</span>
     </a>
-    <a class="route-card" href="/community" data-step="02">
-      <div class="route-kicker">Community · live builds · momentum</div>
-      <h3>I WANT TO BUILD SOMETHING REAL</h3>
-      <p>Learn with Joseph and the group, follow a weekly rhythm, and turn one useful idea into a working system.</p>
-      <span class="route-action">SEE THE LIVE PROGRAMME &gt;</span>
+    <a class="route-card" href="/community">
+      <div class="route-kicker">Weekly</div>
+      <h3>COMMUNITY</h3>
+      <p>Member rhythm, live lab, and accountability.</p>
+      <span class="route-action">OPEN &gt;</span>
     </a>
-    <a class="route-card" href="/coaching" data-step="03">
-      <div class="route-kicker">Private help · accountability</div>
-      <h3>I NEED TO GET UNSTUCK</h3>
-      <p>Bring one specific problem, work through it with Joseph, or add weekly accountability when momentum is the real issue.</p>
-      <span class="route-action">CHOOSE PRIVATE HELP &gt;</span>
+    <a class="route-card" href="/coaching">
+      <div class="route-kicker">Private</div>
+      <h3>COACHING</h3>
+      <p>One problem, worked through with Joseph.</p>
+      <span class="route-action">OPEN &gt;</span>
+    </a>
+    <a class="route-card" href="/products">
+      <div class="route-kicker">Live systems</div>
+      <h3>PRODUCTS</h3>
+      <p>Voice AI, website chat, governance, and pipeline.</p>
+      <span class="route-action">OPEN &gt;</span>
     </a>
   </div>
-
-  <div class="simple-rule">
-    <div><b>NOT SURE WHERE YOU FIT?</b><br><span>Tell me where you are with AI. I will send the Prompt Guidebook and use your answers to make the next advice more relevant.</span></div>
-    <a class="btn blue" href="#guide-gate" data-guide-gate>BUILD MY AI PROFILE &gt;</a>
-  </div>
-
-  <div class="offer-map">
-    <div class="offer-map-head">
-      <div><div class="sec-kicker">Everything has its place</div><h2>THE WHOLE PLACE, AT A GLANCE.</h2></div>
-      <p>No mystery menu and no need to compare every price at once. These are the four shelves; open only the one that matches what you need.</p>
-    </div>
-    <div class="offer-shelf">
-      <a class="offer-card" href="/library">
-        <span class="offer-count">Self-paced · 16 resources</span>
-        <h3>READ + LEARN</h3>
-        <ul><li>Profile-gated Prompt Guidebook</li><li>8 Plain English books</li><li>7 Pro build-alongs</li><li>Three money-saving bundles</li></ul>
-        <span class="offer-action">OPEN THE LIBRARY &gt;</span>
-      </a>
-      <a class="offer-card" href="/community">
-        <span class="offer-count">Four membership levels</span>
-        <h3>LEARN LIVE</h3>
-        <ul><li>Free AI profile + guide</li><li>Paid member community</li><li>Weekly AI Lab</li><li>Pro + accountability</li></ul>
-        <span class="offer-action">COMPARE LEVELS &gt;</span>
-      </a>
-      <a class="offer-card" href="/coaching">
-        <span class="offer-count">Focused human help</span>
-        <h3>WORK WITH JOSEPH</h3>
-        <ul><li>AI Fix Session</li><li>AI Power Session</li><li>30-day Build Partner</li><li>Weekly accountability</li></ul>
-        <span class="offer-action">SEE PRIVATE HELP &gt;</span>
-      </a>
-      <a class="offer-card" href="/products">
-        <span class="offer-count">Four working AI products</span>
-        <h3>SEE IT WORK</h3>
-        <ul><li>ANSAIR voice AI</li><li>HyperChat web AI</li><li>TRAICE governance</li><li>Pipeline intelligence</li></ul>
-        <span class="offer-action">VIEW THE STACK &gt;</span>
-      </a>
-    </div>
-  </div>
-
-  <div class="mini-links">
-    <a class="mini-link" href="/about"><span><b>MEET JOSEPH</b><br>Background, approach and why AI matters now.</span><i>OPEN &gt;</i></a>
-    <a class="mini-link" href="/community?interest=help_choose#membership-apply"><span><b>ASK A HUMAN</b><br>Share the problem and Joseph will point you in the right direction.</span><i>ASK &gt;</i></a>
-  </div>
-
-  <section class="home-coach" id="clone-coach">
-    <div class="home-coach-head">
-      <div>
-        <div class="sec-kicker">Clone Coach · built around you</div>
-        <h2>AI COACHING IS THE FUTURE OF FOLLOW-THROUGH.</h2>
-      </div>
-      <p class="home-coach-intro">Advice is easy to find. <b>Remembering your goals, noticing the pattern and helping you take the next useful action</b> is where a great coach becomes valuable. We build private AI coach bots around your needs, your method, your language and the moments where you tend to get stuck.</p>
-    </div>
-    <p class="home-coach-principle"><b>Always available does not mean human-free.</b> Your coach can handle the daily rhythm, preserve context and prepare better conversations—then hand over to a person whenever judgement, care or genuine expertise is needed.</p>
-    <div class="coach-cap-grid">
-      <article class="coach-capability"><span>01 · Context</span><h3>REMEMBER WHAT MATTERS</h3><p>Keep goals, preferences, working context and previous check-ins connected so every conversation can begin further forward.</p></article>
-      <article class="coach-capability"><span>02 · Action</span><h3>TURN GOALS INTO NEXT MOVES</h3><p>Break large outcomes into clear milestones, practical weekly priorities and small actions that are easy to begin.</p></article>
-      <article class="coach-capability"><span>03 · Accountability</span><h3>CREATE A USEFUL RHYTHM</h3><p>Run daily check-ins, weekly reviews, reminders and progress summaries without making the experience feel like admin.</p></article>
-      <article class="coach-capability"><span>04 · Insight</span><h3>NOTICE PATTERNS + BLOCKERS</h3><p>Surface repeated obstacles, decisions and habits, then ask the right reflective question before momentum disappears.</p></article>
-      <article class="coach-capability"><span>05 · Practice</span><h3>REHEARSE IMPORTANT MOMENTS</h3><p>Prepare meetings, interviews, presentations, sales conversations and difficult decisions with realistic role-play and feedback.</p></article>
-      <article class="coach-capability"><span>06 · Personalisation</span><h3>WORK YOUR WAY</h3><p>Adapt tone, cadence, frameworks, playbooks and boundaries to the individual, team, programme or coaching methodology.</p></article>
-      <article class="coach-capability"><span>07 · Creation</span><h3>MAKE THE WORK WITH YOU</h3><p>Draft plans, questions, summaries, templates and personalised resources from the context already shared.</p></article>
-      <article class="coach-capability"><span>08 · Connection</span><h3>FIT INTO REAL WORKFLOWS</h3><p>Connect agreed calendars, tools and systems so useful actions and progress records do not stay trapped inside a chat window.</p></article>
-      <article class="coach-capability"><span>09 · Boundaries</span><h3>KNOW WHEN TO HAND OVER</h3><p>Use clear guardrails, privacy choices and human escalation for situations where an AI coach should never pretend to be the expert.</p></article>
-    </div>
-    <div class="home-coach-actions">
-      <a class="btn blue" href="/community?interest=custom_coach_bot#membership-apply">BUILD MY COACH BOT &gt;</a>
-      <a class="btn" href="/member">CREATE MY MEMBER PROFILE &gt;</a>
-      <p>Every build is scoped around a real use case. AI coaching supports action, reflection and practice; it is not therapy, medical care, legal advice or financial advice.</p>
-    </div>
-  </section>
 </section>
 
 <!-- ============ ABOUT ============ -->
 <section class="block reveal" id="about">
   <div class="sec-kicker">About</div>
-  <h2>WHO IS RUNNING THIS PLACE?</h2>
+  <h2>JOSEPH CONLAN.</h2>
   <div class="about-grid">
-    <img src="assets/joseph_bw.jpg" alt="Black and white portrait of Joseph Conlan">
+    <img src="assets/joseph_bw_800.jpg" alt="Black and white portrait of Joseph Conlan" width="800" height="1422" loading="lazy" decoding="async">
     <div>
       <p class="lede">I build AI systems for a living at <b>Clone Centre</b>. My work has spanned <b>SMEs through to multi-billion-dollar venture capital funds</b>, and my background includes <b>Oxford AI</b>. That range is why I care about making serious AI useful without making it obscure.</p>
       <br>
-      <p class="lede">The secret is never the tool. It is how you talk to it. Everything on this site—the free AI profile, books, newsletter and paid community—exists to teach you that skill in plain English.</p>
+      <p class="lede">The useful part is how you talk to it. Community, coaching, and the live products are here to put that skill to work.</p>
       <div class="statrow">
-        <div class="stat"><div class="n">8</div><div class="l">Books in the library</div></div>
-        <div class="stat"><div class="n">30+</div><div class="l">Prompt recipes</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">Ways to start</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">Live products</div></div>
         <div class="stat"><div class="n">0</div><div class="l">Jargon allowed</div></div>
       </div>
     </div>
@@ -1016,38 +941,21 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
 <!-- ============ COMMUNITY ============ -->
 <section class="block reveal" id="community">
   <div class="sec-kicker">The Community</div>
-  <h2>DO NOT LEARN AI ALONE</h2>
-  <p class="lede">A practical paid community for founders, professionals and complete beginners who want to <b>use AI this week</b>, not talk about it for six months. There are three ways to join. Your free AI profile and Prompt Guidebook remain available separately, without pretending they are a membership.</p>
-
-  <div class="choice-guide community-choice-guide" aria-label="Quick membership guide">
-    <div class="choice"><b>Community</b><span>Choose this for the books, member chat and a steady weekly prompt rhythm.</span></div>
-    <div class="choice"><b>Pro</b><span>Choose this to build live with Joseph and use the complete recordings vault.</span></div>
-    <div class="choice"><b>Accountability</b><span>Choose this when personal follow-through matters more than more information.</span></div>
-  </div>
-
-  <div class="starter-path">
-    <div><span class="label">Free starting point · not community membership</span><b>NOT READY TO JOIN?</b><p>Build your AI profile and request the Prompt Guidebook for £0. Community access begins with the £19 Community plan below.</p></div>
-    <a class="btn" href="#signup">GET MY FREE GUIDE &gt;</a>
-  </div>
+  <h2>JOIN.</h2>
+  <p class="lede">Three memberships. One button each. Annual is two months free, linked under the monthly price.</p>
 
   <div class="pricing-grid">
     <article class="tier">
       <div class="tier-no">Membership 01</div>
       <h3>Community</h3>
       <div class="tier-price">£19<small> / MONTH</small></div>
-      <div class="annual">£190 / YEAR · TWO MONTHS FREE</div>
+      <a class="annual-link" href="https://buy.stripe.com/3cI7sL0rJ0Lc2Yj8psaZi0k">or £190 for the year</a>
       <ul>
-        <li>AI profile and Prompt Guidebook</li>
         <li>Member chat and introductions</li>
-        <li>All eight Plain English books</li>
         <li>Weekly prompt and build thread</li>
         <li>Saturday and Sunday accountability drops</li>
       </ul>
-      <div class="tier-actions">
-        <a class="tier-cta" href="https://buy.stripe.com/3cI7sL4HZ1Pg2Yj7loaZi0j">JOIN MONTHLY · £19 &gt;</a>
-        <a class="tier-cta secondary" href="https://buy.stripe.com/3cI7sL0rJ0Lc2Yj8psaZi0k">JOIN ANNUALLY · £190 &gt;</a>
-      </div>
-      <div class="tier-checkout-note">SECURE STRIPE CHECKOUT · CANCEL ANY TIME</div>
+      <a class="tier-cta" href="https://buy.stripe.com/3cI7sL4HZ1Pg2Yj7loaZi0j">JOIN · £19 A MONTH &gt;</a>
     </article>
 
     <article class="tier recommended">
@@ -1055,120 +963,37 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="tier-no">Membership 02</div>
       <h3>Pro</h3>
       <div class="tier-price">£49<small> / MONTH</small></div>
-      <div class="annual">£490 / YEAR · TWO MONTHS FREE</div>
+      <a class="annual-link" href="https://buy.stripe.com/bJecN57Ub51scyT8psaZi0m">or £490 for the year</a>
       <ul>
         <li>Everything in Community</li>
         <li>Weekly live AI Lab with Joseph</li>
-        <li>Build Before Breakfast sessions</li>
-        <li>Group accountability and office hours</li>
-        <li>Full recordings and prompt archive</li>
-        <li>HyperChat member workspace access</li>
-        <li>Annual Pro: one website AI chatbot setup included</li>
+        <li>Recordings, prompts, and office hours</li>
+        <li>Annual plan includes one website chatbot setup</li>
       </ul>
-      <div class="tier-actions">
-        <a class="tier-cta" href="https://buy.stripe.com/fZu4gzcar1PgdCX358aZi0l">JOIN MONTHLY · £49 &gt;</a>
-        <a class="tier-cta secondary" href="https://buy.stripe.com/bJecN57Ub51scyT8psaZi0m">JOIN ANNUALLY · £490 &gt;</a>
-      </div>
-      <div class="tier-checkout-note">SECURE STRIPE CHECKOUT · CANCEL ANY TIME</div>
+      <a class="tier-cta" href="https://buy.stripe.com/fZu4gzcar1PgdCX358aZi0l">JOIN · £49 A MONTH &gt;</a>
     </article>
 
     <article class="tier">
       <div class="tier-no">Membership 03 · 5 founding seats</div>
       <h3>Accountability</h3>
       <div class="tier-price">£149<small> / MONTH</small></div>
-      <div class="annual">£1,490 / YEAR · TWO MONTHS FREE</div>
+      <a class="annual-link" href="https://buy.stripe.com/aFafZheizfG656r214aZi0o">or £1,490 for the year</a>
       <ul>
         <li>Everything in Pro</li>
-        <li>Personal weekly check-in message</li>
-        <li>Monthly private 45-minute review</li>
-        <li>Private 90-day goal tracker</li>
-        <li>Priority questions and DM access</li>
+        <li>A personal check-in every week</li>
+        <li>One private review each month</li>
       </ul>
-      <div class="tier-actions">
-        <a class="tier-cta" href="https://buy.stripe.com/4gMbJ1b6n9hIeH1358aZi0n">JOIN MONTHLY · £149 &gt;</a>
-        <a class="tier-cta secondary" href="https://buy.stripe.com/aFafZheizfG656r214aZi0o">JOIN ANNUALLY · £1,490 &gt;</a>
-      </div>
-      <div class="tier-checkout-note">5 FOUNDING SEATS · SECURE STRIPE CHECKOUT</div>
+      <a class="tier-cta" href="https://buy.stripe.com/4gMbJ1b6n9hIeH1358aZi0n">JOIN · £149 A MONTH &gt;</a>
     </article>
-  </div>
-  <div class="pricing-note">BUTTONS OPEN THE EXACT SECURE STRIPE CHECKOUT · MONTHLY PLANS CANCEL ANY TIME · ANNUAL PRICES EQUAL TEN MONTHS · VAT INCLUDED WHERE APPLICABLE</div>
-
-  <div class="annual-bonus" id="annual-chatbot">
-    <div>
-      <div class="tag">Annual Pro bonus · AI website assistant</div>
-      <h3>GET A CHATBOT LIKE THIS ON YOUR SITE.</h3>
-      <p>Choose <b>Clone Centre Pro annually</b> and we will set up one trained website AI chatbot like the assistant on this page, included at no extra setup charge while your annual membership stays active.</p>
-      <p class="small-print">The standard starter build covers one website and one approved business knowledge set. Usage beyond fair-use, third-party usage costs and bespoke integrations are not automatically included; any extras are scoped and agreed before launch. The assistant remains subject to acceptable-use and safety checks.</p>
-    </div>
-    <a class="btn blue" href="https://buy.stripe.com/bJecN57Ub51scyT8psaZi0m">JOIN ANNUAL PRO · £490 &gt;</a>
-  </div>
-
-  <div class="switch-offer">
-    <div>
-      <div class="switch-code">PAY <b>£1</b> TO SWITCH</div>
-      <p class="switch-copy">Already paying for another business, coaching or AI community? Apply with proof of your active paid membership. Once verified, your <b style="color:#fff;">first month</b> is £1; Community then renews at £19/month or Pro at £49/month unless cancelled. The £1 link is issued only after approval.</p>
-    </div>
-    <div class="switch-actions">
-      <a class="btn" href="/community?interest=switch_community#membership-apply">CHECK £1 COMMUNITY ELIGIBILITY &gt;</a>
-      <a class="btn blue" href="/community?interest=switch_pro#membership-apply">CHECK £1 PRO ELIGIBILITY &gt;</a>
-    </div>
-  </div>
-
-  <div class="member-dashboard-callout">
-    <div><span class="label">Already saved a profile or joined?</span><b>YOUR MEMBER DASHBOARD IS READY.</b><p>Sign in to see your AI profile, linked website chats, membership status, purchases and product access. Use the same email when joining so records connect automatically.</p></div>
-    <a class="btn blue" href="/member">OPEN MEMBER CENTRE &gt;</a>
-  </div>
-
-  <div class="member-capture" id="membership-apply">
-    <div class="member-capture-head">
-      <div><div class="sec-kicker">Only when a form is needed</div><h3 id="member-form-title">TELL US WHAT YOU NEED.</h3></div>
-      <p id="member-form-intro">Standard Community, Pro and Accountability plans go directly to Stripe above. Use this form only for £1 switch verification, help choosing, Clone Coach or a bespoke coach build.</p>
-    </div>
-    <form class="member-form" id="member-interest-form" action="/api/member-interest" method="POST">
-      <label class="hp-field" aria-hidden="true">Fax<input type="text" name="fax" tabindex="-1" autocomplete="off"></label>
-      <div class="member-field"><label for="member-name">Your name</label><input id="member-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required></div>
-      <div class="member-field"><label for="member-email">Email address</label><input id="member-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
-      <div class="member-field"><label for="member-company">Company or website <span>(optional)</span></label><input id="member-company" name="company" type="text" autocomplete="organization" maxlength="160"></div>
-      <div class="member-field"><label for="member-interest">What are you interested in?</label><select id="member-interest" name="interest" required>
-        <option value="" selected disabled>Choose the reason a form is needed</option>
-        <optgroup label="£1 switch offer · proof required">
-          <option value="switch_community">Switch → Community · £1, then £19/mo</option>
-          <option value="switch_pro">Switch → Pro · £1, then £49/mo</option>
-        </optgroup>
-        <optgroup label="AI coach + other help">
-          <option value="clone_coach_waitlist">Clone Coach AI beta waitlist</option>
-          <option value="custom_coach_bot">A custom AI coach built for my needs</option>
-          <option value="help_choose">Help me choose</option>
-        </optgroup>
-      </select></div>
-      <div class="switch-proof-fields" id="switch-proof-fields">
-        <p class="proof-note"><b style="color:#fff;">Eligibility check:</b> the £1 offer is only for someone currently paying for another business, coaching or AI community. Please redact card numbers, bank details and unrelated personal information from your proof.</p>
-        <div class="member-field"><label for="current-community">Current paid community</label><input id="current-community" name="currentCommunity" type="text" maxlength="160" placeholder="Community or programme name"></div>
-        <div class="member-field"><label for="current-membership-url">Community website <span>(optional)</span></label><input id="current-membership-url" name="currentMembershipUrl" type="url" maxlength="500" placeholder="https://"></div>
-        <div class="member-field full"><label for="switch-proof">Proof of active paid membership</label><input id="switch-proof" name="switchProof" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"><span class="proof-note">Upload a recent receipt, invoice or membership screenshot. PNG, JPG, WEBP or PDF; maximum 3 MB.</span></div>
-      </div>
-      <div class="member-field"><label for="member-ai-stage">Where are you with AI?</label><select id="member-ai-stage" name="aiStage" required>
-        <option value="" selected disabled>Choose the closest answer</option>
-        <option value="new">I have barely started</option><option value="exploring">I am experimenting</option><option value="regular">I use AI most weeks</option><option value="building">I am already building systems</option>
-      </select></div>
-      <div class="member-field"><label for="member-use">What do you want AI to improve?</label><select id="member-use" name="aiUse" required>
-        <option value="" selected disabled>Choose the main result</option>
-        <option value="clarity">Understand AI clearly</option><option value="productivity">Save time or improve my work</option><option value="growth">Grow a business</option><option value="automation">Automate a process</option><option value="assistant">Build an AI assistant</option><option value="governance">Use AI safely and govern it</option>
-      </select></div>
-      <div class="member-field full"><label for="member-goal">What would make this useful for you?</label><textarea id="member-goal" name="goal" maxlength="1500" placeholder="A sentence or two is enough. Tell Joseph what you want to achieve or what is currently getting in the way." required></textarea></div>
-      <label class="member-consent"><input type="checkbox" name="consent" required><span>I agree that Clone Centre may save these details and contact me about this enquiry. I can ask for my information to be removed at any time.</span></label>
-      <div class="member-form-actions"><p>No payment is taken here. £1 switch applications are checked before a private discounted Stripe link is issued. Replies come from joseph@clonecentre.ai or clone@clonecentre.ai.</p><button class="btn blue" id="member-submit" type="submit">SEND MY REQUEST &gt;</button></div>
-      <div class="member-status" id="member-form-status" role="status"></div>
-    </form>
   </div>
 
 </section>
 
 <!-- ============ LIVE PROGRAMME ============ -->
 <section class="block reveal" id="live">
-  <div class="sec-kicker">Weekly Programme</div>
-  <h2>FIVE TOUCHPOINTS. ONE WEEK.</h2>
-  <p class="lede">Morning builders, daytime founders and evening learners all get a way in. The flagship is the <b>Wednesday 7pm UK AI Lab</b>: bring a real task, leave with something working.</p>
+  <div class="sec-kicker">The week</div>
+  <h2>WHAT HAPPENS EACH WEEK.</h2>
+  <p class="lede">The main session is Wednesday at 7pm UK. Everything else is optional.</p>
 
   <div class="live-grid">
     <article class="live-card">
@@ -1207,21 +1032,6 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
       <div class="format">Async · Accountability check-in</div>
     </article>
   </div>
-
-  <div class="vault">
-    <div>
-      <div class="sec-kicker">Pro Recordings Vault</div>
-      <h3>MISS THE CALL. KEEP THE RESULT.</h3>
-      <p>Every AI Lab is added to the private Pro archive with timestamps, the exact prompts used and a short action summary. Public socials get the clips; members keep the complete working session.</p>
-      <a class="btn blue" href="/community#community" style="display:inline-block;margin-top:22px;">UNLOCK WITH PRO &gt;</a>
-    </div>
-    <div class="vault-list">
-      <div class="vault-item"><b>Full replay</b>Watch on your own time</div>
-      <div class="vault-item"><b>Prompt pack</b>Copy every prompt from the session</div>
-      <div class="vault-item"><b>Timestamps</b>Jump straight to the useful bit</div>
-      <div class="vault-item"><b>Weekly clips</b>Highlights published through the Clone Centre social pipeline</div>
-    </div>
-  </div>
 </section>
 
 <!-- ============ ACCOUNTABILITY ============ -->
@@ -1231,9 +1041,9 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   <p class="lede">Most goals do not need another app. They need a clear next move and somebody who notices whether it happened. The first version is <b>human-led by Joseph</b>, based on the practical system in Coach.</p>
 
   <div class="choice-guide" aria-label="Quick private help guide">
-    <div class="choice"><b>One stuck problem</b><span>Choose the £150 AI Fix Session for one focused expert diagnosis.</span></div>
-    <div class="choice"><b>A deeper build</b><span>Choose the £250 Power Session to map and build the working core together.</span></div>
-    <div class="choice"><b>Ongoing delivery</b><span>Choose the £500 Build Partner for calls plus weekday support for 30 days.</span></div>
+    <div class="choice"><b>One stuck problem</b><span>Choose the £350 AI Fix Session for one focused expert diagnosis.</span></div>
+    <div class="choice"><b>A deeper build</b><span>Choose the £650 Power Session to map and build the working core together.</span></div>
+    <div class="choice"><b>Ongoing delivery</b><span>Choose the £1,500 Build Partner for calls plus weekday support for 30 days.</span></div>
     <div class="choice"><b>Follow-through</b><span>Choose Accountability when the system exists but consistent action is the gap.</span></div>
   </div>
 
@@ -1289,317 +1099,247 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
   </div>
 </section>
 
+<!-- ============ BUILD WITH ME ============ -->
+<section class="block reveal" id="build">
+  <div class="sec-kicker">Done for you</div>
+  <h2>HAVE ME BUILD IT.</h2>
+  <p class="lede">Sessions and coaching teach you to use AI. This is the other route: I design and build the system, test it on your real work, and hand it over to run.</p>
+
+  <div class="build-proof">
+    <p><b>Recent work.</b> I have just come back from Beverly Hills, where I was consulting for the owner of a multi-billion-dollar venture capital fund. My work spans SMEs through to funds, with a background in Oxford AI. The method is the same at every size: start with one workflow, build working software, and hand it over.</p>
+  </div>
+
+  <div class="coaching-grid">
+    <article class="coaching-card">
+      <div class="session">Fixed scope · 2 to 6 weeks</div>
+      <h3>Systems Build</h3>
+      <div class="cost">From £4,500</div>
+      <p>One system, designed, built and handed over.</p>
+      <ul>
+        <li>A free 20-minute scoping call, then a written scope and fixed price before any work starts</li>
+        <li>Built in your tools: client intake, document and knowledge assistants, voice, website chat, reporting</li>
+        <li>Tested on your real examples, with a human handoff for anything sensitive</li>
+        <li>Handover notes, and 30 days of fixes</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="profile" href="mailto:joseph@clonecentre.ai?subject=Scope%20a%20Systems%20Build">SCOPE A BUILD &gt;</a>
+    </article>
+    <article class="coaching-card feature">
+      <div class="session">Monthly · rolling</div>
+      <h3>Embedded AI Lead</h3>
+      <div class="cost">From £3,000<small> / MONTH</small></div>
+      <p>A senior AI engineer working inside your team, on agreed days.</p>
+      <ul>
+        <li>Agreed days each month on your priorities</li>
+        <li>Build, improve and maintain several systems, not just one</li>
+        <li>Training for your staff so the tools actually get used</li>
+        <li>A monthly review of what shipped and what changed</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="profile" href="mailto:joseph@clonecentre.ai?subject=Embedded%20AI%20Lead%20retainer">DISCUSS A RETAINER &gt;</a>
+    </article>
+    <article class="coaching-card">
+      <div class="session">Funds · boards · leadership</div>
+      <h3>Principal Advisory</h3>
+      <div class="cost">On application</div>
+      <p>Private working time with Joseph for people who make the decisions.</p>
+      <ul>
+        <li>AI strategy, and where to place the bets</li>
+        <li>Diligence on AI claims in a deal or portfolio company</li>
+        <li>Governance and an audit trail, using TRAICE where it fits</li>
+        <li>Handled with discretion</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="profile" href="mailto:joseph@clonecentre.ai?subject=Principal%20Advisory%20application">APPLY &gt;</a>
+    </article>
+  </div>
+
+  <div class="page-band">
+    <div class="sec-kicker">How a build runs</div>
+    <h2>FOUR STEPS. NO SURPRISES.</h2>
+    <div class="band-grid four">
+      <article class="band-card"><span>Step 1</span><h3>SCOPE.</h3><p>A 20-minute call about the one workflow that costs you the most time.</p></article>
+      <article class="band-card"><span>Step 2</span><h3>WRITE IT DOWN.</h3><p>A one-page scope with the price, what is included and what is not.</p></article>
+      <article class="band-card"><span>Step 3</span><h3>BUILD IN VIEW.</h3><p>Working demos as it is built, so you see progress and can change direction.</p></article>
+      <article class="band-card"><span>Step 4</span><h3>HAND OVER.</h3><p>It runs in your accounts, with notes your team can follow.</p></article>
+    </div>
+  </div>
+
+  <div class="page-band">
+    <div class="sec-kicker">Where builds start</div>
+    <h2>PROVEN PARTS, CUSTOM FIT.</h2>
+    <p class="lede">I do not start from a blank page. Most builds begin from one of my live systems and are shaped around your business.</p>
+    <div class="band-grid four">
+      <article class="band-card"><span>The phone</span><h3>ANSAIR</h3><p>Voice assistant for routine calls and enquiries.</p></article>
+      <article class="band-card"><span>The website</span><h3>HYPERCHAT</h3><p>An assistant that answers from your own public facts.</p></article>
+      <article class="band-card"><span>The record</span><h3>TRAICE</h3><p>An audit trail, and a way to stop an AI system.</p></article>
+      <article class="band-card"><span>The pipeline</span><h3>PIPELINE</h3><p>Deal and prospect sourcing, screened before you spend time.</p></article>
+    </div>
+  </div>
+
+  <div class="build-cta">
+    <a class="btn blue" data-booking-key="profile" href="mailto:joseph@clonecentre.ai?subject=20-minute%20scoping%20call">BOOK A 20-MINUTE SCOPING CALL &gt;</a>
+    <a class="btn" href="mailto:joseph@clonecentre.ai?subject=Build%20enquiry">EMAIL JOSEPH &gt;</a>
+  </div>
+  <p class="build-fine">Prices are starting points. The written scope fixes the final price before any work begins. I do not promise savings or outcomes, and work involving personal data is scoped for UK GDPR first. Joseph Conlan · Clone Centre Ltd.</p>
+</section>
+
 <!-- ============ COACHING ============ -->
 <section class="block reveal" id="coaching">
-  <div class="sec-kicker">Private AI Coaching</div>
-  <h2>BRING THE PROBLEM. LEAVE WITH THE SYSTEM.</h2>
-  <p class="lede">This is working time, not motivational theatre. We can fix a prompt, map an automation, choose the right tools or build the first version together on the call.</p>
+  <div class="sec-kicker">Private coaching</div>
+  <h2>WORK WITH JOSEPH.</h2>
+  <p class="lede">Three ways to book. The rate follows the systems already live: voice, website chat, governance, deal sourcing, and Clone Centre OS. Want the whole system built for you instead? <a href="/build">See the build packages</a>.</p>
 
   <div class="coaching-grid">
     <article class="coaching-card">
       <div class="session">Session 01 · 60 minutes</div>
       <h3>AI Fix Session</h3>
-      <div class="cost">£150</div>
-      <p>For one clear problem that needs an expert pair of eyes: prompting, workflow design, tool choice or troubleshooting.</p>
-      <div class="includes">INCLUDES · PRE-CALL QUESTIONNAIRE · RECORDING · ACTION NOTES</div>
-      <a class="tier-cta" data-booking-key="aiFix" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Fix%20Session%20-%20%C2%A3150">BOOK £150 &gt;</a>
+      <div class="cost">£350</div>
+      <p>One stuck problem, worked through until the next move is obvious.</p>
+      <ul>
+        <li>Prompting, workflow, tool choice, or a build that has stalled</li>
+        <li>The decision written down before the call ends</li>
+        <li>Recording and action notes</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="aiFix" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Fix%20Session%20-%20%C2%A3350">BOOK THIS &gt;</a>
     </article>
     <article class="coaching-card feature">
       <div class="session">Session 02 · 90 minutes</div>
       <h3>AI Power Session</h3>
-      <div class="cost">£250</div>
-      <p>A deeper working session for a process, campaign or prototype. We map it, build the core and leave you with the next seven days planned.</p>
-      <div class="includes">INCLUDES · PRE-WORK · LIVE BUILD · RECORDING · 7-DAY FOLLOW-UP</div>
-      <a class="tier-cta" data-booking-key="aiPower" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Power%20Session%20-%20%C2%A3250">BOOK £250 &gt;</a>
+      <div class="cost">£650</div>
+      <p>A working session for a process, campaign, or prototype.</p>
+      <ul>
+        <li>Map the job and build the working core together</li>
+        <li>Leave with the next seven days planned</li>
+        <li>Recording and a short follow-up note</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="aiPower" href="mailto:joseph@clonecentre.ai?subject=Book%20an%20AI%20Power%20Session%20-%20%C2%A3650">BOOK THIS &gt;</a>
     </article>
     <article class="coaching-card">
-      <div class="session">30-day support</div>
+      <div class="session">30 days</div>
       <h3>AI Build Partner</h3>
-      <div class="cost">£500<small> / MONTH</small></div>
-      <p>Two private 45-minute calls plus weekday async support for a specific AI build that needs architecture, decisions and hands-on momentum.</p>
-      <div class="includes">INCLUDES · 2 CALLS · BUILD PLAN · WEEKDAY ASYNC SUPPORT</div>
-      <a class="tier-cta" data-booking-key="buildPartner" href="mailto:joseph@clonecentre.ai?subject=AI%20Build%20Partner%20-%20%C2%A3500">APPLY FOR £500 &gt;</a>
+      <div class="cost">£1,500<small> / 30 DAYS</small></div>
+      <p>For one system that needs more than a single sitting.</p>
+      <ul>
+        <li>Two private working calls</li>
+        <li>Weekday replies while the build is moving</li>
+        <li>A plan you can keep running after the month</li>
+      </ul>
+      <a class="tier-cta" data-booking-key="buildPartner" href="mailto:joseph@clonecentre.ai?subject=AI%20Build%20Partner%20-%20%C2%A31500">APPLY &gt;</a>
     </article>
   </div>
 
-  <div class="calendar-shell" id="calendar-shell">
-    <div class="calendar-fallback" id="calendar-fallback"><b>BOOKING DESK IS OPEN</b>Choose a session above to request a time. The live Cal.com calendar will appear here once the booking account is connected.</div>
-  </div>
-</section>
-
-<!-- ============ SIGNUP ============ -->
-<section class="block reveal" id="signup">
-  <div class="signup">
-    <div class="sec-kicker">Free starting point · not community access</div>
-    <h2>BUILD YOUR AI PROFILE.</h2>
-    <p class="lede" style="margin:0 auto;">Not ready for a paid membership? Answer four quick questions and request the Prompt Guidebook for £0. This saves your starting point but does not unlock the member community.</p>
-    <p style="margin-top:30px;"><a class="btn blue" href="#guide-gate" data-guide-gate>GET MY FREE GUIDE &gt;</a></p>
-    <div class="form-note">Clear consent, no card and no community membership. You can ask us to remove your profile at any time.</div>
-  </div>
-</section>
-
-<!-- ============ LIBRARY ============ -->
-<section class="block reveal" id="library">
-  <div class="sec-kicker">Start with one useful result</div>
-  <h2>FIND THE RIGHT BOOK WITHOUT READING THE WHOLE SHELF.</h2>
-  <p class="lede">Request the guide with your AI profile, accept the sensible book recommendation, or adjust one pre-filled choice. If you already know you want a complete learning path, compare the three bundles before the individual catalogue.</p>
-
-  <div class="library-start" id="library-picker">
-    <div class="library-free">
-      <div class="library-start-label">Included after your AI profile</div>
-      <h3>THE PROMPT GUIDEBOOK</h3>
-      <p>The CLEAR framework, 30+ copy-and-paste prompt recipes and the ten mistakes almost everyone makes. Tell me how you use AI and the guide will be sent directly to your inbox.</p>
-      <a class="btn blue" href="#guide-gate" data-guide-gate>REQUEST MY GUIDE &gt;</a>
-    </div>
-    <div class="library-picker">
-      <div class="library-start-label">Smart default · adjust only if needed</div>
-      <h3>WHAT DO YOU WANT HELP WITH?</h3>
-      <p>The most common starting point is already selected. Change it only if another outcome sounds more like you.</p>
-      <div class="picker-control">
-        <select id="library-goal" aria-label="Choose what you want help with">
-          <option value="how_to_ask" selected>I am completely new to AI</option>
-          <option value="ai_in_plain_english">I want AI explained without jargon</option>
-          <option value="everyday_ai">I want useful ideas for everyday life</option>
-          <option value="safe_and_sound">I want to stay safe from AI scams</option>
-          <option value="ai_for_work_and_careers">I want help at work or with my career</option>
-          <option value="ai_as_your_coach">I want help with goals and habits</option>
-          <option value="ai_for_small_business">I run a small business</option>
-          <option value="ai_money_saver">I want to save money</option>
-          <option value="ai_automation_playbook">I want to automate a business process</option>
-          <option value="everything_bundle">I want the complete learning path</option>
-        </select>
-        <button class="btn blue" id="picker-open" type="button">OPEN RESULT &gt;</button>
-      </div>
-      <div class="picker-result" aria-live="polite">
-        <div class="result-label">1 recommended result</div>
-        <strong id="picker-title">How to Ask · £9</strong>
-        <span id="picker-reason">The easiest first paid step: learn how to get a useful answer before worrying about which AI tool to use.</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="bundle-section" id="library-bundles">
-    <div class="library-section-head">
-      <h3>WANT A COMPLETE PATH?</h3>
-      <p>Compare three clear bundles here. The separate-book total is shown first so the saving has context; every option is a one-off payment.</p>
-    </div>
-    <div class="bundle-grid">
-      <article class="bundle-choice">
-        <div class="bundle-type">Foundations · 8 books</div>
-        <h4>PLAIN ENGLISH SET</h4>
-        <p>Asking well, the basics, everyday use, safety, work, coaching, small business and saving money.</p>
-        <div class="bundle-anchor">£72 bought separately</div>
-        <div class="bundle-price">£39 <small>· SAVE £33</small></div>
-        <a class="dl" href="https://buy.stripe.com/28E4gzdev3Xo0Qb214aZi0f">GET THE FOUNDATIONS &gt;</a>
+  <div class="page-band">
+    <div class="sec-kicker">The session</div>
+    <h2>WHAT YOU LEAVE WITH.</h2>
+    <p class="lede">The call is the work. You do not sit through a tour of tools.</p>
+    <div class="band-grid">
+      <article class="band-card">
+        <span>Before</span>
+        <h3>ONE PARAGRAPH.</h3>
+        <p>Send the problem, the result you want, and what you have already tried.</p>
       </article>
-      <article class="bundle-choice">
-        <div class="bundle-type">Deployment · 7 books</div>
-        <h4>PRO SERIES SET</h4>
-        <p>Automation, MCPs, assistants, workflows, growth, ROI and a complete 90-day AI-first plan.</p>
-        <div class="bundle-anchor">£133 bought separately</div>
-        <div class="bundle-price">£79 <small>· SAVE £54</small></div>
-        <a class="dl" href="https://buy.stripe.com/fZucN51vNbpQfL5fRUaZi0g">GET THE PRO SERIES &gt;</a>
+      <article class="band-card">
+        <span>On the call</span>
+        <h3>THE REAL THING.</h3>
+        <p>We open the workflow, the prompt, or the product and change it while you are there.</p>
       </article>
-      <article class="bundle-choice recommended">
-        <span class="bundle-flag">Best price per book</span>
-        <div class="bundle-type">Complete path · all 15 books</div>
-        <h4>EVERYTHING</h4>
-        <p>Both complete series, from first conversation to real deployment, plus the guide and supporting files.</p>
-        <div class="bundle-anchor">£205 bought separately</div>
-        <div class="bundle-price">£99 <small>· SAVE £106</small></div>
-        <a class="dl" href="https://buy.stripe.com/3cI5kDgqH79A9mH0X0aZi0h">GET EVERYTHING &gt;</a>
+      <article class="band-card">
+        <span>After</span>
+        <h3>A NEXT MOVE.</h3>
+        <p>You leave with the decision, the notes, and the first action for the next day.</p>
       </article>
     </div>
   </div>
-
-  <div class="library-catalog-head" id="library-catalogue">
-    <h3>PREFER ONE BOOK?</h3>
-    <p>Open any title for who it is for, the full syllabus and the exact price. The Plain English series is sequenced for beginners; the Pro Series is organised around real deployment work.</p>
-  </div>
-
-  <!-- ===== PLAIN ENGLISH SERIES (£9 each) ===== -->
-  <div class="lib-series-head">
-    <span class="lib-series-tag">PLAIN ENGLISH SERIES</span>
-    <span class="lib-series-price">8 BOOKS · £9 EACH</span>
-  </div>
-
-  <div class="lib-grid">
-
-    <div class="book" onclick="openModal('how_to_ask')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/how_to_ask.png" alt="How to Ask cover">
-      <div class="bookhead"><span class="no">BOOK 01</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>How to Ask</h3>
-      <p>The one skill that matters. For the person who has never opened an AI chat in their life.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_in_plain_english')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_in_plain_english.png" alt="AI in Plain English cover">
-      <div class="bookhead"><span class="no">BOOK 02</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>AI in Plain English</h3>
-      <p>What AI actually is, what it can and cannot do, and your very first conversation. Zero jargon.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('everyday_ai')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/everyday_ai.png" alt="Everyday AI cover">
-      <div class="bookhead"><span class="no">BOOK 03</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>Everyday AI</h3>
-      <p>Fifty simple ways AI can help around the house and beyond.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('safe_and_sound')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/safe_and_sound.png" alt="Safe and Sound cover">
-      <div class="bookhead"><span class="no">BOOK 04</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>Safe and Sound</h3>
-      <p>How to spot AI scams and protect yourself online. Plus a checklist for the fridge.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_for_work_and_careers')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_for_work_and_careers.png" alt="AI for Work and Careers cover">
-      <div class="bookhead"><span class="no">BOOK 05</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>AI for Work and Careers</h3>
-      <p>Get hired, get ahead and get your evenings back. CVs, interviews, pay rises.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_as_your_coach')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_as_your_coach.png" alt="AI as Your Coach cover">
-      <div class="bookhead"><span class="no">BOOK 06</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>AI as Your Coach</h3>
-      <p>Everyone deserves a coach. Goals you will actually keep, and the Sunday night check-in.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_for_small_business')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_for_small_business.png" alt="AI for Small Business cover">
-      <div class="bookhead"><span class="no">BOOK 07</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>AI for Small Business</h3>
-      <p>Small is fast. Fast wins. For shops, salons, cafes, trades and sole traders.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_money_saver')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_money_saver.png" alt="AI Money Saver cover">
-      <div class="bookhead"><span class="no">BOOK 08</span><span class="price">£9<small>PDF</small></span></div>
-      <h3>AI Money Saver</h3>
-      <p>Plug the ordinary leaks in a British budget. Bills, food, subscriptions, refunds.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-  </div>
-
-  <!-- ===== PRO SERIES (£19 each) ===== -->
-  <div class="lib-series-head" style="margin-top:64px;">
-    <span class="lib-series-tag pro">PRO SERIES</span>
-    <span class="lib-series-price">7 BUILD-ALONGS · £19 EACH</span>
-  </div>
-
-  <div class="lib-grid">
-
-    <div class="book" onclick="openModal('ai_automation_playbook')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_automation_playbook.png" alt="The AI Automation Playbook cover">
-      <div class="bookhead"><span class="no">BOOK 09</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>The AI Automation Playbook</h3>
-      <p>Kill the copy-paste. Connect your tools so AI runs the boring bits while you sleep. Three real builds.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('connecting_ai_to_your_business')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/connecting_ai_to_your_business.png" alt="Connecting AI to Your Business cover">
-      <div class="bookhead"><span class="no">BOOK 10</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>Connecting AI to Your Business</h3>
-      <p>Make AI actually see your data. MCPs in plain English. Includes a ready-to-run code file.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('build_your_own_ai_assistant')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/build_your_own_ai_assistant.png" alt="Build Your Own AI Assistant cover">
-      <div class="bookhead"><span class="no">BOOK 11</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>Build Your Own AI Assistant</h3>
-      <p>A custom assistant trained on YOUR business — on your website, knowing your prices.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('the_ai_powered_workflow')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/the_ai_powered_workflow.png" alt="The AI-Powered Workflow cover">
-      <div class="bookhead"><span class="no">BOOK 12</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>The AI-Powered Workflow</h3>
-      <p>Pick one real process. Take it apart. Rebuild it with AI. Measure the time saved.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('ai_for_growth')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/ai_for_growth.png" alt="AI for Growth cover">
-      <div class="bookhead"><span class="no">BOOK 13</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>AI for Growth</h3>
-      <p>Sales, marketing and outreach on autopilot — without sounding like a robot.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('the_automation_roi_method')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/the_automation_roi_method.png" alt="The Automation ROI Method cover">
-      <div class="bookhead"><span class="no">BOOK 14</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>The Automation ROI Method</h3>
-      <p>Decide what to automate. Prove it paid off. Build the case your accountant believes.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-    <div class="book" onclick="openModal('the_ai_first_business')" style="cursor:pointer;">
-      <img class="cover" src="assets/covers/the_ai_first_business.png" alt="The AI-First Business cover">
-      <div class="bookhead"><span class="no">BOOK 15</span><span class="price">£19<small>PDF</small></span></div>
-      <h3>The AI-First Business</h3>
-      <p>The 90-day strategic playbook. Everything you have learned, sequenced into one plan. Capstone.</p>
-      <span class="more">VIEW DETAILS &gt;</span>
-    </div>
-
-  </div>
 </section>
+
 
 <!-- ============ PRODUCT FAMILY ============ -->
 <section class="block reveal" id="ecosystem">
-  <div class="sec-kicker">The Clone Centre Stack</div>
-  <h2>BUILT UNDER ONE ROOF</h2>
-  <p class="lede">The community is backed by working AI products, not slide decks. Members learn from the same systems Clone Centre is putting into the world.</p>
+  <div class="sec-kicker">Products</div>
+  <h2>THE PRODUCTS.</h2>
+  <p class="lede">Four live systems. Open the one that matches the job. Businesses can start with the <a href="/for-business">one-page brief</a> or the <a href="/demo">90-second example</a>.</p>
   <div class="app-grid">
     <a class="app-card" href="https://ansair.uk" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 01</div><h3>ANSAIR</h3><p>A voice AI assistant for calls, bookings and customer questions, 24/7.</p><span class="app-price">FROM £29/MONTH · ANSAIR.UK</span><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 01</div>
+      <h3>ANSAIR</h3>
+      <p>A voice assistant for the hours when nobody can pick up.</p>
+      <ul>
+        <li>Answers calls and customer questions</li>
+        <li>Moves a suitable enquiry toward a booking or quote</li>
+        <li>Covers the phone while the work is in front of you</li>
+      </ul>
+      <span class="app-price">FROM £29/MONTH · ANSAIR.UK</span>
+      <span class="open">OPEN SYSTEM &gt;</span>
     </a>
     <a class="app-card" href="https://www.hyperchat.uk" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 02 · build free</div><h3>HyperChat</h3><p>Turn your website into a trained customer-facing AI assistant in about a minute. Build and test yours free; pay only when you publish it.</p><span class="app-price">BUILD £0 · LIVE £49/MONTH PER CHATBOT</span><span class="open">OPEN HYPERCHAT.UK &gt;</span>
+      <div class="app-status">Live system 02 · build free</div>
+      <h3>HyperChat</h3>
+      <p>A website assistant trained on your business, ready in about a minute.</p>
+      <ul>
+        <li>Build and test before you pay</li>
+        <li>Answers in your facts, your prices, your tone</li>
+        <li>Pay when you publish it</li>
+      </ul>
+      <span class="app-price">BUILD £0 · LIVE £49/MONTH PER CHATBOT</span>
+      <span class="open">OPEN HYPERCHAT.UK &gt;</span>
     </a>
     <a class="app-card" href="https://traice-governance.up.railway.app" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 03</div><h3>TRAICE</h3><p>AI governance, audit trails and controls for organisations deploying AI seriously.</p><span class="app-price">BESPOKE QUOTE · PRICE AGREED TO SCOPE</span><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 03</div>
+      <h3>TRAICE</h3>
+      <p>A record of what the AI did, and who can stop it.</p>
+      <ul>
+        <li>Audit trails for serious deployments</li>
+        <li>Controls for teams that need to explain a result</li>
+        <li>Price agreed to the scope</li>
+      </ul>
+      <span class="app-price">BESPOKE QUOTE · PRICE AGREED TO SCOPE</span>
+      <span class="open">OPEN SYSTEM &gt;</span>
     </a>
     <a class="app-card" href="https://pipeline-ma-production.up.railway.app/" target="_blank" rel="noopener noreferrer">
-      <div class="app-status">Live system 04</div><h3>Pipeline</h3><p>Acquisition intelligence for finding and qualifying off-market UK companies.</p><span class="app-price">7-DAY TRIAL £0 · STARTER £39/MO · PRO £79/MO</span><span class="open">OPEN SYSTEM &gt;</span>
+      <div class="app-status">Live system 04</div>
+      <h3>Pipeline</h3>
+      <p>Acquisition intelligence for off-market UK companies.</p>
+      <ul>
+        <li>Find companies worth a closer look</li>
+        <li>Qualify before a broker pack arrives</li>
+        <li>Keep the target work in one place</li>
+      </ul>
+      <span class="app-price">7-DAY TRIAL £0 · STARTER £39/MO · PRO £79/MO</span>
+      <span class="open">OPEN SYSTEM &gt;</span>
     </a>
+  </div>
+  <div class="page-band">
+    <div class="sec-kicker">Choose by the job</div>
+    <h2>OPEN THE MATCH.</h2>
+    <p class="lede">Clone Centre OS is the operating layer behind the brand: briefs, approvals, and generation in one place. These four are the systems you can open today.</p>
+    <div class="band-grid four">
+      <article class="band-card"><span>The phone</span><h3>ANSAIR</h3><p>Calls, questions, and bookings when you are already busy.</p></article>
+      <article class="band-card"><span>The website</span><h3>HYPERCHAT</h3><p>A trained assistant on the site, built free and paid when it goes live.</p></article>
+      <article class="band-card"><span>The record</span><h3>TRAICE</h3><p>Governance and an audit trail for a team deploying AI.</p></article>
+      <article class="band-card"><span>The search</span><h3>PIPELINE</h3><p>Off-market UK companies, screened before you spend the week on them.</p></article>
+    </div>
   </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="l">
-    <img src="assets/clone_centre_latest_logo.png" alt="Clone Centre logo">
-    <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a> · AI line 07888 865560</span>
+    <img src="assets/clone_centre_logo_192.png" alt="Clone Centre logo" width="38" height="38">
+    <span>Clone<b style="color:var(--blue);font-weight:400">Centre</b> · <a href="https://clonecentre.ai">clonecentre.ai</a></span>
   </div>
   <div class="footer-links" aria-label="Footer navigation">
-    <a href="/about">About</a><a href="/community">Community</a><a href="/coaching">Coaching</a><a href="/library">Library</a><a href="/products">Products</a><a href="/member">Member</a>
+    <a href="/about">About</a><a href="/community">Community</a><a href="/coaching">Coaching</a><a href="/products">Products</a><a href="/for-business">For business</a><a href="/member">Member</a><a href="/privacy">Privacy</a><a href="https://www.clonecentre.ai/ai-policy">AI policy</a>
   </div>
-  <div class="r">© 2026 JOSEPH CONLAN · PHASE 5 LIVE</div>
+  <div class="r">© 2026 JOSEPH CONLAN</div>
 </footer>
 
 <!-- ============ CLONE CENTRE AI · OUR HYPERCHAT PRODUCT ============ -->
-<button class="cc-chat-launcher" id="cc-chat-launcher" type="button" aria-label="Ask Clone Centre AI" aria-controls="clonecentre-ai" aria-expanded="false">
-  <img src="assets/clone_centre_robot.png" alt="" aria-hidden="true">
+<button class="cc-chat-launcher" id="cc-chat-launcher" type="button" aria-label="Ask Clone Centre AI" title="Ask Clone Centre AI" aria-controls="clonecentre-ai" aria-expanded="false">
+  <img src="assets/clone_centre_robot_192.png" alt="" width="60" height="60" aria-hidden="true">
 </button>
 
 <section class="cc-chat-panel" id="clonecentre-ai" role="dialog" aria-modal="false" aria-labelledby="cc-chat-title" aria-hidden="true">
   <header class="cc-chat-head">
-    <span class="cc-chat-head-mark"><img src="assets/clone_centre_robot.png" alt=""></span>
-    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>Our HyperChat system · <strong id="cc-chat-time">Guest · 05:00</strong></span></span>
+    <span class="cc-chat-head-mark"><img src="assets/clone_centre_robot_192.png" alt="" width="39" height="39"></span>
+    <span class="cc-chat-head-copy"><b id="cc-chat-title">CLONE CENTRE AI</b><span>AI assistant, not a person · <strong id="cc-chat-time">Guest · 05:00</strong></span></span>
     <button class="cc-chat-close" id="cc-chat-close" type="button" aria-label="Close Clone Centre AI">×</button>
   </header>
   <div class="cc-chat-messages" id="cc-chat-messages" aria-live="polite"></div>
@@ -1612,123 +1352,23 @@ html[data-page="products"] .home-hub,html[data-page="products"] #about,html[data
     <span><b>Want this on your website?</b>Included with annual Pro.</span>
     <a href="/community#annual-chatbot">See annual Pro &gt;</a>
   </div>
-  <div class="cc-chat-expired" id="cc-chat-expired">Your guest session is complete. Save a member profile so Joseph can continue from the context you have already shared.<br><a href="/community?interest=help_choose#membership-apply">Save my profile + continue &gt;</a></div>
+  <div class="cc-chat-expired" id="cc-chat-expired">Your guest session is complete. Save a member profile so Joseph can continue from the context you have already shared.<br><a href="/member">Save my profile + continue &gt;</a></div>
   <form class="cc-chat-compose" id="cc-chat-compose">
     <input id="cc-chat-input" type="text" maxlength="1200" autocomplete="off" placeholder="Ask anything about Clone Centre…" aria-label="Message Clone Centre AI">
     <button class="cc-chat-send" type="submit" aria-label="Send message">&gt;</button>
   </form>
-  <div class="cc-chat-brand"><a href="https://www.hyperchat.uk" target="_blank" rel="noopener noreferrer">Build with HyperChat</a> · Chats are saved and may be reviewed · <a href="https://www.hyperchat.uk/privacy" target="_blank" rel="noopener noreferrer">Privacy</a></div>
+  <div class="cc-chat-brand"><a href="https://www.hyperchat.uk" target="_blank" rel="noopener noreferrer">Build with HyperChat</a> · Chats are saved and a person may review them · <a href="/privacy">Privacy</a></div>
 </section>
 
-<!-- ============ AI PROFILE + GUIDE GATE ============ -->
-<div class="guide-gate-overlay" id="guide-gate" aria-hidden="true">
-  <div class="guide-gate" role="dialog" aria-modal="true" aria-labelledby="guide-title">
-    <button class="guide-close" id="guide-close" type="button" aria-label="Close AI profile form">×</button>
-    <div id="guide-form-shell">
-      <div class="guide-progress" aria-label="Form progress"><span class="on"></span><span></span></div>
-      <div class="guide-eyebrow">Your AI profile · about 45 seconds</div>
-      <h2 id="guide-title">MAKE THE GUIDE RELEVANT TO YOU.</h2>
-      <p class="guide-intro">Tell me where you are with AI. I will email the Prompt Guidebook and use your answers to make future Clone Centre advice less generic.</p>
-      <form class="guide-form" id="profileform" action="/api/subscribe" method="POST">
-        <label class="hp-field" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
-        <div class="guide-step active" data-guide-step="1">
-          <div class="profile-fields">
-            <div class="profile-field">
-              <label for="profile-name">First name</label>
-              <input id="profile-name" name="firstName" type="text" autocomplete="given-name" minlength="2" maxlength="60" placeholder="Joseph" required>
-            </div>
-            <div class="profile-field">
-              <label for="profile-email">Email address</label>
-              <input id="profile-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
-            </div>
-            <div class="profile-field full">
-              <label for="profile-role">Where will AI be useful?</label>
-              <select id="profile-role" name="role" required>
-                <option value="" selected disabled>Choose the closest answer</option>
-                <option value="personal">In my personal life</option>
-                <option value="employee">In my work or career</option>
-                <option value="leader">Across a team I lead</option>
-                <option value="founder">Inside a business I run</option>
-              </select>
-            </div>
-          </div>
-          <div class="guide-actions">
-            <span></span>
-            <button class="btn blue" id="guide-next" type="button">NEXT: YOUR AI USE &gt;</button>
-          </div>
-        </div>
-        <div class="guide-step" data-guide-step="2">
-          <div class="profile-label">Where are you with AI today?</div>
-          <div class="profile-stage-grid">
-            <label class="stage-choice"><input type="radio" name="aiStage" value="new" required><span>I have barely started</span></label>
-            <label class="stage-choice"><input type="radio" name="aiStage" value="exploring"><span>I am experimenting</span></label>
-            <label class="stage-choice"><input type="radio" name="aiStage" value="regular"><span>I use AI most weeks</span></label>
-            <label class="stage-choice"><input type="radio" name="aiStage" value="building"><span>I am building systems</span></label>
-          </div>
-          <div class="profile-field" style="margin-top:18px;">
-            <label for="profile-goal">What would be most useful next?</label>
-            <select id="profile-goal" name="goal" required>
-              <option value="" selected disabled>Choose one main result</option>
-              <option value="understand">Understand AI clearly</option>
-              <option value="prompt">Get better answers from AI</option>
-              <option value="save_time">Save time on repeat work</option>
-              <option value="automate">Automate a process</option>
-              <option value="build">Build an AI product or assistant</option>
-              <option value="safe">Use AI safely</option>
-            </select>
-          </div>
-          <label class="profile-consent"><input type="checkbox" name="consent" required> <span>Email my guide and send practical Clone Centre updates based on these answers. I can unsubscribe at any time.</span></label>
-          <div class="guide-actions">
-            <button class="btn quiet" id="guide-back" type="button">&lt; BACK</button>
-            <button class="btn blue" type="submit">EMAIL MY GUIDE &gt;</button>
-          </div>
-        </div>
-        <div class="guide-error" id="guide-error" role="status">That did not go through. Check each answer and try again, or email joseph@clonecentre.ai.</div>
-      </form>
-    </div>
-    <div class="guide-success" id="guide-success" role="status">
-      <div class="success-mark">PROFILE SAVED // GUIDE QUEUED</div>
-      <h2 id="guide-success-title">CHECK YOUR INBOX.</h2>
-      <p id="guide-success-copy">Your Prompt Guidebook is being emailed as an attachment. I have also saved your AI starting point so the next advice is more useful.</p>
-      <p style="margin-top:26px;"><a class="btn blue" href="/library">EXPLORE THE LIBRARY &gt;</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BOOK DETAIL MODAL ============ -->
-<div class="modal-overlay" id="bookModal" onclick="if(event.target===this)closeModal()">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
-    <div class="modal-cover"><img id="mCover" src="" alt=""></div>
-    <div class="modal-body">
-      <div class="modal-kicker" id="mKicker"></div>
-      <h2 class="modal-title" id="mTitle"></h2>
-      <p class="modal-promise" id="mPromise"></p>
-      <div class="modal-meta" id="mMeta"></div>
-      <div class="modal-section" id="mForSection">
-        <h4>WHO IT IS FOR</h4>
-        <p id="mFor"></p>
-      </div>
-      <div class="modal-section" id="mInsideSection">
-        <h4>WHAT IS INSIDE</h4>
-        <ul class="modal-syllabus" id="mSyllabus"></ul>
-      </div>
-      <div class="modal-buy">
-        <div class="modal-price" id="mPrice"></div>
-        <a class="btn blue" id="mBuy" href="#">GET THE BOOK &gt;</a>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 /* ---- focused page route ---- */
 const currentPage=document.documentElement.dataset.page||'home';
 const pageCopy={
   about:{title:'Joseph Conlan · About',kicker:'About Joseph',heading:'THE PERSON BEHIND THE SYSTEMS.',lede:'My background, my plain-English approach, and the numbers that explain why learning to use AI well matters now.',jump:'<a class="btn blue" href="#about">MEET JOSEPH &gt;</a><a class="btn" href="#numbers">SEE THE EVIDENCE &gt;</a>'},
-  community:{title:'Clone Centre Community · Joseph Conlan',kicker:'Membership + weekly programme',heading:'ONE COMMUNITY. THREE WAYS TO JOIN.',lede:'Choose Community for the member rhythm, Pro to build live with Joseph, or Accountability for personal follow-through. The free AI profile and Prompt Guidebook are a separate starting point, not a membership level.',jump:'<a class="btn blue" href="#community">COMPARE MEMBERSHIPS &gt;</a><a class="btn" href="#live">SEE THE WEEK &gt;</a><a class="btn" href="/member">MEMBER DASHBOARD &gt;</a>'},
+  community:{title:'Clone Centre Community · Joseph Conlan',kicker:'Membership + weekly programme',heading:'ONE COMMUNITY. THREE WAYS TO JOIN.',lede:'Choose Community for the member rhythm, Pro to build live with Joseph, or Accountability for personal follow-through.',jump:'<a class="btn blue" href="#community">COMPARE MEMBERSHIPS &gt;</a><a class="btn" href="#live">SEE THE WEEK &gt;</a><a class="btn" href="/member">MEMBER DASHBOARD &gt;</a>'},
+  build:{title:'Build with Joseph · AI systems built for you · Clone Centre',kicker:'Done-for-you AI systems',heading:'I BUILD THE SYSTEM. YOU RUN IT.',lede:'Fixed-scope builds, an embedded AI lead, and private advisory for funds and leadership teams. Start with a free 20-minute scoping call.',jump:'<a class="btn blue" href="#build">SEE THE PACKAGES &gt;</a><a class="btn" href="/coaching">PREFER A SESSION? &gt;</a>'},
   coaching:{title:'AI Coaching · Joseph Conlan',kicker:'Private help + accountability',heading:'GET THE RIGHT KIND OF HELP.',lede:'Choose focused expert working time when the AI problem is technical. Choose accountability when the real problem is keeping momentum.',jump:'<a class="btn blue" href="#accountability">ACCOUNTABILITY &gt;</a><a class="btn" href="#coaching">PRIVATE SESSIONS &gt;</a>'},
-  library:{title:'Clone Centre PDF Library · Joseph Conlan',kicker:'15 books · one smart starting point',heading:'START WITH ONE CLEAR RESULT.',lede:'Build your AI profile to receive the Prompt Guidebook, use the pre-filled picker for one recommendation, or compare three complete learning paths before browsing the full shelf.',jump:'<a class="btn blue" href="#library-picker">GET A RECOMMENDATION &gt;</a><a class="btn" href="#library-bundles">COMPARE 3 BUNDLES &gt;</a>'},
   products:{title:'Clone Centre Products · Joseph Conlan',kicker:'The Clone Centre stack',heading:'WORKING SYSTEMS. NOT SLIDE DECKS.',lede:'Meet the live AI products behind the teaching: voice assistance, website AI, governance and acquisition intelligence.',jump:'<a class="btn blue" href="#ecosystem">EXPLORE THE STACK &gt;</a>'}
 };
 if(pageCopy[currentPage]){
@@ -1741,20 +1381,6 @@ if(pageCopy[currentPage]){
 }
 const activeNav=document.querySelector('[data-nav-page="'+currentPage+'"]');
 if(activeNav)activeNav.setAttribute('aria-current','page');
-
-/* ---- character rain ---- */
-const c=document.getElementById('rain'),x=c.getContext('2d');
-let cols,drops;const CH='01<>[]{}#$%&*+=AI';
-function size(){c.width=c.offsetWidth;c.height=c.offsetHeight;cols=Math.floor(c.width/16);drops=Array(cols).fill(0).map(()=>Math.random()*-60);}
-size();addEventListener('resize',size);
-setInterval(()=>{x.fillStyle='rgba(0,0,0,.14)';x.fillRect(0,0,c.width,c.height);
-x.fillStyle='#2E9BFF';x.font='14px monospace';
-for(let i=0;i<cols;i++){const ch=CH[Math.random()*CH.length|0];x.fillText(ch,i*16,drops[i]*16);
-if(drops[i]*16>c.height&&Math.random()>.975)drops[i]=0;drops[i]+=.5;}},90);
-
-/* ---- marquee ---- */
-const unit='AI TIPS <b>++</b> TRICKS <b>++</b> PROMPTS <b>++</b> CLONE CENTRE <b>++</b> ';
-document.getElementById('mq').innerHTML=unit.repeat(8);
 
 /* ---- responsive navigation ---- */
 const siteNav=document.getElementById('site-nav');
@@ -1792,119 +1418,7 @@ if(location.hash&&document.fonts){
   }));
 }
 
-/* ---- AI profile + guide gate ---- */
-const guideGate=document.getElementById('guide-gate');
-const guideForm=document.getElementById('profileform');
-const guideSteps=[...guideGate.querySelectorAll('[data-guide-step]')];
-const guideProgress=[...guideGate.querySelectorAll('.guide-progress span')];
-function setGuideStep(step){
-  guideSteps.forEach(panel=>panel.classList.toggle('active',panel.dataset.guideStep===String(step)));
-  guideProgress.forEach((bar,index)=>bar.classList.toggle('on',index<step));
-}
-function openGuideGate(event){
-  if(event)event.preventDefault();
-  guideGate.classList.add('open');guideGate.setAttribute('aria-hidden','false');document.body.classList.add('guide-open');
-  if(document.getElementById('guide-success').style.display!=='block'){
-    setGuideStep(1);setTimeout(()=>document.getElementById('profile-name').focus(),60);
-  }
-}
-function closeGuideGate(){
-  guideGate.classList.remove('open');guideGate.setAttribute('aria-hidden','true');document.body.classList.remove('guide-open');
-}
-document.querySelectorAll('[data-guide-gate]').forEach(link=>link.addEventListener('click',openGuideGate));
-document.getElementById('guide-close').addEventListener('click',closeGuideGate);
-guideGate.addEventListener('click',event=>{if(event.target===guideGate)closeGuideGate();});
-document.getElementById('guide-next').addEventListener('click',()=>{
-  const fields=[...guideSteps[0].querySelectorAll('input:not([type="hidden"]),select')];
-  const invalid=fields.find(field=>!field.checkValidity());
-  if(invalid){invalid.reportValidity();return;}
-  setGuideStep(2);setTimeout(()=>guideSteps[1].querySelector('input').focus(),40);
-});
-document.getElementById('guide-back').addEventListener('click',()=>setGuideStep(1));
-guideForm.addEventListener('submit',async function(event){
-  event.preventDefault();
-  if(!guideForm.reportValidity())return;
-  const error=document.getElementById('guide-error'),button=guideForm.querySelector('[type="submit"]'),data=new FormData(guideForm);
-  button.disabled=true;button.textContent='SENDING...';error.style.display='none';
-  let profileSessionId;
-  try{profileSessionId=localStorage.getItem('clonecentre_hyperchat_session');}catch(_){}
-  if(!profileSessionId)profileSessionId='cc_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
-  const payload={sessionId:profileSessionId,firstName:data.get('firstName'),email:data.get('email'),role:data.get('role'),aiStage:data.get('aiStage'),goal:data.get('goal'),consent:data.has('consent'),company:data.get('company')};
-  try{
-    const response=await fetch(guideForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error('profile failed');
-    if(!result.emailSent){document.getElementById('guide-success-title').textContent='PROFILE SAVED // EMAIL QUEUED.';document.getElementById('guide-success-copy').textContent='Your AI starting point is stored securely and your Prompt Guidebook is queued for delivery. Check your inbox in the next few minutes; you will not need to complete this form again.';}
-    document.getElementById('guide-form-shell').style.display='none';document.getElementById('guide-success').style.display='block';
-  }catch(_){
-    error.style.display='block';button.disabled=false;button.textContent='TRY AGAIN >';
-  }
-});
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&guideGate.classList.contains('open'))closeGuideGate();});
 
-/* ---- stored membership + enquiry profile ---- */
-const memberForm=document.getElementById('member-interest-form');
-const memberStatus=document.getElementById('member-form-status');
-const memberInterestSelect=document.getElementById('member-interest');
-const switchProofFields=document.getElementById('switch-proof-fields');
-const currentCommunityField=document.getElementById('current-community');
-const currentMembershipUrlField=document.getElementById('current-membership-url');
-const switchProofField=document.getElementById('switch-proof');
-const memberFormTitle=document.getElementById('member-form-title');
-const memberFormIntro=document.getElementById('member-form-intro');
-const memberSubmit=document.getElementById('member-submit');
-const requestedInterestRaw=new URLSearchParams(location.search).get('interest');
-const legacyInterestMap={community:'community_monthly',pro:'pro_monthly',annual_pro_chatbot:'pro_annual',accountability:'accountability_monthly',switch:'switch_community'};
-const requestedInterest=legacyInterestMap[requestedInterestRaw]||requestedInterestRaw;
-if(memberForm&&requestedInterest&&memberForm.elements.interest.querySelector('option[value="'+CSS.escape(requestedInterest)+'"]')){
-  memberForm.elements.interest.value=requestedInterest;
-}
-function syncMemberEnquiryRoute(){
-  if(!memberForm)return;
-  const isSwitch=memberInterestSelect.value==='switch_community'||memberInterestSelect.value==='switch_pro';
-  switchProofFields.classList.toggle('on',isSwitch);
-  currentCommunityField.required=isSwitch;
-  switchProofField.required=isSwitch;
-  memberFormTitle.textContent=isSwitch?'PROVE YOUR SWITCH.':'TELL US WHAT YOU NEED.';
-  memberFormIntro.textContent=isSwitch?'Show that you currently pay for another business, coaching or AI community. Joseph will review the evidence and issue the private £1 Stripe link only when the offer is eligible.':'Standard Community, Pro and Accountability plans go directly to Stripe above. Use this form only for help choosing, Clone Coach or a bespoke coach build.';
-  memberSubmit.textContent=isSwitch?'SUBMIT £1 ELIGIBILITY CHECK >':'SEND MY REQUEST >';
-}
-if(memberInterestSelect){memberInterestSelect.addEventListener('change',syncMemberEnquiryRoute);syncMemberEnquiryRoute();}
-function proofFilePayload(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=()=>resolve({name:file.name,type:file.type,data:String(reader.result||'').split(',')[1]||''});
-    reader.onerror=()=>reject(new Error('file_read_failed'));
-    reader.readAsDataURL(file);
-  });
-}
-if(memberForm)memberForm.addEventListener('submit',async event=>{
-  event.preventDefault();
-  if(!memberForm.reportValidity())return;
-  const button=memberForm.querySelector('[type="submit"]'),data=new FormData(memberForm);
-  button.disabled=true;button.textContent='SAVING...';memberStatus.className='member-status';
-  let sessionId;
-  try{sessionId=localStorage.getItem('clonecentre_hyperchat_session');}catch(_){}
-  if(!sessionId)sessionId='cc_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
-  const isSwitch=data.get('interest')==='switch_community'||data.get('interest')==='switch_pro';
-  let proofFile=null;
-  if(isSwitch){
-    const file=switchProofField.files&&switchProofField.files[0];
-    const allowed=['image/png','image/jpeg','image/webp','application/pdf'];
-    if(!file||!allowed.includes(file.type)||file.size>3*1024*1024){memberStatus.className='member-status on';memberStatus.textContent='Please upload a PNG, JPG, WEBP or PDF proof file no larger than 3 MB.';button.disabled=false;button.textContent='TRY AGAIN >';return;}
-    try{proofFile=await proofFilePayload(file);}catch(_){memberStatus.className='member-status on';memberStatus.textContent='That proof file could not be read. Please choose it again.';button.disabled=false;button.textContent='TRY AGAIN >';return;}
-  }
-  const payload={sessionId,name:data.get('name'),email:data.get('email'),company:data.get('company'),interest:data.get('interest'),aiStage:data.get('aiStage'),aiUse:data.get('aiUse'),goal:data.get('goal'),currentCommunity:data.get('currentCommunity'),currentMembershipUrl:data.get('currentMembershipUrl'),proofFile,consent:data.has('consent'),fax:data.get('fax'),page:location.href};
-  try{
-    const response=await fetch(memberForm.action,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const result=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(result.error||'profile_failed');
-    memberForm.classList.add('is-complete');memberStatus.className='member-status on success';
-    memberStatus.textContent=isSwitch?'Eligibility evidence saved securely. Joseph will review it before any private £1 Stripe link is issued.':(result.emailSent?'Saved. Check your inbox for confirmation; Joseph now has the context you shared.':'Saved securely. Joseph now has the context you shared and will reply from joseph@clonecentre.ai or clone@clonecentre.ai.');
-    const dashboardLink=document.createElement('a');dashboardLink.href='/member';dashboardLink.textContent='CREATE OR OPEN MY DASHBOARD >';memberStatus.appendChild(document.createElement('br'));memberStatus.appendChild(dashboardLink);
-  }catch(_){
-    memberStatus.className='member-status on';memberStatus.textContent='That did not save. Please check each field and try again, or contact joseph@clonecentre.ai.';button.disabled=false;button.textContent='TRY AGAIN >';
-  }
-});
 
 /* ---- live Cal.com booking connection ---- */
 const calendarShell=document.getElementById('calendar-shell');
@@ -1929,141 +1443,6 @@ fetch('/api/site-config',{headers:{'Accept':'application/json'}}).then(response=
   if(currentPage==='coaching')mountCalBooking(booking.profile||booking.aiFix);
 }).catch(()=>{});
 
-/* ---- book detail modal ---- */
-const BOOKS={
-"how_to_ask":{kicker:"Book 01 · Plain English Series",title:"How to Ask",cover:"assets/covers/how_to_ask.png",
-  promise:"The one skill that matters. For the person who has never opened an AI chat in their life. If you can send a text, you can do everything in here.",
-  forWho:"Absolute beginners. The curious but wary. Anyone who has typed something vague into ChatGPT, gotten something vague back, and declared it overrated.",
-  syllabus:["The one skill that matters","Why the words matter more than the tool","The CLEAR framework","Your first ten conversations","The ten mistakes almost everyone makes"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/fZu9ATdev0LcdCXbBEaZi00",meta:["PLAIN ENGLISH","BEGINNER","40+ PAGES"]},
-"ai_in_plain_english":{kicker:"Book 02 · Plain English Series",title:"AI in Plain English",cover:"assets/covers/ai_in_plain_english.png",
-  promise:"What AI actually is, what it can and cannot do, and your very first conversation. A friendly guide for complete beginners, with zero jargon.",
-  forWho:"The person who keeps hearing about AI and wants to understand it without becoming a techie. No experience needed.",
-  syllabus:["What AI actually is (no maths)","What it can and cannot do","The three big tools explained","Your first ten conversations","The jargon buster"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/5kQdR95M3fG68iD6hkaZi01",meta:["PLAIN ENGLISH","BEGINNER"]},
-"everyday_ai":{kicker:"Book 03 · Plain English Series",title:"Everyday AI",cover:"assets/covers/everyday_ai.png",
-  promise:"Fifty simple ways AI can help around the house and beyond: recipes, letters, gardening, paperwork and keeping in touch with family.",
-  forWho:"Anyone who wants practical, everyday uses for AI. Not business, not career — just life made a bit easier.",
-  syllabus:["50 practical ideas, each with the exact words to type","Recipes and meal planning","Letters and paperwork","Gardening and home","Keeping in touch with family"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/00w00j5M365w9mH7loaZi02",meta:["PLAIN ENGLISH","PRACTICAL","50 IDEAS"]},
-"safe_and_sound":{kicker:"Book 04 · Plain English Series",title:"Safe and Sound",cover:"assets/covers/safe_and_sound.png",
-  promise:"How to spot AI scams and protect yourself online. Voice cloning, deepfakes and the family safe word, plus a checklist for the fridge.",
-  forWho:"Anyone who worries about scams — for themselves or their parents. The defences are simpler than you think.",
-  syllabus:["The new tricks, explained plainly","Voice cloning and deepfakes","The family safe word","Ten golden rules","The fridge checklist"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/aFa28rgqHgKa9mH0X0aZi03",meta:["PLAIN ENGLISH","SECURITY","CHECKLIST"]},
-"ai_for_work_and_careers":{kicker:"Book 05 · Plain English Series",title:"AI for Work and Careers",cover:"assets/covers/ai_for_work_and_careers.png",
-  promise:"Get hired, get ahead and get your evenings back. CVs that survive the robots, interviews, pay rises, and the five year sketch.",
-  forWho:"Anyone in work or looking for work who wants to use AI to get ahead without sounding like a robot wrote it.",
-  syllabus:["CVs that survive the robots","Interview practice with AI","Emails and meetings","Pay rises and pushback","Promotion and the five-year sketch"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/aFacN52zRfG61UffRUaZi04",meta:["PLAIN ENGLISH","CAREER"]},
-"ai_as_your_coach":{kicker:"Book 06 · Plain English Series",title:"AI as Your Coach",cover:"assets/covers/ai_as_your_coach.png",
-  promise:"Everyone deserves a coach. Patience, good questions, and a plan that sticks. Goals you will actually keep, and the Sunday night check-in.",
-  forWho:"Anyone who wants a coach but cannot afford £100/hour. AI is not a therapist, but it is a surprisingly good thinking partner.",
-  syllabus:["Everyone deserves a coach","Goals you will actually keep","Habits: small, streaked, guilt-free","The Sunday night check-in","When it all goes quiet"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/eVq14ngqH1Pg1Uf5dgaZi05",meta:["PLAIN ENGLISH","LIFE"]},
-"ai_for_small_business":{kicker:"Book 07 · Plain English Series",title:"AI for Small Business",cover:"assets/covers/ai_for_small_business.png",
-  promise:"Small is fast. Fast wins. For shops, salons, cafes, trades and sole traders. Get more done with the people you already have.",
-  forWho:"The sole trader and small business owner who is flat out and has no time for jargon. AI helps you more than it helps the big firms.",
-  syllabus:["What AI can realistically do","First drafts, reminders, replies, ideas","The admin that eats your evenings","Customer replies that sound like you","Winning your week back"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/dRm3cvb6n9hI1Uf214aZi06",meta:["PLAIN ENGLISH","BUSINESS"]},
-"ai_money_saver":{kicker:"Book 08 · Plain English Series",title:"AI Money Saver",cover:"assets/covers/ai_money_saver.png",
-  promise:"Plug the ordinary leaks in a British budget. Bills, food, subscriptions and the refund never claimed. Rehearse the awkward phone calls.",
-  forWho:"Anyone who suspects they are overpaying for things and wants AI to help them fight back. Not investing — just plugging leaks.",
-  syllabus:["Bills: the retention game","Subscriptions you forgot about","Food: less in the bin","Refunds and your rights","Rehearsing the awkward calls"],price:"£9",priceSub:"INSTANT PDF",buy:"https://buy.stripe.com/8x228r3DV51seH1axAaZi07",meta:["PLAIN ENGLISH","MONEY"]},
-"ai_automation_playbook":{kicker:"Book 09 · Pro Series",title:"The AI Automation Playbook",cover:"assets/covers/ai_automation_playbook.png",
-  promise:"Kill the copy-paste. Connect your tools so AI runs the boring bits while you sleep. Three real automations you build yourself.",
-  forWho:"The person who has had ChatGPT open in one tab and a spreadsheet in another, manually moving text between them. There is a better way.",
-  syllabus:["What automation actually is (the domino analogy)","BUILD: The welcome reply automation","n8n vs Make vs Zapier — honest comparison","BUILD: The content engine (idea → blog + posts)","When NOT to automate (the anti-chapter)","BUILD: The daily digest at 8am","Where people get stuck + the 30-minute rule"],price:"£19",priceSub:"INSTANT PDF · BUILD-ALONG",buy:"https://buy.stripe.com/28E3cvcarctUdCXfRUaZi08",meta:["PRO SERIES","BUILD-ALONG","3 PROJECTS"]},
-"connecting_ai_to_your_business":{kicker:"Book 10 · Pro Series",title:"Connecting AI to Your Business",cover:"assets/covers/connecting_ai_to_your_business.png",
-  promise:"Make AI actually see your data. Model Context Protocol (MCP), explained for the person who will never read the spec.",
-  forWho:"The person who keeps hearing 'AI can't see my data' and wants to fix that. Includes a ready-to-run Python file — no coding required.",
-  syllabus:["The one idea: AI is smart but blind, MCP gives it eyes","BUILD: Connect Claude to your documents","What an MCP server actually is (the librarian analogy)","BUILD: The business knowledge server (provided file)","Browsing the MCP marketplace","Safety: the local-first rule","Where people get stuck + what's next"],price:"£19",priceSub:"INSTANT PDF · BUILD-ALONG + CODE FILE",buy:"https://buy.stripe.com/dRmaEXfmD79A7ez214aZi09",meta:["PRO SERIES","MCP","BUILD-ALONG"]},
-"build_your_own_ai_assistant":{kicker:"Book 11 · Pro Series",title:"Build Your Own AI Assistant",cover:"assets/covers/build_your_own_ai_assistant.png",
-  promise:"A custom assistant trained on YOUR business — on your website, answering your customers, knowing your prices.",
-  forWho:"The person who has typed 'what are your opening hours?' into a chatbot and gotten nonsense, and wants to build the good version.",
-  syllabus:["What a custom assistant actually is","The 5 documents every business needs ready","BUILD: Your first trained assistant","The art of the system prompt (CLEAR, revisited)","BUILD: Put it on your website","Guardrails, escalation, the 'I'm not sure' rule","Maintaining it over time"],price:"£19",priceSub:"INSTANT PDF · BUILD-ALONG",buy:"https://buy.stripe.com/3cI7sL4HZ2Tk0Qb7loaZi0a",meta:["PRO SERIES","BUILD-ALONG","2 PROJECTS"]},
-"the_ai_powered_workflow":{kicker:"Book 12 · Pro Series",title:"The AI-Powered Workflow",cover:"assets/covers/the_ai_powered_workflow.png",
-  promise:"Pick one real process in your business. Take it apart. Rebuild it with AI. Measure the time saved. A method, not a tool tour.",
-  forWho:"The person who suspects AI could help but doesn't know where to start, so does nothing. This book forces one concrete win.",
-  syllabus:["Pick ONE process (the decision matrix)","Map it: every step, every minute","Diagnose it: where the time leaks","Redesign it: where AI fits and where it does NOT","BUILD: Prompts for 5 workflow candidates","Measure it: the before/after","Scale the method to the next process"],price:"£19",priceSub:"INSTANT PDF · METHOD",buy:"https://buy.stripe.com/dRmaEX6Q751s7ez6hkaZi0b",meta:["PRO SERIES","METHODOLOGY"]},
-"ai_for_growth":{kicker:"Book 13 · Pro Series",title:"AI for Growth",cover:"assets/covers/ai_for_growth.png",
-  promise:"Sales, marketing and outreach on autopilot — without sounding like a robot. Includes a full lead-gen + follow-up sequence.",
-  forWho:"The business owner who needs more customers and has no marketing team. AI helps you market like you have one.",
-  syllabus:["The growth fundamentals AI can't replace","AI for research: finding your audience's real words","BUILD: The outreach sequence (email 1, 2, 3)","Content that compounds: the batch method","Personalisation at scale (without the creepy line)","Measurement: what to track, what to ignore","The anti-spam oath"],price:"£19",priceSub:"INSTANT PDF · BUILD-ALONG",buy:"https://buy.stripe.com/aFa7sL1vN2Tk6av6hkaZi0c",meta:["PRO SERIES","SALES","MARKETING"]},
-"the_automation_roi_method":{kicker:"Book 14 · Pro Series",title:"The Automation ROI Method",cover:"assets/covers/the_automation_roi_method.png",
-  promise:"Decide what to automate. Prove it paid off. Build the case your accountant and your future self will believe. Numbers, not vibes.",
-  forWho:"The person — or their partner, or their accountant — who asks 'is this AI stuff actually worth it?' Wants receipts.",
-  syllabus:["Why 'it feels faster' isn't enough","The ROI formula in plain English","BUILD: The one-page ROI dashboard","The hidden costs: setup, maintenance, breakage","Presenting the case (to partner, team, accountant)","The kill criteria: when to stop","Honest accounting"],price:"£19",priceSub:"INSTANT PDF · DASHBOARD TEMPLATE",buy:"https://buy.stripe.com/cNi6oH8Yf51saqL5dgaZi0d",meta:["PRO SERIES","ROI","SPREADSHEET"]},
-"the_ai_first_business":{kicker:"Book 15 · Pro Series · Capstone",title:"The AI-First Business",cover:"assets/covers/the_ai_first_business.png",
-  promise:"The 90-day strategic playbook. Everything you have learned, sequenced into one deployment plan. The capstone of the series.",
-  forWho:"The person who wants the integrated plan, not scattered projects. Also the entry point for anyone who wants strategy before tactics.",
-  syllabus:["The AI-first principle: problem first, tool second","Weeks 1–4: foundations + one quick win","Weeks 5–8: the first real deployment","Weeks 9–12: scale and systematise","The team conversation: getting others on board","Risks, ethics, and the honest limits","The 12-month view"],price:"£19",priceSub:"INSTANT PDF · 90-DAY PLAN",buy:"https://buy.stripe.com/8x2bJ1b6n3XoaqL358aZi0e",meta:["PRO SERIES","STRATEGY","CAPSTONE"]},
-"full_library_bundle":{kicker:"Best Value · Save £33",title:"The Full Library",cover:"assets/covers/full_library_bundle.png",
-  promise:"All eight Clone Centre Plain English books in one download. Everything Joseph has written on AI for beginners, in one place.",
-  forWho:"Anyone who wants the complete foundation. Buying individually costs £72. This bundle saves you £33.",
-  syllabus:["How to Ask","AI in Plain English","Everyday AI","Safe and Sound","AI for Work and Careers","AI as Your Coach","AI for Small Business","AI Money Saver"],price:"£39",priceSub:"ONE PAYMENT · ALL 8 BOOKS",buy:"https://buy.stripe.com/28E4gzdev3Xo0Qb214aZi0f",meta:["8 BOOKS","SAVE £33","BEGINNER"]},
-"pro_series_bundle":{kicker:"The Complete Pro Set · Save £54",title:"The Pro Series",cover:"assets/covers/pro_series_bundle.png",
-  promise:"All seven Pro Series books. Automation, MCPs, custom assistants, workflows, growth, ROI, and the 90-day strategy.",
-  forWho:"The business owner ready to deploy AI for real. Buying individually costs £133. This bundle saves you £54.",
-  syllabus:["The AI Automation Playbook","Connecting AI to Your Business (MCPs)","Build Your Own AI Assistant","The AI-Powered Workflow","AI for Growth","The Automation ROI Method","The AI-First Business (capstone)"],price:"£79",priceSub:"ONE PAYMENT · ALL 7 PRO BOOKS",buy:"https://buy.stripe.com/fZucN51vNbpQfL5fRUaZi0g",meta:["7 BOOKS","SAVE £54","PRO"]},
-"everything_bundle":{kicker:"The Entire Library · Best Price Per Book",title:"Everything",cover:"assets/covers/everything_bundle.png",
-  promise:"All fifteen Clone Centre books. The complete Plain English series and the complete Pro Series. Everything Joseph has written.",
-  forWho:"The person who wants it all. Individually these cost £205. This bundle brings it to £99 — £6.60 per book.",
-  syllabus:["The 8 Plain English books (How to Ask → AI Money Saver)","The 7 Pro Series books (Automation → AI-First Business)","The free Prompt Guidebook","The provided MCP server file + business facts template","Priority email support from Joseph"],price:"£99",priceSub:"ONE PAYMENT · ALL 15 BOOKS",buy:"https://buy.stripe.com/3cI5kDgqH79A9mH0X0aZi0h",meta:["15 BOOKS","SAVE £106","EVERYTHING"]}
-};
-
-const PICKER_REASONS={
-  how_to_ask:'The easiest first paid step: learn how to get a useful answer before worrying about which AI tool to use.',
-  ai_in_plain_english:'A jargon-free map of what AI is, what it can do and where its limits really are.',
-  everyday_ai:'Fifty practical ideas for home, paperwork, food, family and everyday jobs.',
-  safe_and_sound:'A calm, practical guide to deepfakes, voice scams and the simple habits that keep a family safer.',
-  ai_for_work_and_careers:'A focused route into CVs, interviews, meetings, pay conversations and getting time back.',
-  ai_as_your_coach:'A structured way to use AI for goals, habits and a weekly check-in without pretending it is therapy.',
-  ai_for_small_business:'The plain-English starting point for using AI in a shop, trade, salon, cafe or small team.',
-  ai_money_saver:'Practical prompts for bills, subscriptions, food waste, refunds and awkward retention calls.',
-  ai_automation_playbook:'The first Pro build-along: three automations that replace repetitive copy-and-paste work.',
-  everything_bundle:'The full path from a first AI conversation to automation, assistants, ROI and a 90-day deployment plan.'
-};
-
-const libraryGoal=document.getElementById('library-goal');
-const pickerTitle=document.getElementById('picker-title');
-const pickerReason=document.getElementById('picker-reason');
-const pickerOpen=document.getElementById('picker-open');
-function updatePicker(){
-  if(!libraryGoal)return;
-  const slug=libraryGoal.value,b=BOOKS[slug];
-  if(!b)return;
-  pickerTitle.textContent=b.title+' · '+b.price;
-  pickerReason.textContent=PICKER_REASONS[slug]||b.promise;
-  pickerOpen.setAttribute('aria-label','Open details for '+b.title);
-}
-if(libraryGoal){
-  libraryGoal.addEventListener('change',updatePicker);
-  pickerOpen.addEventListener('click',()=>openModal(libraryGoal.value));
-  updatePicker();
-}
-
-document.querySelectorAll('.book[onclick]').forEach(card=>{
-  const title=card.querySelector('h3');
-  card.setAttribute('role','button');
-  card.setAttribute('tabindex','0');
-  card.setAttribute('aria-haspopup','dialog');
-  if(title)card.setAttribute('aria-label','View details for '+title.textContent.trim());
-  card.addEventListener('keydown',event=>{
-    if(event.key==='Enter'||event.key===' '){event.preventDefault();card.click();}
-  });
-});
-
-function openModal(slug){
-  const b=BOOKS[slug];if(!b)return;
-  const m=document.getElementById('bookModal');
-  document.getElementById('mCover').src=b.cover;
-  document.getElementById('mKicker').textContent=b.kicker;
-  document.getElementById('mTitle').innerHTML=b.title;
-  document.getElementById('mPromise').textContent=b.promise;
-  document.getElementById('mFor').textContent=b.forWho;
-  document.getElementById('mSyllabus').innerHTML=b.syllabus.map(function(s){return '<li>'+s+'</li>';}).join('');
-  document.getElementById('mMeta').innerHTML=b.meta.map(function(c){return '<span class="chip">'+c+'</span>';}).join('');
-  document.getElementById('mPrice').innerHTML=b.price+'<small>'+b.priceSub+'</small>';
-  const buy=document.getElementById('mBuy');buy.href=b.buy;
-  buy.textContent=b.bundle||(b.price.indexOf('39')>-1||b.price.indexOf('79')>-1||b.price.indexOf('99')>-1)?'GET THE BUNDLE >':'GET THE BOOK >';
-  m.classList.add('open');document.body.style.overflow='hidden';
-}
-function closeModal(){document.getElementById('bookModal').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
 
 /* ---- Clone Centre AI · custom HyperChat-powered assistant ---- */
 const CC_CHAT_BASE='https://www.hyperchat.uk';
@@ -2081,21 +1460,27 @@ const ccChatSend=ccChatCompose.querySelector('[type="submit"]');
 const CC_CHAT_LIMIT_MS=5*60*1000;
 const CC_CHAT_RESET_MS=24*60*60*1000;
 let ccChatBusy=false;
-let ccChatSession;
+let ccChatSession='';
 let ccChatStarted=0;
+let ccChatReady=false;
+let ccChatClock=0;
 let ccChatLimitAnnounced=false;
 const ccTranscript=[];
 const ccTranscriptId='ct_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
 let ccTranscriptTimer=0;
 let ccLastTranscriptTurns=0;
-try{
-  ccChatSession=localStorage.getItem('clonecentre_hyperchat_session');
-  if(!ccChatSession){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('clonecentre_hyperchat_session',ccChatSession);}
-}catch(_){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();}
-try{
-  ccChatStarted=Number(localStorage.getItem('clonecentre_chat_guest_started')||0);
-  if(ccChatStarted&&Date.now()-ccChatStarted>CC_CHAT_RESET_MS){localStorage.removeItem('clonecentre_chat_guest_started');ccChatStarted=0;}
-}catch(_){}
+function ccEnsureChat(){
+  if(ccChatReady)return;
+  ccChatReady=true;
+  try{
+    ccChatSession=localStorage.getItem('clonecentre_hyperchat_session')||'';
+    if(!ccChatSession){ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('clonecentre_hyperchat_session',ccChatSession);}
+    ccChatStarted=Number(localStorage.getItem('clonecentre_chat_guest_started')||0);
+    if(ccChatStarted&&Date.now()-ccChatStarted>CC_CHAT_RESET_MS){localStorage.removeItem('clonecentre_chat_guest_started');ccChatStarted=0;}
+  }catch(_){if(!ccChatSession)ccChatSession='cc_'+Math.random().toString(36).slice(2)+Date.now();}
+  ccUpdateGuestClock();
+  if(!ccChatClock)ccChatClock=setInterval(ccUpdateGuestClock,1000);
+}
 
 function ccFormatAssistant(bubble,text){
   const source=String(text),pattern=/(\*\*[^*\n]+\*\*|\[[^\]\n]+\]\(https?:\/\/[^\s)]+\))/g;
@@ -2124,7 +1509,7 @@ function ccAddMessage(text,isUser,thinking=false){
 }
 function ccSetChat(open){
   ccChatPanel.classList.toggle('open',open);ccChatPanel.setAttribute('aria-hidden',String(!open));ccChatLauncher.setAttribute('aria-expanded',String(open));document.body.classList.toggle('cc-chat-open',open);
-  if(open)setTimeout(()=>ccChatInput.focus(),80);
+  if(open){ccEnsureChat();setTimeout(()=>ccChatInput.focus(),80);}
 }
 function ccSendTranscript(keepalive=false){
   const userTurns=ccTranscript.filter(message=>message.role==='user').length;
@@ -2154,7 +1539,7 @@ function ccStartGuestClock(){
   return ccUpdateGuestClock();
 }
 async function ccAsk(question){
-  const message=String(question||'').trim();if(!message||ccChatBusy||!ccStartGuestClock())return;
+  const message=String(question||'').trim();if(!message||ccChatBusy)return;ccEnsureChat();if(!ccStartGuestClock())return;
   ccChatBusy=true;ccAddMessage(message,true);ccChatInput.value='';ccChatSuggestions.hidden=true;ccAddMessage('•••',false,true);
   try{
     const response=await fetch(CC_CHAT_BASE+'/api/chat/'+CC_CHAT_PROJECT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,session_id:ccChatSession})});
@@ -2164,8 +1549,7 @@ async function ccAsk(question){
   finally{ccChatBusy=false;ccScheduleTranscript();ccUpdateGuestClock();if(!ccChatInput.disabled)ccChatInput.focus();}
 }
 
-ccAddMessage("Hi — I'm Clone Centre AI. Ask me what to learn, book or build.",false);
-ccUpdateGuestClock();setInterval(ccUpdateGuestClock,1000);
+ccAddMessage("I'm Clone Centre AI, an automated assistant, not a person. I answer from Clone Centre's published information. I don't make decisions about you. Chats are saved and a person may review them. Ask me what to join, book, or build.",false);
 ccChatLauncher.addEventListener('click',()=>ccSetChat(!ccChatPanel.classList.contains('open')));
 ccChatClose.addEventListener('click',()=>ccSetChat(false));
 ccChatCompose.addEventListener('submit',event=>{event.preventDefault();ccAsk(ccChatInput.value);});

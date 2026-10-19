@@ -7,3 +7,4 @@ assets/covers/_html
 *.log
 .env
 .env.*
+os-data/segments
